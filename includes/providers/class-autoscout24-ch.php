@@ -195,6 +195,83 @@ final class AutoScout24_CH implements Provider {
 	}
 
 	/**
+	 * Listing detail and equipment (two requests).
+	 *
+	 * @param Connection $connection Connection.
+	 * @param int        $listing_id Listing id.
+	 * @param string     $language   Content language.
+	 * @return array|WP_Error
+	 */
+	public function fetch_listing_detail( Connection $connection, int $listing_id, string $language ): array|WP_Error {
+		$lang   = rawurlencode( $this->language( $language ) );
+		$detail = $this->request( $connection, 'GET', '/public/v1/listings/' . $listing_id . '?language=' . $lang );
+		if ( is_wp_error( $detail ) ) {
+			return $detail;
+		}
+
+		$specs = array();
+		foreach ( array( 'bodyColor', 'interiorColor' ) as $key ) {
+			if ( isset( $detail[ $key ] ) && is_scalar( $detail[ $key ] ) ) {
+				$specs[ $key ] = sanitize_key( (string) $detail[ $key ] );
+			}
+		}
+		foreach ( array( 'doors', 'seats', 'cylinders', 'cubicCapacity', 'co2Emission', 'gears', 'weight' ) as $key ) {
+			if ( isset( $detail[ $key ] ) && is_numeric( $detail[ $key ] ) ) {
+				$specs[ $key ] = (int) $detail[ $key ];
+			}
+		}
+		foreach ( array( 'batteryCapacity', 'chargingPower' ) as $key ) {
+			if ( isset( $detail[ $key ] ) && is_numeric( $detail[ $key ] ) ) {
+				$specs[ $key ] = (float) $detail[ $key ];
+			}
+		}
+		$date = self::date_or_null( $detail['lastInspectionDate'] ?? null );
+		if ( null !== $date ) {
+			$specs['lastInspectionDate'] = $date;
+		}
+
+		$warranty = is_array( $detail['warranty'] ?? null ) ? $detail['warranty'] : array();
+		if ( $warranty && 'none' !== ( $warranty['type'] ?? '' ) ) {
+			$specs['warrantyMonths'] = self::nullable_int( $warranty['duration'] ?? null );
+			$specs['warrantyKm']     = self::nullable_int( $warranty['mileage'] ?? null );
+			$specs['warrantyText']   = sanitize_text_field( (string) ( $warranty['details'] ?? '' ) );
+		}
+
+		$images = array();
+		foreach ( (array) ( $detail['images'] ?? array() ) as $image ) {
+			$url = is_array( $image ) ? esc_url_raw( (string) ( $image['url'] ?? '' ) ) : '';
+			if ( '' !== $url ) {
+				$images[] = $url;
+			}
+		}
+
+		$equipment = array();
+		$items     = $this->request( $connection, 'GET', '/public/v1/listings/' . $listing_id . '/equipment?language=' . $lang );
+		if ( ! is_wp_error( $items ) ) {
+			foreach ( array( 'standard', 'optional' ) as $kind ) {
+				foreach ( (array) ( $items[ $kind ] ?? array() ) as $item ) {
+					if ( ! is_array( $item ) || empty( $item['name'] ) ) {
+						continue;
+					}
+					$equipment[] = sanitize_text_field( (string) $item['name'] );
+					foreach ( (array) ( $item['packageItems'] ?? array() ) as $package_item ) {
+						if ( is_array( $package_item ) && ! empty( $package_item['name'] ) ) {
+							$equipment[] = sanitize_text_field( (string) $package_item['name'] );
+						}
+					}
+				}
+			}
+		}
+
+		return array(
+			'description' => wp_kses_post( (string) ( $detail['description'] ?? '' ) ),
+			'specs'       => array_filter( $specs, static fn( $value ) => null !== $value && '' !== $value ),
+			'equipment'   => array_values( array_unique( array_filter( $equipment ) ) ),
+			'images'      => array_slice( $images, 0, 40 ),
+		);
+	}
+
+	/**
 	 * Seller profile.
 	 *
 	 * @param Connection $connection Connection.

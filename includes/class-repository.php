@@ -73,6 +73,8 @@ final class Repository {
 		'image_url',
 		'leasing_monthly_rate',
 		'has_warranty',
+		'body_type',
+		'images_json',
 	);
 
 	/**
@@ -419,7 +421,7 @@ final class Repository {
 		}
 
 		global $wpdb;
-		$table = self::vehicles_table();
+		$table      = self::vehicles_table();
 		$connection = Connection::DEFAULT_ID;
 
 		$makes = $wpdb->get_results(
@@ -449,10 +451,214 @@ final class Repository {
 			'drive_types'   => self::distinct_values( 'drive_type', $connection ),
 			'conditions'    => self::distinct_values( 'condition_type', $connection ),
 			'years'         => is_array( $years ) ? $years : array(),
+			'bounds'        => self::bounds( $connection ),
 		);
 
 		set_transient( self::CACHE_FILTERS, $options, self::CACHE_TTL );
 		return $options;
+	}
+
+	/**
+	 * Smallest and largest price, year, mileage and power (for sliders).
+	 *
+	 * @param string $connection_id Connection id.
+	 * @return array<string, array{min: int, max: int}>
+	 */
+	private static function bounds( string $connection_id ): array {
+		global $wpdb;
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT MIN(price) AS price_min, MAX(price) AS price_max,
+					MIN(first_registration_year) AS year_min, MAX(first_registration_year) AS year_max,
+					MIN(mileage) AS mileage_min, MAX(mileage) AS mileage_max,
+					MIN(horse_power) AS power_min, MAX(horse_power) AS power_max
+				FROM %i WHERE connection_id=%s AND status='active'",
+				self::vehicles_table(),
+				$connection_id
+			),
+			ARRAY_A
+		);
+
+		$bounds = array();
+		foreach ( array( 'price', 'year', 'mileage', 'power' ) as $key ) {
+			$min = isset( $row[ $key . '_min' ] ) ? (int) floor( (float) $row[ $key . '_min' ] ) : 0;
+			$max = isset( $row[ $key . '_max' ] ) ? (int) ceil( (float) $row[ $key . '_max' ] ) : 0;
+			if ( $max > $min ) {
+				$bounds[ $key ] = array(
+					'min' => $min,
+					'max' => $max,
+				);
+			}
+		}
+		return $bounds;
+	}
+
+	/**
+	 * Vehicle counts per make and model for the given filters, ignoring the
+	 * make and model filters themselves (so visitors can switch make).
+	 *
+	 * Without other active filters the cached tree is used (no query).
+	 *
+	 * @param array $filters Normalized filters.
+	 * @return array{makes: array<string, int>, models: array<string, array<string, int>>}
+	 */
+	public static function facets( array $filters ): array {
+		unset( $filters['make'], $filters['model'] );
+
+		$facets = array(
+			'makes'  => array(),
+			'models' => array(),
+		);
+
+		if ( ! array_filter( $filters, static fn( $value ) => '' !== $value && null !== $value && 0 !== $value ) ) {
+			$rows = self::make_model_rows();
+		} else {
+			global $wpdb;
+			list( $where_sql, $params ) = self::where_sql( $filters );
+			$sql                        = 'SELECT make_key, model_key, COUNT(*) AS count FROM ' . self::vehicles_table() . ' WHERE ' . $where_sql . " AND make_key<>'' GROUP BY make_key, model_key";
+			$rows                       = $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- WHERE built from whitelisted columns and placeholders.
+			$rows                       = is_array( $rows ) ? $rows : array();
+		}
+
+		foreach ( $rows as $row ) {
+			$make  = (string) $row['make_key'];
+			$count = (int) $row['count'];
+
+			$facets['makes'][ $make ] = ( $facets['makes'][ $make ] ?? 0 ) + $count;
+			if ( '' !== (string) $row['model_key'] ) {
+				$facets['models'][ $make ][ (string) $row['model_key'] ] = $count;
+			}
+		}
+
+		return $facets;
+	}
+
+	/**
+	 * Makes with their models, labels and total counts (cached tree).
+	 *
+	 * @return array<int, array{value: string, label: string, count: int, models: array}>
+	 */
+	public static function make_tree(): array {
+		$tree = array();
+		foreach ( self::make_model_rows() as $row ) {
+			$make = (string) $row['make_key'];
+			if ( ! isset( $tree[ $make ] ) ) {
+				$tree[ $make ] = array(
+					'value'  => $make,
+					'label'  => '' !== (string) $row['make_name'] ? (string) $row['make_name'] : $make,
+					'count'  => 0,
+					'models' => array(),
+				);
+			}
+			$tree[ $make ]['count'] += (int) $row['count'];
+			if ( '' !== (string) $row['model_key'] ) {
+				$tree[ $make ]['models'][] = array(
+					'value' => (string) $row['model_key'],
+					'label' => '' !== (string) $row['model_name'] ? (string) $row['model_name'] : (string) $row['model_key'],
+					'count' => (int) $row['count'],
+				);
+			}
+		}
+
+		$tree = array_values( $tree );
+		usort( $tree, static fn( $a, $b ) => strnatcasecmp( $a['label'], $b['label'] ) );
+		foreach ( $tree as &$make ) {
+			usort( $make['models'], static fn( $a, $b ) => strnatcasecmp( $a['label'], $b['label'] ) );
+		}
+		unset( $make );
+
+		return $tree;
+	}
+
+	/**
+	 * One vehicle with all columns (detail page).
+	 *
+	 * @param int  $external_id Listing id.
+	 * @param bool $active_only Only active vehicles.
+	 */
+	public static function get_vehicle( int $external_id, bool $active_only = true ): ?array {
+		global $wpdb;
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE connection_id=%s AND external_id=%d' . ( $active_only ? " AND status='active'" : '' ) . ' LIMIT 1',
+				self::vehicles_table(),
+				Connection::DEFAULT_ID,
+				$external_id
+			),
+			ARRAY_A
+		);
+		return is_array( $row ) ? $row : null;
+	}
+
+	/**
+	 * Active vehicles whose description and equipment are missing or older
+	 * than a week.
+	 *
+	 * @param string $connection_id Connection id.
+	 * @param int    $limit         Maximum rows.
+	 * @return int[] External ids.
+	 */
+	public static function vehicles_needing_details( string $connection_id, int $limit ): array {
+		global $wpdb;
+		$ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT external_id FROM %i WHERE connection_id=%s AND status='active'
+				AND (detail_synced_at IS NULL OR detail_synced_at < %s)
+				ORDER BY detail_synced_at IS NULL DESC, detail_synced_at ASC, created_at DESC LIMIT %d",
+				self::vehicles_table(),
+				$connection_id,
+				gmdate( 'Y-m-d H:i:s', time() - WEEK_IN_SECONDS ),
+				max( 1, $limit )
+			)
+		);
+		return array_map( 'intval', is_array( $ids ) ? $ids : array() );
+	}
+
+	/**
+	 * Store normalized detail data (description, specs, equipment).
+	 *
+	 * @param string $connection_id Connection id.
+	 * @param int    $external_id   Listing id.
+	 * @param array  $detail        Normalized detail data.
+	 */
+	public static function store_details( string $connection_id, int $external_id, array $detail ): void {
+		global $wpdb;
+		$wpdb->update(
+			self::vehicles_table(),
+			array(
+				'detail_json'      => (string) wp_json_encode( $detail ),
+				'detail_synced_at' => current_time( 'mysql', true ),
+			),
+			array(
+				'connection_id' => $connection_id,
+				'external_id'   => $external_id,
+			),
+			array( '%s', '%s' ),
+			array( '%s', '%d' )
+		);
+	}
+
+	/**
+	 * Active vehicle ids and title parts for sitemaps (one page).
+	 *
+	 * @param int $page     1-based page.
+	 * @param int $per_page Rows per page.
+	 * @return array[]
+	 */
+	public static function sitemap_rows( int $page, int $per_page ): array {
+		global $wpdb;
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT external_id, make_name, model_name, version_full_name, updated_at FROM %i
+				WHERE connection_id=%s AND status='active' ORDER BY external_id ASC LIMIT %d OFFSET %d",
+				self::vehicles_table(),
+				Connection::DEFAULT_ID,
+				$per_page,
+				( max( 1, $page ) - 1 ) * $per_page
+			),
+			ARRAY_A
+		);
+		return is_array( $rows ) ? $rows : array();
 	}
 
 	/**

@@ -94,6 +94,20 @@ interface Provider {
 	public function fetch_warranty_ids( Connection $connection, string $language ): array|WP_Error;
 
 	/**
+	 * Description, extra specifications and equipment of one listing,
+	 * normalized and sanitized (used by local detail pages).
+	 *
+	 * Returned keys: description (safe HTML), specs (key => scalar),
+	 * equipment (list of strings), images (list of URLs).
+	 *
+	 * @param Connection $connection Connection.
+	 * @param int        $listing_id Listing id.
+	 * @param string     $language   Content language.
+	 * @return array|WP_Error
+	 */
+	public function fetch_listing_detail( Connection $connection, int $listing_id, string $language ): array|WP_Error;
+
+	/**
 	 * Public seller profile (name, address, zip, city, phone).
 	 *
 	 * @param Connection $connection Connection.

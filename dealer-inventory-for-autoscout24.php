@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name:       Dealer Inventory for AutoScout24
- * Plugin URI:        https://github.com/drilonsaiti/aziri-autoscout24-inventory
+ * Plugin URI:        https://github.com/drilonsaiti/autoscout24-inventory-plugin
  * Description:       Show a car dealer's AutoScout24 stock on their own WordPress site: synced locally, fast, crawlable and fully styleable.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Drilon Saiti
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin constants.
  */
-define( 'DINV_VERSION', '1.0.0' );
+define( 'DINV_VERSION', '1.1.0' );
 define( 'DINV_PLUGIN_FILE', __FILE__ );
 define( 'DINV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DINV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

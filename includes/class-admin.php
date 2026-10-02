@@ -120,15 +120,30 @@ final class Admin {
 
 		wp_enqueue_style( 'dinv-admin', DINV_PLUGIN_URL . 'admin/css/admin.css', array(), DINV_VERSION );
 
-		if ( 'dinv-design' === $page ) {
-			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_script( 'dinv-admin', DINV_PLUGIN_URL . 'admin/js/admin.js', array( 'jquery', 'wp-color-picker' ), DINV_VERSION, true );
-			wp_localize_script( 'dinv-admin', 'DinvAdmin', array( 'presets' => Design::presets() ) );
+		if ( in_array( $page, array( 'dinv-display', 'dinv-design', 'dinv-help' ), true ) ) {
+			$deps = array( 'jquery', 'jquery-ui-sortable' );
+			if ( 'dinv-design' === $page ) {
+				wp_enqueue_style( 'wp-color-picker' );
+				$deps[] = 'wp-color-picker';
+			}
+			wp_enqueue_script( 'dinv-admin', DINV_PLUGIN_URL . 'admin/js/admin.js', $deps, DINV_VERSION, true );
+			wp_localize_script(
+				'dinv-admin',
+				'DinvAdmin',
+				array(
+					'presets'    => Design::presets(),
+					'previewUrl' => Preview::url(),
+					'labels'     => array(
+						'desktop' => __( 'Desktop', 'dealer-inventory-for-autoscout24' ),
+						'mobile'  => __( 'Mobile', 'dealer-inventory-for-autoscout24' ),
+					),
+				)
+			);
 		}
 
 		if ( 'dinv-help' === $page ) {
 			wp_enqueue_style( 'dinv-shortcode-builder', DINV_PLUGIN_URL . 'admin/css/shortcode-builder.css', array( 'dinv-admin' ), DINV_VERSION );
-			wp_enqueue_script( 'dinv-shortcode-builder', DINV_PLUGIN_URL . 'admin/js/shortcode-builder.js', array(), DINV_VERSION, true );
+			wp_enqueue_script( 'dinv-shortcode-builder', DINV_PLUGIN_URL . 'admin/js/shortcode-builder.js', array( 'dinv-admin' ), DINV_VERSION, true );
 			wp_localize_script(
 				'dinv-shortcode-builder',
 				'DinvBuilder',
@@ -313,14 +328,39 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			return;
 		}
-		$keys = array_merge( array_keys( Schema::group( 'display' ) ), array_keys( Schema::group( 'format' ) ), array_keys( Schema::group( 'filters' ) ) );
+		$groups = array(
+			'display' => Schema::instance_groups()['display'],
+			'filters' => Schema::instance_groups()['filters'],
+			'card'    => Schema::instance_groups()['card'],
+			'format'  => Schema::instance_groups()['format'],
+			'detail'  => __( 'Vehicle detail pages', 'dealer-inventory-for-autoscout24' ),
+		);
 		?>
 		<div class="wrap dinv-admin">
-			<?php $this->page_header( __( 'Display', 'dealer-inventory-for-autoscout24' ), __( 'Site-wide defaults for every inventory. Each shortcode can override them.', 'dealer-inventory-for-autoscout24' ) ); ?>
+			<?php $this->page_header( __( 'Display', 'dealer-inventory-for-autoscout24' ), __( 'Site-wide defaults for every inventory. Each shortcode, block or widget can override them.', 'dealer-inventory-for-autoscout24' ) ); ?>
 			<?php $this->notice(); ?>
-			<section class="dinv-admin__card dinv-admin__widecard">
-				<?php $this->settings_form( 'dinv-display', $keys, __( 'Save display settings', 'dealer-inventory-for-autoscout24' ) ); ?>
-			</section>
+			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+				<input type="hidden" name="action" value="dinv_save_settings">
+				<input type="hidden" name="return_page" value="dinv-display">
+				<?php wp_nonce_field( 'dinv_save_settings' ); ?>
+				<nav class="dinv-admin__tabs" aria-label="<?php esc_attr_e( 'Sections', 'dealer-inventory-for-autoscout24' ); ?>">
+					<?php foreach ( $groups as $group => $title ) : ?>
+						<a href="#dinv-group-<?php echo esc_attr( $group ); ?>"><?php echo esc_html( $title ); ?></a>
+					<?php endforeach; ?>
+				</nav>
+				<?php foreach ( $groups as $group => $title ) : ?>
+					<section class="dinv-admin__card dinv-admin__widecard" id="dinv-group-<?php echo esc_attr( $group ); ?>">
+						<h2><?php echo esc_html( $title ); ?></h2>
+						<?php if ( 'detail' === $group ) : ?>
+							<p class="description"><?php esc_html_e( 'Used when "Vehicle links" is set to "Detail page on this site". Without a detail page, vehicles open on the page of the inventory itself.', 'dealer-inventory-for-autoscout24' ); ?></p>
+						<?php endif; ?>
+						<?php $this->settings_fields( array_keys( Schema::group( $group ) ) ); ?>
+					</section>
+				<?php endforeach; ?>
+				<div class="dinv-admin__savebar">
+					<?php submit_button( __( 'Save display settings', 'dealer-inventory-for-autoscout24' ), 'primary', 'submit', false ); ?>
+				</div>
+			</form>
 		</div>
 		<?php
 	}
@@ -393,22 +433,15 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 					</div>
 
 					<aside class="dinv-admin__preview-column">
-						<section class="dinv-admin__card dinv-preview-card" data-dinv-preview-card>
-							<div class="dinv-preview-brand"><strong><?php echo esc_html( get_bloginfo( 'name' ) . ' · ' . Labels::ui()['vehicle_search'] ); ?></strong><span><?php echo esc_html( Labels::ui()['powered_by'] ); ?></span></div>
-							<div class="dinv-preview-body">
-								<div class="dinv-preview-count"><?php echo esc_html( Labels::vehicle_count( 24 ) ); ?></div>
-								<div class="dinv-preview-filter"><?php echo esc_html( Schema::filter_labels()['make'] ); ?> <span><?php echo esc_html( Labels::ui()['all'] ); ?> ▾</span></div>
-								<div class="dinv-preview-vehicle">
-									<div class="dinv-preview-image"></div>
-									<div>
-										<strong><?php esc_html_e( 'Example Model 2.0 Sport', 'dealer-inventory-for-autoscout24' ); ?></strong>
-										<small><?php esc_html_e( 'One owner, full service history', 'dealer-inventory-for-autoscout24' ); ?></small>
-										<b><?php echo esc_html( Format::price( 29900, Format::currency( (string) Settings::get( 'currency', 'auto' ) ) ) ); ?></b>
-										<p><?php echo esc_html( implode( ' · ', array( '2022', Format::mileage( 32000 ), Labels::enum( 'fuel', 'petrol' ), Labels::enum( 'transmission', 'automatic' ) ) ) ); ?></p>
-										<em><?php echo esc_html( Labels::ui()['view_vehicle'] ); ?> →</em>
-									</div>
-								</div>
-							</div>
+						<section class="dinv-admin__card dinv-admin__preview">
+							<?php
+							$this->preview_frame(
+								array(
+									'per_page'        => '3',
+									'show_pagination' => 'no',
+								)
+							);
+							?>
 						</section>
 
 						<button type="submit" form="dinv-reset-design-form" class="button button--reset" data-dinv-confirm="<?php esc_attr_e( 'Reset all design settings to the defaults?', 'dealer-inventory-for-autoscout24' ); ?>">
@@ -435,12 +468,7 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 		}
 
 		$fields = Schema::instance_fields();
-		$groups = array(
-			'display' => __( 'Results and visible parts', 'dealer-inventory-for-autoscout24' ),
-			'format'  => __( 'Units', 'dealer-inventory-for-autoscout24' ),
-			'filters' => __( 'Filters shown to visitors', 'dealer-inventory-for-autoscout24' ),
-			'preset'  => __( 'Pre-filter the vehicles', 'dealer-inventory-for-autoscout24' ),
-		);
+		$groups = Schema::instance_groups();
 		$tag    = Shortcode::TAG;
 		?>
 		<div class="wrap dinv-admin">
@@ -454,7 +482,7 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 					<?php foreach ( $groups as $group => $title ) : ?>
 						<div class="dinv-builder__section">
 							<h3><?php echo esc_html( $title ); ?></h3>
-							<div class="<?php echo 'filters' === $group ? 'dinv-builder__toggles' : 'dinv-builder__grid'; ?>">
+							<div class="dinv-builder__grid">
 								<?php
 								foreach ( $fields as $attr => $field ) {
 									if ( $group === $field['group'] ) {
@@ -465,6 +493,10 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 							</div>
 						</div>
 					<?php endforeach; ?>
+
+					<div class="dinv-builder__preview">
+						<?php $this->preview_frame( array( 'per_page' => '6' ) ); ?>
+					</div>
 
 					<div class="dinv-builder__output">
 						<label for="dinv-generated-shortcode"><?php esc_html_e( 'Your shortcode', 'dealer-inventory-for-autoscout24' ); ?></label>
@@ -579,6 +611,10 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 			Repository::deactivate_connection( $new_connection->id );
 		}
 
+		if ( ( $old['detail_base'] ?? '' ) !== ( $new['detail_base'] ?? '' ) ) {
+			update_option( 'dinv_flush_rewrite', 1, false );
+		}
+
 		if ( $old['sync_mode'] !== $new['sync_mode'] || (int) $old['sync_interval'] !== (int) $new['sync_interval'] || $old['sync_time'] !== $new['sync_time'] ) {
 			Scheduler::reschedule();
 		}
@@ -639,6 +675,30 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 	}
 
 	/**
+	 * Schema fields grouped by section (inside a form).
+	 *
+	 * @param string[] $keys Setting keys.
+	 */
+	private function settings_fields( array $keys ): void {
+		$settings = Settings::all();
+		$sections = array();
+		foreach ( $keys as $key ) {
+			$field                           = Schema::field( $key );
+			$sections[ $field['section'] ][] = $key;
+		}
+		foreach ( $sections as $section => $section_keys ) {
+			if ( '' !== $section ) {
+				echo '<h3 class="dinv-admin__subheading">' . esc_html( $section ) . '</h3>';
+			}
+			echo '<table class="form-table" role="presentation">';
+			foreach ( $section_keys as $key ) {
+				$this->field_row( $key, $settings );
+			}
+			echo '</table>';
+		}
+	}
+
+	/**
 	 * Form with schema fields grouped by section.
 	 *
 	 * @param string   $page   Return page slug.
@@ -646,31 +706,37 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 	 * @param string   $submit Submit label.
 	 */
 	private function settings_form( string $page, array $keys, string $submit ): void {
-		$settings = Settings::all();
-		$sections = array();
-		foreach ( $keys as $key ) {
-			$field                           = Schema::field( $key );
-			$sections[ $field['section'] ][] = $key;
-		}
 		?>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 			<input type="hidden" name="action" value="dinv_save_settings">
 			<input type="hidden" name="return_page" value="<?php echo esc_attr( $page ); ?>">
 			<?php wp_nonce_field( 'dinv_save_settings' ); ?>
-			<?php foreach ( $sections as $section => $section_keys ) : ?>
-				<?php if ( '' !== $section ) : ?>
-					<h3 class="dinv-admin__subheading"><?php echo esc_html( $section ); ?></h3>
-				<?php endif; ?>
-				<table class="form-table" role="presentation">
-					<?php
-					foreach ( $section_keys as $key ) {
-						$this->field_row( $key, $settings );
-					}
-					?>
-				</table>
-			<?php endforeach; ?>
+			<?php $this->settings_fields( $keys ); ?>
 			<?php submit_button( $submit ); ?>
 		</form>
+		<?php
+	}
+
+	/**
+	 * Live preview iframe (rendered on the front end with the theme's styles).
+	 *
+	 * @param array $atts Fixed shortcode attributes of the preview.
+	 */
+	private function preview_frame( array $atts ): void {
+		?>
+		<div class="dinv-preview" data-dinv-preview-frame data-atts="<?php echo esc_attr( (string) wp_json_encode( (object) $atts ) ); ?>">
+			<div class="dinv-preview__bar">
+				<strong><?php esc_html_e( 'Live preview', 'dealer-inventory-for-autoscout24' ); ?></strong>
+				<span class="dinv-preview__devices" role="group" aria-label="<?php esc_attr_e( 'Preview width', 'dealer-inventory-for-autoscout24' ); ?>">
+					<button type="button" class="button button-small" data-dinv-device="1200" aria-pressed="true"><?php esc_html_e( 'Desktop', 'dealer-inventory-for-autoscout24' ); ?></button>
+					<button type="button" class="button button-small" data-dinv-device="390" aria-pressed="false"><?php esc_html_e( 'Mobile', 'dealer-inventory-for-autoscout24' ); ?></button>
+				</span>
+			</div>
+			<div class="dinv-preview__viewport">
+				<iframe title="<?php esc_attr_e( 'Live preview', 'dealer-inventory-for-autoscout24' ); ?>" loading="lazy"></iframe>
+			</div>
+			<p class="description"><?php esc_html_e( 'Shows unsaved changes with your theme. Links in the preview are disabled.', 'dealer-inventory-for-autoscout24' ); ?></p>
+		</div>
 		<?php
 	}
 
@@ -726,6 +792,23 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 						<?php
 						break;
 
+					case 'page':
+						wp_dropdown_pages(
+							array(
+								'name'              => esc_attr( $key ),
+								'id'                => esc_attr( $id ),
+								'selected'          => (int) $value,
+								'show_option_none'  => esc_html__( '— Page of the inventory —', 'dealer-inventory-for-autoscout24' ),
+								'option_none_value' => '0',
+							)
+						);
+						break;
+
+					case 'multi':
+					case 'list':
+						$this->choice_list( $key, $id, $field, (array) $value );
+						break;
+
 					case 'time':
 						?>
 						<input id="<?php echo esc_attr( $id ); ?>" type="time" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( (string) $value ); ?>">
@@ -757,6 +840,47 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 	}
 
 	/**
+	 * Checkbox list for multi / list fields; list fields can be reordered by
+	 * drag and drop (or with the keyboard: Alt + arrow keys). The value is
+	 * submitted as a comma separated string.
+	 *
+	 * @param string $name     Input name.
+	 * @param string $id       Element id.
+	 * @param array  $field    Field definition.
+	 * @param array  $selected Selected values in order.
+	 * @param string $default_value Builder default ('' outside the builder).
+	 */
+	private function choice_list( string $name, string $id, array $field, array $selected, string $default_value = '' ): void {
+		$options = $field['options'];
+		$order   = array_keys( $options );
+		if ( 'list' === $field['type'] ) {
+			$order = array_merge( array_values( array_intersect( $selected, $order ) ), array_values( array_diff( $order, $selected ) ) );
+		}
+		$value = $selected ? implode( ',', $selected ) : 'none';
+		?>
+		<div class="dinv-choices dinv-choices--<?php echo esc_attr( $field['type'] ); ?>" id="<?php echo esc_attr( $id ); ?>" data-dinv-choices role="group" aria-label="<?php echo esc_attr( $field['label'] ); ?>">
+			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" data-dinv-choices-value<?php echo '' !== $default_value ? ' data-default="' . esc_attr( $default_value ) . '"' : ''; ?>>
+			<ul>
+				<?php foreach ( $order as $option ) : ?>
+					<li data-value="<?php echo esc_attr( (string) $option ); ?>">
+						<?php if ( 'list' === $field['type'] ) : ?>
+							<span class="dinv-choices__handle dashicons dashicons-move" aria-hidden="true"></span>
+						<?php endif; ?>
+						<label>
+							<input type="checkbox" value="<?php echo esc_attr( (string) $option ); ?>" <?php checked( in_array( (string) $option, array_map( 'strval', $selected ), true ) ); ?>>
+							<?php echo esc_html( $options[ $option ] ); ?>
+						</label>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+			<?php if ( 'list' === $field['type'] ) : ?>
+				<p class="description"><?php esc_html_e( 'Drag to change the order (keyboard: focus a checkbox and press Alt + arrow up / down).', 'dealer-inventory-for-autoscout24' ); ?></p>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Builder input for one shortcode attribute.
 	 *
 	 * @param string $attr  Attribute name.
@@ -764,6 +888,16 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 	 */
 	private function builder_field( string $attr, array $field ): void {
 		$default = Schema::SCOPE_BOTH === $field['scope'] ? Settings::get( $field['key'], $field['default'] ) : $field['default'];
+
+		if ( in_array( $field['type'], array( 'multi', 'list' ), true ) ) {
+			?>
+			<div class="dinv-builder__field dinv-builder__field--wide">
+				<span><?php echo esc_html( $field['label'] ); ?></span>
+				<?php $this->choice_list( $attr, 'dinv-builder-' . $attr, $field, (array) $default, Schema::to_attr( $default ) ); ?>
+			</div>
+			<?php
+			return;
+		}
 
 		if ( 'bool' === $field['type'] ) {
 			?>
@@ -810,6 +944,9 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 				return isset( $field['min'], $field['max'] ) ? $field['min'] . '–' . $field['max'] : __( 'number', 'dealer-inventory-for-autoscout24' );
 			case 'number':
 				return __( 'number', 'dealer-inventory-for-autoscout24' );
+			case 'multi':
+			case 'list':
+				return implode( ', ', array_map( 'strval', array_keys( $field['options'] ) ) ) . ' ' . __( '(comma separated; "none" for none)', 'dealer-inventory-for-autoscout24' );
 			default:
 				return __( 'text', 'dealer-inventory-for-autoscout24' );
 		}
@@ -821,8 +958,8 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 	 * @param mixed $value Value.
 	 */
 	private function value_text( $value ): string {
-		if ( is_bool( $value ) ) {
-			return $value ? 'yes' : 'no';
+		if ( is_bool( $value ) || is_array( $value ) ) {
+			return Schema::to_attr( $value );
 		}
 		return '' === (string) $value ? '—' : (string) $value;
 	}

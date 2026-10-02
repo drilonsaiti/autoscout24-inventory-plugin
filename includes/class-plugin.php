@@ -48,6 +48,11 @@ final class Plugin {
 		add_action( Sync::HOOK, array( Scheduler::class, 'run' ) );
 
 		add_shortcode( Shortcode::TAG, array( Shortcode::class, 'render' ) );
+		add_action( 'init', array( Assets::class, 'register' ), 8 );
+		add_action( 'init', array( Block::class, 'register' ), 9 );
+		add_action( 'elementor/widgets/register', array( Elementor::class, 'register' ) );
+		Detail::register();
+		add_action( 'template_redirect', array( Preview::class, 'maybe_render' ), 1 );
 		add_action( 'wp_enqueue_scripts', array( Assets::class, 'maybe_enqueue' ), 5 );
 		add_filter( 'wp_resource_hints', array( Assets::class, 'resource_hints' ), 10, 2 );
 		add_filter( 'wp_robots', array( $this, 'robots' ) );
@@ -159,7 +164,7 @@ final class Plugin {
 			'other' => false,
 		);
 		foreach ( $_GET as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only.
-			if ( ! is_string( $key ) || ! str_starts_with( $key, 'dinv_' ) ) {
+			if ( ! is_string( $key ) || ! str_starts_with( $key, 'dinv_' ) || Detail::QUERY_VAR === $key ) {
 				continue;
 			}
 			if ( preg_match( '/^dinv_(?:[a-z0-9_-]+_)?page$/', $key ) ) {
@@ -194,6 +199,7 @@ final class Plugin {
 		Settings::all();
 		update_option( self::VERSION_OPTION, DINV_VERSION, true );
 		Scheduler::reschedule();
+		update_option( 'dinv_flush_rewrite', 1, false );
 	}
 
 	/**
@@ -201,6 +207,7 @@ final class Plugin {
 	 */
 	public static function deactivate(): void {
 		Scheduler::clear();
+		flush_rewrite_rules( false );
 	}
 
 	/**

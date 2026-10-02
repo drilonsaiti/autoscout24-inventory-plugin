@@ -61,7 +61,11 @@ final class Settings {
 	 */
 	public static function get( string $key, $fallback = null ) {
 		$settings = self::all();
-		return array_key_exists( $key, $settings ) ? $settings[ $key ] : $fallback;
+		if ( array_key_exists( $key, $settings ) ) {
+			return $settings[ $key ];
+		}
+		$field = Schema::field( $key );
+		return null !== $field && Schema::SCOPE_INSTANCE !== $field['scope'] ? $field['default'] : $fallback;
 	}
 
 	/**
@@ -129,6 +133,23 @@ final class Settings {
 		self::$runtime_cache = $settings;
 		Connection::reset();
 		return $settings;
+	}
+
+	/**
+	 * Use unsaved values for the rest of this request (admin live preview).
+	 *
+	 * @param array $values Raw values keyed by setting name.
+	 */
+	public static function preview( array $values ): void {
+		$settings = self::all();
+		foreach ( $values as $key => $raw ) {
+			$field = Schema::field( (string) $key );
+			if ( null === $field || Schema::SCOPE_INSTANCE === $field['scope'] || ! in_array( $field['group'], array( 'display', 'filters', 'card', 'format', 'design' ), true ) ) {
+				continue;
+			}
+			$settings[ $key ] = Schema::sanitize( (string) $key, is_array( $raw ) ? implode( ',', array_map( 'strval', $raw ) ) : (string) $raw );
+		}
+		self::$runtime_cache = $settings;
 	}
 
 	/**

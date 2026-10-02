@@ -21,6 +21,7 @@ function dinv_uninstall_site(): void {
 	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- Removing the plugin's own tables.
 	$wpdb->query( 'DROP TABLE IF EXISTS ' . esc_sql( $wpdb->prefix . 'dinv_vehicles' ) );
 	$wpdb->query( 'DROP TABLE IF EXISTS ' . esc_sql( $wpdb->prefix . 'dinv_logs' ) );
+	flush_rewrite_rules( false );
 
 	foreach ( array(
 		'dinv_settings',
@@ -31,6 +32,7 @@ function dinv_uninstall_site(): void {
 		'dinv_connection_status',
 		'dinv_seller_profile',
 		'dinv_sync_lock',
+		'dinv_flush_rewrite',
 	) as $option ) {
 		delete_option( $option );
 	}

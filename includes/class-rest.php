@@ -67,7 +67,13 @@ final class Rest {
 	}
 
 	/**
-	 * Filtered, sorted and paginated vehicles as rendered HTML.
+	 * Filtered, sorted and paginated vehicles as rendered HTML, plus make /
+	 * model counts for the new filter state.
+	 *
+	 * Parameters: instance settings (as shortcode attributes), unprefixed
+	 * request parameters (dinv_make, dinv_page, dinv_sort, dinv_per_page,
+	 * dinv_view …), dinv_base (page path for links), dinv_part ("items" to
+	 * get only the vehicles for appending), dinv_locale and v (version).
 	 *
 	 * @param WP_REST_Request $request Request.
 	 */
@@ -77,40 +83,41 @@ final class Rest {
 		// Render in the visitor's language (multilingual sites pass the page locale).
 		$switched = self::switch_locale( (string) ( $params['dinv_locale'] ?? '' ) );
 
-		// Display settings of the instance (only display/filter/format groups).
+		// Settings of the instance (only groups the browser may send).
 		$atts = array();
 		foreach ( Schema::instance_fields() as $attr => $field ) {
-			if ( in_array( $field['group'], Shortcode::CLIENT_GROUPS, true ) && isset( $params[ $attr ] ) && ! is_array( $params[ $attr ] ) ) {
+			if ( in_array( $field['group'], Shortcode::CLIENT_GROUPS, true ) && isset( $params[ $attr ] ) && is_scalar( $params[ $attr ] ) ) {
 				$atts[ $attr ] = wp_unslash( (string) $params[ $attr ] );
 			}
 		}
 		$config = Schema::resolve( $atts );
 
-		$filters = Shortcode::filters_from_request( $params );
-		$page    = max( 1, absint( $params['dinv_page'] ?? 1 ) );
-		$sort    = Shortcode::valid_sort( sanitize_key( (string) ( $params['dinv_sort'] ?? '' ) ), (string) $config['sort'] );
-
-		$results  = Repository::search( $filters, $page, (int) $config['per_page'], $sort, $config['show_pagination'] || $config['show_count'] );
-		$renderer = new Renderer( $config );
-
 		$base = Shortcode::sanitize_base_url( (string) wp_unslash( $params['dinv_base'] ?? '' ) );
 		if ( '' !== $base ) {
-			$instance = sanitize_key( (string) ( $params['dinv_instance'] ?? '' ) );
-			$renderer->link_pages( $base, Shortcode::url_params( $filters, $sort, (string) $config['sort'], $instance ), $instance );
+			Detail::set_context_base( (string) strtok( $base, '?' ) );
 		}
 
-		$response = self::response(
-			array(
-				'success'    => true,
-				'total'      => $results['total'],
-				'countLabel' => Labels::vehicle_noun( (int) $results['total'] ),
-				'page'       => $results['page'],
-				'totalPages' => $results['total_pages'],
-				'html'       => $renderer->items( $results['items'] ),
-				'pagination' => $config['show_pagination'] ? $renderer->pagination( $results ) : '',
-			),
-			(string) ( $params['v'] ?? '' ) === (string) Sync::version()
+		$inventory = new Inventory( $config, $params, '', $config['url_state'] ? $base : '', true );
+		$results   = $inventory->results;
+		$renderer  = $inventory->renderer;
+		$items     = 'items' === ( $params['dinv_part'] ?? '' );
+		$offset    = ( (int) $results['page'] - 1 ) * (int) $results['per_page'];
+
+		$data = array(
+			'success'    => true,
+			'total'      => $results['total'],
+			'countLabel' => Labels::vehicle_noun( (int) $results['total'] ),
+			'page'       => $results['page'],
+			'totalPages' => $results['total_pages'],
+			'layout'     => $inventory->config['layout'],
+			'html'       => $items ? $renderer->items( $results['items'], $offset ) : $renderer->body( $results['items'] ),
+			'pagination' => $config['show_pagination'] ? $renderer->pagination( $results ) : '',
 		);
+		if ( ! $items && $inventory->shows_make_control() ) {
+			$data['facets'] = $inventory->facets();
+		}
+
+		$response = self::response( $data, (string) ( $params['v'] ?? '' ) === (string) Sync::version() );
 
 		if ( $switched ) {
 			restore_previous_locale();

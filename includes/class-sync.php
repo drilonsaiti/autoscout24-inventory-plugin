@@ -78,6 +78,7 @@ final class Sync {
 			// Only a complete download may deactivate vehicles.
 			$deactivated = Repository::deactivate_missing( $connection->id, $batch );
 			$metadata    = self::refresh_metadata( $connection, $language );
+			$details     = self::refresh_details( $connection, $language );
 
 			Repository::invalidate_public_cache();
 
@@ -90,6 +91,7 @@ final class Sync {
 				'deactivated'        => $deactivated,
 				'warranty_refreshed' => $metadata['warranty_refreshed'],
 				'metadata_failures'  => $metadata['failures'],
+				'details_updated'    => $details,
 				'last_error'         => '',
 			);
 			update_option( 'dinv_sync_stats', $stats, true );
@@ -154,6 +156,51 @@ final class Sync {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Download description and equipment for new or outdated vehicles, when
+	 * local detail pages are used. Limited per run to protect the API quota.
+	 *
+	 * @param Connection $connection Connection.
+	 * @param string     $language   Content language.
+	 * @return int Number of vehicles updated.
+	 */
+	private static function refresh_details( Connection $connection, string $language ): int {
+		if ( ! self::details_enabled() ) {
+			return 0;
+		}
+
+		/**
+		 * Filters how many vehicles get their details refreshed per sync.
+		 *
+		 * @param int $limit Vehicles per run (two API requests each).
+		 */
+		$limit    = max( 1, (int) apply_filters( 'dinv_detail_batch_size', 25 ) );
+		$provider = $connection->provider();
+		$updated  = 0;
+
+		foreach ( Repository::vehicles_needing_details( $connection->id, $limit ) as $external_id ) {
+			$detail = $provider->fetch_listing_detail( $connection, $external_id, $language );
+			if ( is_wp_error( $detail ) ) {
+				Logger::log( 'warning', 'detail_refresh_failed', 'Vehicle detail refresh failed.', array( 'error_code' => $detail->get_error_code() ) );
+				if ( 'dinv_rate_limited' === $detail->get_error_code() ) {
+					break;
+				}
+				continue;
+			}
+			Repository::store_details( $connection->id, $external_id, $detail );
+			++$updated;
+		}
+
+		return $updated;
+	}
+
+	/**
+	 * Whether descriptions and equipment are downloaded.
+	 */
+	public static function details_enabled(): bool {
+		return (bool) Settings::get( 'sync_details', false ) || 'local' === Settings::get( 'link_to', 'autoscout' );
 	}
 
 	/**

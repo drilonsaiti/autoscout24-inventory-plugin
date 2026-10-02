@@ -115,15 +115,19 @@ final class Format {
 	/**
 	 * First registration, "03/2021" (format translatable per locale).
 	 *
-	 * @param string     $date Y-m-d.
-	 * @param int|string $year Fallback year.
+	 * @param string     $date   Y-m-d.
+	 * @param int|string $year   Fallback year.
+	 * @param string     $format "auto" (translated) or a PHP date format: m/Y, m.Y, Y.
 	 */
-	public static function registration( string $date, $year ): string {
+	public static function registration( string $date, $year, string $format = 'auto' ): string {
 		if ( preg_match( '/^(\d{4})-(\d{2})-\d{2}$/', $date ) ) {
 			$timestamp = strtotime( $date . ' 12:00:00 UTC' );
 			if ( false !== $timestamp ) {
-				/* translators: PHP date format for the first registration month, see https://www.php.net/date. German: m.Y */
-				return wp_date( _x( 'm/Y', 'first registration date format', 'dealer-inventory-for-autoscout24' ), $timestamp, new \DateTimeZone( 'UTC' ) );
+				if ( ! in_array( $format, array( 'm/Y', 'm.Y', 'Y' ), true ) ) {
+					/* translators: PHP date format for the first registration month, see https://www.php.net/date. German: m.Y */
+					$format = _x( 'm/Y', 'first registration date format', 'dealer-inventory-for-autoscout24' );
+				}
+				return wp_date( $format, $timestamp, new \DateTimeZone( 'UTC' ) );
 			}
 		}
 		return $year ? (string) $year : '';

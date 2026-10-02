@@ -13,21 +13,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Turns the design settings into CSS custom properties on .dinv-inventory.
+ *
+ * Every visual value in the stylesheet reads a --dinv-* custom property, so
+ * themes can restyle the plugin by overriding those properties, without
+ * fighting specificity.
  */
 final class Design {
 
-	public const DEFAULT_PRESET = 'light';
+	public const DEFAULT_PRESET = 'classic';
 
 	/**
-	 * Color presets. Every preset passes WCAG AA contrast for body text,
-	 * muted text and button text.
+	 * Presets: colors plus sizes. Every preset passes WCAG AA contrast for
+	 * body text, secondary text and button text.
 	 *
-	 * @return array<string, array<string, string>>
+	 * @return array<string, array<string, mixed>>
 	 */
 	public static function presets(): array {
 		return array(
-			'light'        => array(
-				'label'                => __( 'Light', 'dealer-inventory-for-autoscout24' ),
+			'classic'      => array(
+				'label'                => __( 'Classic', 'dealer-inventory-for-autoscout24' ),
 				'design_accent'        => '#2457D6',
 				'design_accent_hover'  => '#1B46A8',
 				'design_on_accent'     => '#FFFFFF',
@@ -40,36 +44,79 @@ final class Design {
 				'design_border'        => '#DDE1E7',
 				'design_border_hi'     => '#B6BDC8',
 				'design_border_accent' => '#C9D6F5',
+				'design_max_width'     => 1280,
+				'design_padding'       => 32,
+				'design_gap'           => 16,
+				'design_radius_large'  => 16,
+				'design_radius'        => 12,
+				'design_radius_small'  => 8,
+				'design_shadow'        => 'soft',
 			),
-			'dark'         => array(
-				'label'                => __( 'Dark', 'dealer-inventory-for-autoscout24' ),
-				'design_accent'        => '#5B8CFF',
-				'design_accent_hover'  => '#7FA5FF',
-				'design_on_accent'     => '#0B0C0E',
-				'design_bg'            => '#0F1012',
-				'design_bg_alt'        => '#141518',
-				'design_panel'         => '#191A1E',
-				'design_panel_2'       => '#121316',
-				'design_text'          => '#F5F6F7',
-				'design_muted'         => '#A8ABB2',
-				'design_border'        => '#2B2D33',
-				'design_border_hi'     => '#4A4D55',
-				'design_border_accent' => '#2C3F6E',
+			'minimal'      => array(
+				'label'                => __( 'Minimal', 'dealer-inventory-for-autoscout24' ),
+				'design_accent'        => '#111827',
+				'design_accent_hover'  => '#374151',
+				'design_on_accent'     => '#FFFFFF',
+				'design_bg'            => '#FFFFFF',
+				'design_bg_alt'        => '#FAFAFA',
+				'design_panel'         => '#F4F4F5',
+				'design_panel_2'       => '#FFFFFF',
+				'design_text'          => '#111827',
+				'design_muted'         => '#4B5563',
+				'design_border'        => '#E5E7EB',
+				'design_border_hi'     => '#9CA3AF',
+				'design_border_accent' => '#D1D5DB',
+				'design_max_width'     => 1280,
+				'design_padding'       => 24,
+				'design_gap'           => 16,
+				'design_radius_large'  => 4,
+				'design_radius'        => 4,
+				'design_radius_small'  => 2,
+				'design_shadow'        => 'none',
 			),
-			'dark_neutral' => array(
-				'label'                => __( 'Dark monochrome', 'dealer-inventory-for-autoscout24' ),
-				'design_accent'        => '#E5E7EB',
-				'design_accent_hover'  => '#FFFFFF',
-				'design_on_accent'     => '#111113',
-				'design_bg'            => '#0F1012',
-				'design_bg_alt'        => '#141518',
-				'design_panel'         => '#191A1E',
-				'design_panel_2'       => '#121316',
-				'design_text'          => '#F7F7F8',
-				'design_muted'         => '#A8ABB2',
-				'design_border'        => '#2B2D33',
-				'design_border_hi'     => '#4A4D55',
-				'design_border_accent' => '#3B3D43',
+			'premium_dark' => array(
+				'label'                => __( 'Premium dark', 'dealer-inventory-for-autoscout24' ),
+				'design_accent'        => '#C8A96A',
+				'design_accent_hover'  => '#DCC08A',
+				'design_on_accent'     => '#111111',
+				'design_bg'            => '#0D0D0F',
+				'design_bg_alt'        => '#141416',
+				'design_panel'         => '#1A1A1D',
+				'design_panel_2'       => '#121214',
+				'design_text'          => '#F4F4F5',
+				'design_muted'         => '#A1A1AA',
+				'design_border'        => '#2A2A2E',
+				'design_border_hi'     => '#4A4A50',
+				'design_border_accent' => '#4A3F2A',
+				'design_max_width'     => 1320,
+				'design_padding'       => 40,
+				'design_gap'           => 18,
+				'design_radius_large'  => 20,
+				'design_radius'        => 14,
+				'design_radius_small'  => 10,
+				'design_shadow'        => 'strong',
+			),
+			'compact'      => array(
+				'label'                => __( 'Compact', 'dealer-inventory-for-autoscout24' ),
+				'design_accent'        => '#0F766E',
+				'design_accent_hover'  => '#115E59',
+				'design_on_accent'     => '#FFFFFF',
+				'design_bg'            => '#FFFFFF',
+				'design_bg_alt'        => '#F8FAFC',
+				'design_panel'         => '#F1F5F9',
+				'design_panel_2'       => '#FFFFFF',
+				'design_text'          => '#0F172A',
+				'design_muted'         => '#475569',
+				'design_border'        => '#E2E8F0',
+				'design_border_hi'     => '#94A3B8',
+				'design_border_accent' => '#99F6E4',
+				'design_max_width'     => 1200,
+				'design_padding'       => 16,
+				'design_gap'           => 10,
+				'design_radius_large'  => 8,
+				'design_radius'        => 6,
+				'design_radius_small'  => 4,
+				'design_shadow'        => 'none',
 			),
 		);
 	}
@@ -98,19 +145,44 @@ final class Design {
 
 	/**
 	 * CSS custom properties for the current settings.
+	 *
+	 * @param array|null $settings Settings to render (defaults to the saved ones).
 	 */
-	public static function css(): string {
-		$s     = Settings::all();
+	public static function css( ?array $settings = null ): string {
+		$tokens = self::tokens( $settings ?? Settings::all() );
+
+		$css = '.dinv-inventory,.dinv-detail{';
+		foreach ( $tokens as $name => $value ) {
+			$css .= $name . ':' . $value . ';';
+		}
+		return $css . '}';
+	}
+
+	/**
+	 * Custom property values.
+	 *
+	 * @param array $s Settings.
+	 * @return array<string, string>
+	 */
+	public static function tokens( array $s ): array {
 		$color = static function ( string $key ) use ( $s ): string {
 			$value = sanitize_hex_color( (string) ( $s[ $key ] ?? '' ) );
-			return $value ? $value : (string) Schema::field( $key )['default'];
+			return $value ? $value : (string) self::presets()[ self::DEFAULT_PRESET ][ $key ];
 		};
+		$int   = static fn( string $key ): int => absint( $s[ $key ] ?? self::presets()[ self::DEFAULT_PRESET ][ $key ] ?? 0 );
+
+		$shadows = array(
+			'none'   => array( 'none', 'none' ),
+			'soft'   => array( '0 1px 2px rgb(0 0 0 / 6%), 0 4px 14px rgb(0 0 0 / 6%)', '0 10px 28px rgb(0 0 0 / 12%)' ),
+			'strong' => array( '0 2px 4px rgb(0 0 0 / 18%), 0 12px 32px rgb(0 0 0 / 28%)', '0 18px 44px rgb(0 0 0 / 40%)' ),
+		);
+		$shadow  = $shadows[ (string) ( $s['design_shadow'] ?? 'soft' ) ] ?? $shadows['soft'];
 
 		$tokens = array(
 			'--dinv-accent'             => $color( 'design_accent' ),
 			'--dinv-accent-hover'       => $color( 'design_accent_hover' ),
 			'--dinv-on-accent'          => $color( 'design_on_accent' ),
-			'--dinv-focus-ring'         => self::rgba( $color( 'design_accent' ), 0.18 ),
+			'--dinv-focus-ring'         => self::rgba( $color( 'design_accent' ), 0.28 ),
 			'--dinv-bg'                 => $color( 'design_bg' ),
 			'--dinv-bg-alt'             => $color( 'design_bg_alt' ),
 			'--dinv-panel'              => $color( 'design_panel' ),
@@ -120,50 +192,49 @@ final class Design {
 			'--dinv-border'             => $color( 'design_border' ),
 			'--dinv-border-hi'          => $color( 'design_border_hi' ),
 			'--dinv-border-accent'      => $color( 'design_border_accent' ),
-			'--dinv-wrap'               => absint( $s['design_max_width'] ) . 'px',
-			'--dinv-pad'                => absint( $s['design_padding'] ) . 'px',
-			'--dinv-radius'             => absint( $s['design_radius'] ) . 'px',
-			'--dinv-radius-lg'          => absint( $s['design_radius_large'] ) . 'px',
-			'--dinv-radius-sm'          => absint( $s['design_radius_small'] ) . 'px',
-			'--dinv-gap'                => absint( $s['design_gap'] ) . 'px',
-			'--dinv-image-width'        => absint( $s['design_image_width'] ) . 'px',
-			'--dinv-image-ratio'        => self::ratio( (string) $s['design_image_ratio'] ),
-			'--dinv-image-ratio-mobile' => self::ratio( (string) $s['design_mobile_ratio'] ),
-			'--dinv-font'               => self::font( (string) $s['design_font'] ),
+			'--dinv-font'               => self::font( (string) ( $s['design_font'] ?? 'inherit' ), (string) ( $s['design_font_custom'] ?? '' ) ),
+			'--dinv-wrap'               => $int( 'design_max_width' ) . 'px',
+			'--dinv-pad'                => $int( 'design_padding' ) . 'px',
+			'--dinv-gap'                => $int( 'design_gap' ) . 'px',
+			'--dinv-radius-lg'          => $int( 'design_radius_large' ) . 'px',
+			'--dinv-radius'             => $int( 'design_radius' ) . 'px',
+			'--dinv-radius-sm'          => $int( 'design_radius_small' ) . 'px',
+			'--dinv-shadow'             => $shadow[0],
+			'--dinv-shadow-hover'       => $shadow[1],
+			'--dinv-image-width'        => absint( $s['design_image_width'] ?? 280 ) . 'px',
+			'--dinv-image-ratio-mobile' => self::ratio( (string) ( $s['design_mobile_ratio'] ?? '16-10' ) ),
 		);
 
-		$css = '.dinv-inventory{';
-		foreach ( $tokens as $name => $value ) {
-			$css .= $name . ':' . $value . ';';
+		if ( ! empty( $s['use_theme_styles'] ) ) {
+			// Colors and font come from the theme (theme.json presets when present).
+			$tokens = array_merge(
+				$tokens,
+				array(
+					'--dinv-accent'        => 'var(--wp--preset--color--primary,var(--wp--preset--color--accent-1,var(--wp--preset--color--contrast,currentColor)))',
+					'--dinv-accent-hover'  => 'var(--dinv-accent)',
+					'--dinv-on-accent'     => 'var(--wp--preset--color--base,#fff)',
+					'--dinv-focus-ring'    => 'color-mix(in srgb,var(--dinv-accent) 35%,transparent)',
+					'--dinv-bg'            => 'transparent',
+					'--dinv-bg-alt'        => 'transparent',
+					'--dinv-panel'         => 'color-mix(in srgb,currentColor 5%,transparent)',
+					'--dinv-panel-2'       => 'var(--wp--preset--color--base,transparent)',
+					'--dinv-text'          => 'inherit',
+					'--dinv-muted'         => 'color-mix(in srgb,currentColor 72%,transparent)',
+					'--dinv-border'        => 'color-mix(in srgb,currentColor 16%,transparent)',
+					'--dinv-border-hi'     => 'color-mix(in srgb,currentColor 36%,transparent)',
+					'--dinv-border-accent' => 'color-mix(in srgb,var(--dinv-accent) 40%,transparent)',
+					'--dinv-font'          => 'inherit',
+				)
+			);
 		}
-		$css .= '}';
 
-		$hidden = array(
-			'design_show_teaser' => '.dinv-vehicle__teaser,.dinv-card__teaser',
-			'design_show_specs'  => '.dinv-vehicle__specs,.dinv-card__chips',
-			'design_show_cta'    => '.dinv-vehicle__cta',
-		);
-		foreach ( $hidden as $key => $selector ) {
-			if ( empty( $s[ $key ] ) ) {
-				$css .= implode( ',', array_map( static fn( $part ) => '.dinv-inventory ' . $part, explode( ',', $selector ) ) ) . '{display:none!important;}';
-			}
-		}
-
-		return $css;
-	}
-
-	/**
-	 * Font stack for a font setting.
-	 *
-	 * @param string $font Font key.
-	 */
-	private static function font( string $font ): string {
-		$stacks = array(
-			'inherit' => 'inherit',
-			'system'  => 'system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif',
-			'serif'   => 'Georgia,"Times New Roman",serif',
-		);
-		return $stacks[ $font ] ?? 'inherit';
+		/**
+		 * Filters the design tokens (CSS custom property => value).
+		 *
+		 * @param array $tokens   Tokens.
+		 * @param array $settings Settings.
+		 */
+		return (array) apply_filters( 'dinv_design_tokens', $tokens, $s );
 	}
 
 	/**
@@ -171,8 +242,26 @@ final class Design {
 	 *
 	 * @param string $ratio Ratio key like "4-3".
 	 */
-	private static function ratio( string $ratio ): string {
+	public static function ratio( string $ratio ): string {
 		return preg_match( '/^(\d{1,2})-(\d{1,2})$/', $ratio, $m ) ? $m[1] . ' / ' . $m[2] : '4 / 3';
+	}
+
+	/**
+	 * Font stack.
+	 *
+	 * @param string $font   Font key.
+	 * @param string $custom Custom family.
+	 */
+	private static function font( string $font, string $custom ): string {
+		if ( 'custom' === $font && '' !== $custom && preg_match( '/^[A-Za-z0-9 ,\'"\-]+$/', $custom ) ) {
+			return $custom;
+		}
+		$stacks = array(
+			'inherit' => 'inherit',
+			'system'  => 'system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif',
+			'serif'   => 'Georgia,"Times New Roman",serif',
+		);
+		return $stacks[ $font ] ?? 'inherit';
 	}
 
 	/**

@@ -13,7 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Loads CSS and JavaScript only on pages that show an inventory, and the
- * script only when an instance is interactive (filters, sort or pagination).
+ * script only when an instance is interactive (filters, sort, pagination,
+ * view or page-size switch) or a vehicle detail page is shown.
  */
 final class Assets {
 
@@ -41,11 +42,43 @@ final class Assets {
 	private static bool $script_localized = false;
 
 	/**
-	 * Detect inventories in the queried post (content and Elementor data)
-	 * before wp_head, so styles land in the head and static blocks load no JS.
+	 * Register the stylesheet and script (also used as block editor styles).
+	 */
+	public static function register(): void {
+		wp_register_style( self::HANDLE, DINV_PLUGIN_URL . 'public/css/inventory.css', array(), DINV_VERSION );
+		wp_register_script(
+			self::HANDLE,
+			DINV_PLUGIN_URL . 'public/js/inventory.js',
+			array(),
+			DINV_VERSION,
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+	}
+
+	/**
+	 * Whether an inventory needs the script.
+	 *
+	 * @param array $config Resolved configuration.
+	 */
+	public static function is_interactive( array $config ): bool {
+		return $config['show_filters'] || $config['show_sort'] || $config['show_pagination'] || $config['view_switcher'] || $config['per_page_selector'];
+	}
+
+	/**
+	 * Detect inventories in the queried post (shortcodes, blocks and
+	 * Elementor data) before wp_head, so styles land in the head and static
+	 * inventories load no JavaScript.
 	 */
 	public static function maybe_enqueue(): void {
 		if ( is_admin() ) {
+			return;
+		}
+
+		if ( Detail::is_detail_request() ) {
+			self::enqueue( true );
 			return;
 		}
 
@@ -54,56 +87,70 @@ final class Assets {
 			return;
 		}
 
-		$post     = get_post( $post_id );
-		$haystack = ( $post instanceof \WP_Post ? (string) $post->post_content : '' ) . "\n" . (string) get_post_meta( $post_id, '_elementor_data', true );
+		$post    = get_post( $post_id );
+		$content = $post instanceof \WP_Post ? (string) $post->post_content : '';
+		$configs = array();
 
-		if ( false === strpos( $haystack, '[' . Shortcode::TAG ) ) {
+		foreach ( self::find_blocks( parse_blocks( $content ) ) as $attributes ) {
+			$configs[] = Schema::resolve( Block::to_atts( $attributes ) );
+		}
+
+		$haystack = $content . "\n" . (string) get_post_meta( $post_id, '_elementor_data', true );
+		if ( false !== strpos( $haystack, '[' . Shortcode::TAG ) ) {
+			// Elementor stores widget content as JSON with escaped quotes; normalize
+			// for detection only. Stored data is never modified.
+			$haystack = html_entity_decode( str_replace( array( '\\"', "\\'" ), array( '"', "'" ), $haystack ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			preg_match_all( '/\[' . Shortcode::TAG . '\b([^\]]*)\]/i', $haystack, $matches );
+			foreach ( $matches[1] ?? array() as $attributes ) {
+				$parsed    = shortcode_parse_atts( (string) $attributes );
+				$configs[] = Schema::resolve( is_array( $parsed ) ? $parsed : array() );
+			}
+		}
+
+		if ( ! $configs && false !== strpos( $haystack, '"widgetType":"' . Elementor::WIDGET ) ) {
+			$configs[] = Schema::resolve( array() );
+		}
+
+		if ( ! $configs ) {
 			return;
 		}
 
-		// Elementor stores widget content as JSON with escaped quotes; normalize
-		// for detection only. Stored data is never modified.
-		$haystack = html_entity_decode( str_replace( array( '\\"', "\\'" ), array( '"', "'" ), $haystack ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-
-		preg_match_all( '/\[' . Shortcode::TAG . '\b([^\]]*)\]/i', $haystack, $matches );
-
-		$with_filters = false;
-		$with_script  = false;
-		foreach ( $matches[1] ?? array() as $attributes ) {
-			$parsed = shortcode_parse_atts( (string) $attributes );
-			$config = Schema::resolve( is_array( $parsed ) ? $parsed : array() );
-
-			$with_filters = $with_filters || $config['show_filters'];
-			$with_script  = $with_script || $config['show_filters'] || $config['show_sort'] || $config['show_pagination'];
+		$script = false;
+		foreach ( $configs as $config ) {
+			$script = $script || self::is_interactive( $config );
 		}
+		self::enqueue( $script );
+	}
 
-		if ( $matches[1] ?? array() ) {
-			self::$page_has_inventory = true;
-			self::enqueue( $with_filters, $with_script );
+	/**
+	 * Attributes of every inventory block, including nested blocks.
+	 *
+	 * @param array $blocks Parsed blocks.
+	 * @return array[]
+	 */
+	private static function find_blocks( array $blocks ): array {
+		$found = array();
+		foreach ( $blocks as $block ) {
+			if ( Block::NAME === ( $block['blockName'] ?? '' ) ) {
+				$found[] = (array) ( $block['attrs'] ?? array() );
+			}
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$found = array_merge( $found, self::find_blocks( $block['innerBlocks'] ) );
+			}
 		}
+		return $found;
 	}
 
 	/**
 	 * Enqueue the stylesheet, design tokens and (optionally) the script.
 	 *
-	 * @param bool $with_filters The page shows filters.
-	 * @param bool $with_script  The page has an interactive instance.
+	 * @param bool $script The page has an interactive inventory or a detail view.
 	 */
-	public static function enqueue( bool $with_filters, bool $with_script ): void {
+	public static function enqueue( bool $script ): void {
 		self::$page_has_inventory = true;
 
 		if ( ! wp_style_is( self::HANDLE, 'registered' ) ) {
-			wp_register_style( self::HANDLE, DINV_PLUGIN_URL . 'public/css/inventory.css', array(), DINV_VERSION );
-			wp_register_script(
-				self::HANDLE,
-				DINV_PLUGIN_URL . 'public/js/inventory.js',
-				array(),
-				DINV_VERSION,
-				array(
-					'in_footer' => true,
-					'strategy'  => 'defer',
-				)
-			);
+			self::register();
 		}
 
 		wp_enqueue_style( self::HANDLE );
@@ -113,7 +160,7 @@ final class Assets {
 			self::$design_added = true;
 		}
 
-		if ( ! $with_script ) {
+		if ( ! $script ) {
 			return;
 		}
 
@@ -124,7 +171,7 @@ final class Assets {
 				self::HANDLE,
 				'DinvInventory',
 				array(
-					'restBase' => esc_url_raw( rest_url( 'dinv/v1' ) ),
+					'restBase' => esc_url_raw( rest_url( Rest::NAMESPACE ) ),
 					'labels'   => Labels::ui(),
 				)
 			);

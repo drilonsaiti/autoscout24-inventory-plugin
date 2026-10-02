@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "dealer-inventory/inventory",
+	"title": "Vehicle Inventory",
+	"category": "widgets",
+	"icon": "car",
+	"description": "Shows your AutoScout24 vehicles with filters, sorting and pagination.",
+	"keywords": [
+		"autoscout24",
+		"cars",
+		"vehicles",
+		"inventory",
+		"dealer"
+	],
+	"textdomain": "dealer-inventory-for-autoscout24",
+	"supports": {
+		"html": false,
+		"align": [
+			"wide",
+			"full"
+		],
+		"spacing": {
+			"margin": true
+		}
+	},
+	"editorScript": "dinv-block-editor",
+	"editorStyle": "dinv-inventory",
+	"attributes": {
+		"settings": {
+			"type": "object",
+			"default": {}
+		}
+	},
+	"example": {
+		"attributes": {
+			"settings": {
+				"per_page": "3",
+				"show_filters": "no",
+				"show_header": "no",
+				"show_pagination": "no"
+			}
+		}
+	}
+}

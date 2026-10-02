@@ -4,7 +4,7 @@ Tags: car dealer, vehicle inventory, autoscout24, car listings, dealership
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,17 +17,22 @@ Dealer Inventory for AutoScout24 brings the cars you list on AutoScout24 to your
 **Features**
 
 * Automatic synchronization (every 15 minutes to every 12 hours, or once a day at a fixed time) plus "Sync now".
-* Card grid or list layout, 1–4 columns, configurable vehicles per page.
-* Filters for make, vehicle type, price, year, mileage, fuel, transmission, body type, drive, condition, power and warranty. Choose which filters appear.
-* Sorting by newest, price, mileage, year, power or make.
+* Layouts: cards, compact grid, list and table; columns per desktop, tablet and phone; optional grid / list switch that remembers the visitor's choice.
+* Vehicles per page with an optional visitor selector; pagination as page numbers, "Load more" or infinite scrolling (always with crawlable links).
+* Make and model as two dropdowns, one combined picker or a searchable field, with live counts; empty makes and models can be hidden.
+* Choose the filters and drag them into order; filters above the results or in a sidebar, collapsible, as an off-canvas panel on phones; ranges as fields or sliders.
+* Sorting by newest, price, mileage, year, power or make; choose which sort options are offered.
+* Card parts, badges (new, warranty, price reduced), monthly rate, image ratio, mini-gallery and hover effects.
+* Optional vehicle detail pages on your own site with photo gallery, specifications, equipment, SEO title and description, Open Graph tags, schema.org Vehicle data and an XML sitemap.
 * Crawlable pagination with real links, self-referencing canonical URLs and noindex for filtered result pages.
 * Shareable result URLs (filters, sort and page in the URL), multiple independent inventories on one page.
-* Shortcode builder in the admin; every option can be set site-wide and overridden per shortcode.
-* Design settings: presets, colors, radius, spacing, image ratios, card parts. Uses your theme font by default.
+* Gutenberg block, Elementor widget and a shortcode builder, all with live preview; every option can be set site-wide and overridden per inventory.
+* Design presets (Classic, Minimal, Premium dark, Compact) or "Use theme styles", colors, radius, spacing, shadows, live preview.
+* Template overrides: copy any file from templates/ to yourtheme/dealer-inventory/. Hooks and filters for data, markup and SEO output.
 * Prices, numbers and units formatted for the visitor's language (for example "CHF 59’900", "59.900 €", PS / ch / CV / kW).
 * Translations included: German (Germany, Austria, Switzerland), French and Italian. Works with TranslatePress, WPML and Polylang.
 * Lightweight: CSS and JavaScript load only on pages with an inventory, and static blocks (for example "three newest cars" on the homepage) load no JavaScript at all.
-* Works with the block editor, classic editor and Elementor (Shortcode or HTML widget).
+* Works with the block editor, classic editor and Elementor (own widget, Shortcode or HTML widget).
 
 **Markets**
 
@@ -95,7 +100,7 @@ Yes: `[dealer_inventory make="bmw" body="suv"]` or `[dealer_inventory query="mak
 
 = Does it work with Elementor? =
 
-Yes. Use the Shortcode widget or the HTML widget. Elementor's element cache is told that inventory widgets are dynamic, so lists stay current.
+Yes. Use the "Vehicle Inventory" widget, or the Shortcode or HTML widget. Elementor's element cache is told that inventory widgets are dynamic, so lists stay current.
 
 = Does it work with page caching? =
 
@@ -124,6 +129,16 @@ Deleting the plugin removes its database tables, settings and scheduled events.
 
 == Changelog ==
 
+= 1.1.0 =
+* New: layouts (cards, compact grid, list, table), columns per breakpoint, grid / list switch.
+* New: make / model modes (separate, combined, searchable), counts and hiding of empty entries.
+* New: filter selection and order, sidebar position, mobile filter panel, range sliders.
+* New: per-page selector, "Load more" and infinite scrolling, configurable sort options.
+* New: badges, monthly rate, mini-gallery, hover effects.
+* New: vehicle detail pages with structured data and sitemap.
+* New: design presets, "Use theme styles", live previews, template overrides.
+* New: Gutenberg block and Elementor widget.
+
 = 1.0.0 =
 * First public release, based on a single-dealer build: rebuilt as a configurable, translatable plugin.
 * Settings schema with site-wide defaults and per-shortcode overrides; new Display screen; generated shortcode builder.
@@ -135,6 +150,9 @@ Deleting the plugin removes its database tables, settings and scheduled events.
 * German, Swiss German, Austrian German, French and Italian translations.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Adds layouts, detail pages, a block and an Elementor widget. Existing settings are migrated automatically.
 
 = 1.0.0 =
 First public release.

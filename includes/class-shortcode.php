@@ -45,82 +45,79 @@ final class Shortcode {
 	/**
 	 * Groups whose values the browser may send back to the REST endpoint.
 	 */
-	public const CLIENT_GROUPS = array( 'display', 'filters', 'format' );
+	public const CLIENT_GROUPS = array( 'display', 'filters', 'card', 'format', 'preset' );
 
 	/**
-	 * Render the shortcode.
+	 * Render the shortcode (also used by the block and the Elementor widget).
 	 *
 	 * @param array|string $atts Shortcode attributes.
 	 */
 	public static function render( $atts ): string {
-		$atts   = is_array( $atts ) ? array_change_key_case( $atts, CASE_LOWER ) : array();
-		$config = Schema::resolve( $atts );
+		$atts = is_array( $atts ) ? array_change_key_case( $atts, CASE_LOWER ) : array();
 
-		$instance    = (string) $config['instance'];
-		$interactive = $config['show_filters'] || $config['show_sort'] || $config['show_pagination'];
-
-		Assets::enqueue( (bool) $config['show_filters'], (bool) $interactive );
-
-		$preset_filters  = self::filters_from_config( $config );
-		$request_filters = $config['url_state']
-			? self::filters_from_request( $_GET, $instance ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public, read-only filtering.
-			: array();
-		$filters         = array_merge( $preset_filters, $request_filters );
-
-		$sort = (string) $config['sort'];
-		if ( $config['url_state'] ) {
-			$sort_key = self::request_key( 'sort', $instance );
-			if ( isset( $_GET[ $sort_key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$sort = self::valid_sort( sanitize_key( wp_unslash( $_GET[ $sort_key ] ) ), $sort ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			}
+		// On a vehicle detail URL the first inventory of the page shows the vehicle.
+		if ( Detail::is_detail_request() ) {
+			return Detail::render_once( Schema::resolve( $atts ) );
 		}
 
-		// Crawlable pagination: the page number lives in the URL.
-		$page = 1;
-		if ( $config['url_state'] && $config['show_pagination'] ) {
-			$page = max( 1, absint( wp_unslash( $_GET[ self::request_key( 'page', $instance ) ] ?? 1 ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- absint().
-		}
-
-		$need_total = $config['show_count'] || $config['show_pagination'];
-		$results    = Repository::search( $filters, $page, (int) $config['per_page'], $sort, $need_total );
-		if ( $page > 1 && $results['total_pages'] > 0 && $page > $results['total_pages'] ) {
-			$results = Repository::search( $filters, $results['total_pages'], (int) $config['per_page'], $sort, $need_total );
-		}
-
-		$renderer = new Renderer( $config );
-		if ( $config['url_state'] ) {
-			$renderer->link_pages( self::current_base_url(), self::url_params( $request_filters, $sort, (string) $config['sort'], $instance ), $instance );
-		}
-
-		$template_vars = array(
-			'config'        => $config,
-			'instance'      => $instance,
-			'results'       => $results,
-			'filters'       => $filters,
-			'sort'          => $sort,
-			'options'       => $config['show_filters'] ? Repository::filter_options() : array(),
-			'labels'        => Labels::ui(),
-			'renderer'      => $renderer,
-			'preset_params' => self::request_params( $preset_filters ),
-			'client_config' => self::client_config( $config ),
-			'dealer_url'    => (string) Settings::get( 'dealer_url', '' ),
-			'interactive'   => $interactive,
-		);
-
-		return self::template( 'inventory.php', $template_vars );
+		return self::render_inventory( Schema::resolve( $atts ) );
 	}
 
 	/**
-	 * Load a template with isolated variables.
+	 * Render an inventory for a resolved configuration.
 	 *
-	 * @param string $name Template file.
-	 * @param array  $vars Variables.
+	 * @param array $config Resolved configuration.
 	 */
-	public static function template( string $name, array $vars ): string {
-		// phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- Template scope only.
-		extract( $vars, EXTR_SKIP );
+	public static function render_inventory( array $config ): string {
+		$interactive = Assets::is_interactive( $config );
+
+		Assets::enqueue( $interactive );
+
+		$inventory = new Inventory(
+			$config,
+			$_GET, // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public, read-only filtering.
+			(string) $config['instance'],
+			$config['url_state'] ? self::current_base_url() : '',
+			(bool) $config['url_state']
+		);
+
+		$show_make = $inventory->shows_make_control();
+
+		$vars = array(
+			'inventory'      => $inventory,
+			'config'         => $inventory->config,
+			'instance'       => $inventory->instance,
+			'results'        => $inventory->results,
+			'filters'        => $inventory->filters,
+			'preset_filters' => $inventory->preset_filters,
+			'sort'           => $inventory->sort,
+			'view'           => $inventory->view,
+			'options'        => $config['show_filters'] ? Repository::filter_options() : array(),
+			'tree'           => $show_make ? Repository::make_tree() : array(),
+			'facets'         => $show_make ? $inventory->facets() : array(),
+			'labels'         => Labels::ui(),
+			'renderer'       => $inventory->renderer,
+			'preset_params'  => self::request_params( $inventory->preset_filters ),
+			'client_config'  => self::client_config( $config ),
+			'dealer_url'     => (string) Settings::get( 'dealer_url', '' ),
+			'interactive'    => $interactive,
+			'uid'            => 'dinv-' . ( '' !== $inventory->instance ? $inventory->instance : wp_unique_id() ),
+		);
+
 		ob_start();
-		include DINV_PLUGIN_DIR . 'templates/' . $name;
+		/**
+		 * Fires before an inventory is rendered.
+		 *
+		 * @param array $config Instance configuration.
+		 */
+		do_action( 'dinv_before_inventory', $inventory->config );
+		echo Template::render( 'inventory.php', $vars ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Templates escape their output.
+		/**
+		 * Fires after an inventory is rendered.
+		 *
+		 * @param array $config Instance configuration.
+		 */
+		do_action( 'dinv_after_inventory', $inventory->config );
 		return (string) ob_get_clean();
 	}
 
@@ -234,9 +231,27 @@ final class Shortcode {
 	 * @param array  $vehicle Vehicle row.
 	 * @param string $link_to Link target.
 	 */
-	public static function vehicle_link( array $vehicle, string $link_to = 'autoscout' ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- More link targets follow in a later version.
-		$provider = Connection::current()->provider();
-		return $provider->listing_url( $vehicle, I18n::listing_language( $provider ) );
+	public static function vehicle_link( array $vehicle, string $link_to = 'autoscout' ): string {
+		switch ( $link_to ) {
+			case 'none':
+				$url = '';
+				break;
+			case 'local':
+				$url = Detail::url( $vehicle );
+				break;
+			default:
+				$provider = Connection::current()->provider();
+				$url      = $provider->listing_url( $vehicle, I18n::listing_language( $provider ) );
+		}
+
+		/**
+		 * Filters the URL a vehicle links to.
+		 *
+		 * @param string $url     URL ('' for no link).
+		 * @param array  $vehicle Vehicle row.
+		 * @param string $link_to Link target setting.
+		 */
+		return (string) apply_filters( 'dinv_vehicle_url', $url, $vehicle, $link_to );
 	}
 
 	/**
@@ -287,7 +302,7 @@ final class Shortcode {
 			}
 			$global = Settings::get( $field['key'], $field['default'] );
 			if ( $config[ $field['key'] ] !== $global ) {
-				$out[ $attr ] = $config[ $field['key'] ];
+				$out[ $attr ] = Schema::to_attr( $config[ $field['key'] ] );
 			}
 		}
 		return $out;
@@ -299,7 +314,7 @@ final class Shortcode {
 	 * @param array $config Resolved configuration.
 	 * @return array<string, mixed>
 	 */
-	private static function filters_from_config( array $config ): array {
+	public static function filters_from_config( array $config ): array {
 		$source = array();
 		foreach ( array_keys( self::REQUEST_FILTERS ) as $param ) {
 			if ( isset( $config[ $param ] ) && '' !== $config[ $param ] && false !== $config[ $param ] ) {
@@ -328,7 +343,7 @@ final class Shortcode {
 	 * @param array $filters Normalized filters.
 	 * @return array<string, string>
 	 */
-	private static function request_params( array $filters ): array {
+	public static function request_params( array $filters ): array {
 		$reverse = array_flip( self::REQUEST_FILTERS );
 		$params  = array();
 		foreach ( $filters as $key => $value ) {
