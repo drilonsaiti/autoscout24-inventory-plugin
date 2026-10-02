@@ -1,0 +1,1584 @@
+# Copyright (C) 2026 Drilon Saiti
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Dealer Inventory for AutoScout24 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/drilonsaiti/aziri-autoscout24-inventory/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Language: it_IT\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-02T11:30:07+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: dealer-inventory-for-autoscout24\n"
+
+#. Plugin Name of the plugin
+#: dealer-inventory-for-autoscout24.php
+#: includes/class-admin.php:66
+#: includes/class-admin.php:854
+msgid "Dealer Inventory for AutoScout24"
+msgstr "Dealer Inventory for AutoScout24"
+
+#. Plugin URI of the plugin
+#: dealer-inventory-for-autoscout24.php
+msgid "https://github.com/drilonsaiti/aziri-autoscout24-inventory"
+msgstr ""
+
+#. Description of the plugin
+#: dealer-inventory-for-autoscout24.php
+msgid "Show a car dealer's AutoScout24 stock on their own WordPress site: synced locally, fast, crawlable and fully styleable."
+msgstr "Mostra lo stock AutoScout24 di un concessionario sul proprio sito WordPress: sincronizzato in locale, veloce, indicizzabile e completamente personalizzabile."
+
+#. Author of the plugin
+#: dealer-inventory-for-autoscout24.php
+msgid "Drilon Saiti"
+msgstr ""
+
+#. Author URI of the plugin
+#: dealer-inventory-for-autoscout24.php
+msgid "https://drilonsaiti.github.io/"
+msgstr ""
+
+#: includes/class-admin.php:58
+msgid "Our vehicle listings are provided by AutoScout24 (SMG Swiss Marketplace Group AG). Vehicle photos are loaded directly from the AutoScout24 image server (images.autoscout24.ch); your browser therefore sends your IP address and browser information to that server. Links to vehicles lead to autoscout24.ch."
+msgstr "I nostri annunci di veicoli provengono da AutoScout24 (SMG Swiss Marketplace Group AG). Le foto vengono caricate direttamente dal server di immagini di AutoScout24 (images.autoscout24.ch); il tuo browser invia quindi a quel server il tuo indirizzo IP e informazioni sul browser. I link ai veicoli portano a autoscout24.ch."
+
+#. translators: %s: URL of the SMG privacy policy.
+#: includes/class-admin.php:61
+#, php-format
+msgid "Privacy policy of SMG Swiss Marketplace Group: %s"
+msgstr "Informativa sulla privacy di SMG Swiss Marketplace Group: %s"
+
+#: includes/class-admin.php:64
+msgid "The vehicle search on this site does not store personal data or set cookies."
+msgstr "La ricerca veicoli di questo sito non memorizza dati personali e non imposta cookie."
+
+#: includes/class-admin.php:74
+#: includes/class-admin.php:75
+msgid "Dealer Inventory"
+msgstr "Parco veicoli"
+
+#: includes/class-admin.php:84
+#: includes/class-admin.php:163
+msgid "Dashboard"
+msgstr "Bacheca"
+
+#: includes/class-admin.php:85
+#: includes/class-admin.php:170
+#: includes/class-admin.php:235
+msgid "Connection"
+msgstr "Connessione"
+
+#: includes/class-admin.php:86
+#: includes/class-admin.php:277
+msgid "Synchronization"
+msgstr "Sincronizzazione"
+
+#: includes/class-admin.php:87
+#: includes/class-admin.php:319
+msgid "Display"
+msgstr "Visualizzazione"
+
+#: includes/class-admin.php:88
+#: includes/class-admin.php:341
+msgid "Design"
+msgstr "Design"
+
+#: includes/class-admin.php:89
+#: includes/class-admin.php:447
+msgid "Help & Shortcode"
+msgstr "Aiuto e shortcode"
+
+#: includes/class-admin.php:90
+#: includes/class-admin.php:529
+msgid "Logs"
+msgstr "Log"
+
+#: includes/class-admin.php:107
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: includes/class-admin.php:137
+msgid "Copied"
+msgstr "Copiato"
+
+#: includes/class-admin.php:157
+msgid "Connected"
+msgstr "Connesso"
+
+#: includes/class-admin.php:158
+msgid "Error"
+msgstr "Errore"
+
+#: includes/class-admin.php:159
+msgid "Not tested"
+msgstr "Non testato"
+
+#: includes/class-admin.php:163
+msgid "Connection, inventory and synchronization at a glance."
+msgstr "Connessione, parco veicoli e sincronizzazione a colpo d’occhio."
+
+#: includes/class-admin.php:172
+msgid "Credentials saved"
+msgstr "Credenziali salvate"
+
+#: includes/class-admin.php:172
+msgid "Setup incomplete"
+msgstr "Configurazione incompleta"
+
+#: includes/class-admin.php:175
+msgid "Vehicles"
+msgstr "Veicoli"
+
+#: includes/class-admin.php:175
+msgid "Active in the local inventory"
+msgstr "Attivi nel parco locale"
+
+#: includes/class-admin.php:177
+msgid "Last successful sync"
+msgstr "Ultima sincronizzazione riuscita"
+
+#. translators: %s: duration in seconds.
+#: includes/class-admin.php:181
+#, php-format
+msgid "%s seconds"
+msgstr "%s secondi"
+
+#: includes/class-admin.php:182
+msgid "No completed sync yet"
+msgstr "Nessuna sincronizzazione completata"
+
+#: includes/class-admin.php:184
+#: includes/class-admin.php:290
+msgid "Next sync"
+msgstr "Prossima sincronizzazione"
+
+#: includes/class-admin.php:190
+#: includes/class-admin.php:287
+msgid "Status"
+msgstr "Stato"
+
+#: includes/class-admin.php:192
+msgid "Last attempt"
+msgstr "Ultimo tentativo"
+
+#: includes/class-admin.php:193
+#: includes/class-admin.php:292
+msgid "Last error"
+msgstr "Ultimo errore"
+
+#: includes/class-admin.php:193
+#: includes/class-admin.php:292
+msgid "None"
+msgstr "Nessuno"
+
+#: includes/class-admin.php:194
+#: includes/class-schema.php:349
+msgid "Marketplace"
+msgstr "Portale"
+
+#: includes/class-admin.php:195
+msgid "WP-Cron"
+msgstr "WP-Cron"
+
+#: includes/class-admin.php:195
+msgid "Triggered by the server"
+msgstr "Avviato dal server"
+
+#: includes/class-admin.php:195
+msgid "Triggered by page visits"
+msgstr "Avviato dalle visite"
+
+#: includes/class-admin.php:198
+#: includes/class-admin.php:251
+msgid "Test connection"
+msgstr "Verifica connessione"
+
+#: includes/class-admin.php:199
+#: includes/class-admin.php:295
+msgid "Sync now"
+msgstr "Sincronizza ora"
+
+#: includes/class-admin.php:204
+msgid "Getting started"
+msgstr "Per iniziare"
+
+#: includes/class-admin.php:206
+msgid "Ask AutoScout24 for API access (Client ID and Client Secret) for your dealer account."
+msgstr "Richiedi ad AutoScout24 l’accesso API (Client ID e Client Secret) per il tuo account concessionario."
+
+#: includes/class-admin.php:207
+msgid "Enter the credentials and your Seller ID under Connection, then test the connection."
+msgstr "Inserisci le credenziali e il tuo Seller ID in «Connessione», poi verifica la connessione."
+
+#: includes/class-admin.php:208
+msgid "Run the first synchronization."
+msgstr "Esegui la prima sincronizzazione."
+
+#. translators: %s: shortcode.
+#: includes/class-admin.php:213
+#, php-format
+msgid "Add %s to any page, or build a custom one under Help & Shortcode."
+msgstr "Aggiungi %s a una pagina qualsiasi oppure creane uno personalizzato in «Aiuto e shortcode»."
+
+#: includes/class-admin.php:235
+msgid "Your AutoScout24 API credentials."
+msgstr "Le tue credenziali API AutoScout24."
+
+#: includes/class-admin.php:241
+msgid "API access"
+msgstr "Accesso API"
+
+#: includes/class-admin.php:243
+msgid "OpenSSL is not available on this server. Define DINV_CLIENT_SECRET in wp-config.php instead of saving the secret here."
+msgstr "OpenSSL non è disponibile su questo server. Definisci DINV_CLIENT_SECRET in wp-config.php invece di salvare qui il secret."
+
+#: includes/class-admin.php:245
+msgid "Save connection"
+msgstr "Salva connessione"
+
+#: includes/class-admin.php:249
+msgid "Connection test"
+msgstr "Test di connessione"
+
+#: includes/class-admin.php:250
+msgid "Checks the credentials, the Seller ID and read access to your listings."
+msgstr "Verifica le credenziali, il Seller ID e l’accesso in lettura ai tuoi annunci."
+
+#: includes/class-admin.php:253
+msgid "Where do I get the credentials?"
+msgstr "Dove trovo le credenziali?"
+
+#: includes/class-admin.php:254
+msgid "AutoScout24 issues API credentials to dealers on request. Contact your AutoScout24 account manager or customer service and ask for access to the listing API for your own website."
+msgstr "AutoScout24 rilascia le credenziali API ai concessionari su richiesta. Contatta il tuo referente AutoScout24 o il servizio clienti e chiedi l’accesso all’API degli annunci per il tuo sito."
+
+#: includes/class-admin.php:255
+msgid "Storing credentials in wp-config.php"
+msgstr "Salvare le credenziali in wp-config.php"
+
+#: includes/class-admin.php:256
+msgid "Optional. Constants override the fields on this screen:"
+msgstr "Facoltativo. Le costanti sostituiscono i campi di questa schermata:"
+
+#: includes/class-admin.php:277
+msgid "How often your local copy of the listings is refreshed."
+msgstr "Con quale frequenza viene aggiornata la copia locale degli annunci."
+
+#: includes/class-admin.php:282
+#: includes/class-admin.php:289
+#: includes/class-schema.php:410
+msgid "Schedule"
+msgstr "Pianificazione"
+
+#: includes/class-admin.php:283
+msgid "Save schedule"
+msgstr "Salva pianificazione"
+
+#: includes/class-admin.php:291
+msgid "Last success"
+msgstr "Ultimo successo"
+
+#: includes/class-admin.php:301
+msgid "Reliable timing"
+msgstr "Esecuzione puntuale"
+
+#: includes/class-admin.php:302
+msgid "WordPress runs scheduled tasks when someone visits the site. For exact timing on low-traffic sites, disable page-load cron and let the server call wp-cron.php, for example every 5 minutes:"
+msgstr "WordPress esegue le attività pianificate quando qualcuno visita il sito. Per orari precisi su siti con poco traffico, disattiva il cron al caricamento delle pagine e fai chiamare wp-cron.php dal server, ad esempio ogni 5 minuti:"
+
+#: includes/class-admin.php:319
+msgid "Site-wide defaults for every inventory. Each shortcode can override them."
+msgstr "Valori predefiniti per ogni elenco veicoli. Ogni shortcode può sovrascriverli."
+
+#: includes/class-admin.php:322
+msgid "Save display settings"
+msgstr "Salva visualizzazione"
+
+#: includes/class-admin.php:341
+msgid "Colors, typography and card options without writing CSS."
+msgstr "Colori, tipografia e opzioni delle schede senza scrivere CSS."
+
+#: includes/class-admin.php:352
+#: includes/class-schema.php:686
+msgid "Preset"
+msgstr "Modello"
+
+#: includes/class-admin.php:362
+msgid "Apply preset colors"
+msgstr "Applica i colori del modello"
+
+#: includes/class-admin.php:364
+msgid "Applying a preset fills the color fields below. Nothing is saved until you click Save design."
+msgstr "Il modello compila i campi colore qui sotto. Nulla viene salvato finché non fai clic su «Salva design»."
+
+#: includes/class-admin.php:368
+#: includes/class-schema.php:675
+msgid "Colors"
+msgstr "Colori"
+
+#: includes/class-admin.php:380
+msgid "Typography, spacing and cards"
+msgstr "Tipografia, spaziature e schede"
+
+#: includes/class-admin.php:391
+msgid "Save design"
+msgstr "Salva design"
+
+#: includes/class-admin.php:404
+msgid "Example Model 2.0 Sport"
+msgstr "Modello di esempio 2.0 Sport"
+
+#: includes/class-admin.php:405
+msgid "One owner, full service history"
+msgstr "Unico proprietario, tagliandi certificati"
+
+#: includes/class-admin.php:414
+msgid "Reset all design settings to the defaults?"
+msgstr "Ripristinare tutte le impostazioni di design?"
+
+#: includes/class-admin.php:415
+msgid "Reset design to defaults"
+msgstr "Ripristina design"
+
+#: includes/class-admin.php:439
+msgid "Results and visible parts"
+msgstr "Risultati ed elementi visibili"
+
+#: includes/class-admin.php:440
+msgid "Units"
+msgstr "Unità"
+
+#: includes/class-admin.php:441
+msgid "Filters shown to visitors"
+msgstr "Filtri visibili ai visitatori"
+
+#: includes/class-admin.php:442
+msgid "Pre-filter the vehicles"
+msgstr "Prefiltra i veicoli"
+
+#: includes/class-admin.php:447
+msgid "Build a shortcode, see every parameter and copy examples."
+msgstr "Crea uno shortcode, consulta tutti i parametri e copia gli esempi."
+
+#: includes/class-admin.php:450
+msgid "Shortcode builder"
+msgstr "Generatore di shortcode"
+
+#: includes/class-admin.php:451
+msgid "Only settings that differ from the site-wide Display settings are added to the shortcode. Paste it into the block editor, a Shortcode block, or an Elementor Shortcode widget."
+msgstr "Nello shortcode vengono aggiunte solo le impostazioni diverse da quelle generali di visualizzazione. Incollalo nell’editor a blocchi, in un blocco Shortcode o in un widget Shortcode di Elementor."
+
+#: includes/class-admin.php:470
+msgid "Your shortcode"
+msgstr "Il tuo shortcode"
+
+#: includes/class-admin.php:473
+msgid "Copy shortcode"
+msgstr "Copia shortcode"
+
+#: includes/class-admin.php:474
+msgid "Reset"
+msgstr "Ripristina"
+
+#: includes/class-admin.php:482
+msgid "All shortcode parameters"
+msgstr "Tutti i parametri dello shortcode"
+
+#: includes/class-admin.php:486
+msgid "Parameter"
+msgstr "Parametro"
+
+#: includes/class-admin.php:487
+msgid "Values"
+msgstr "Valori"
+
+#: includes/class-admin.php:488
+msgid "Default"
+msgstr "Predefinito"
+
+#: includes/class-admin.php:489
+msgid "Description"
+msgstr "Descrizione"
+
+#: includes/class-admin.php:507
+msgid "Full inventory page"
+msgstr "Pagina completa dei veicoli"
+
+#: includes/class-admin.php:511
+msgid "Three most expensive cars on the homepage"
+msgstr "Le tre auto più costose in homepage"
+
+#: includes/class-admin.php:529
+msgid "Recent synchronization and API messages. Credentials are never logged."
+msgstr "Messaggi recenti di sincronizzazione e API. Le credenziali non vengono mai registrate."
+
+#: includes/class-admin.php:534
+msgid "Time"
+msgstr "Ora"
+
+#: includes/class-admin.php:535
+msgid "Level"
+msgstr "Livello"
+
+#: includes/class-admin.php:536
+msgid "Event"
+msgstr "Evento"
+
+#: includes/class-admin.php:537
+msgid "Message"
+msgstr "Messaggio"
+
+#: includes/class-admin.php:551
+msgid "No log entries yet."
+msgstr "Ancora nessuna voce."
+
+#: includes/class-admin.php:586
+msgid "Settings saved."
+msgstr "Impostazioni salvate."
+
+#: includes/class-admin.php:595
+msgid "Design reset to the defaults."
+msgstr "Design ripristinato."
+
+#. translators: %s: dealer name.
+#: includes/class-admin.php:618
+#, php-format
+msgid "Connected to %s."
+msgstr "Connesso a %s."
+
+#. translators: %s: dealer name.
+#: includes/class-admin.php:618
+msgid "your dealer account"
+msgstr "il tuo account concessionario"
+
+#. translators: %s: number of vehicles.
+#: includes/class-admin.php:637
+#, php-format
+msgid "Synchronization finished. Active vehicles: %s."
+msgstr "Sincronizzazione completata. Veicoli attivi: %s."
+
+#: includes/class-admin.php:725
+msgid "Saved. Leave empty to keep it."
+msgstr "Salvato. Lascia vuoto per mantenerlo."
+
+#: includes/class-admin.php:744
+msgid "Defined in wp-config.php"
+msgstr "Definito in wp-config.php"
+
+#: includes/class-admin.php:749
+msgid "Defined in wp-config.php."
+msgstr "Definito in wp-config.php."
+
+#: includes/class-admin.php:810
+#: includes/class-admin.php:812
+msgid "number"
+msgstr "numero"
+
+#: includes/class-admin.php:814
+msgid "text"
+msgstr "testo"
+
+#: includes/class-admin.php:837
+msgid "The saved Client Secret can no longer be decrypted, usually because the WordPress security keys changed. Please enter the secret again under Connection."
+msgstr "Il Client Secret salvato non può più essere decifrato, di solito perché sono cambiate le chiavi di sicurezza di WordPress. Inseriscilo di nuovo in «Connessione»."
+
+#: includes/class-admin.php:938
+msgid "You are not allowed to do this."
+msgstr "Non hai i permessi per farlo."
+
+#: includes/class-design.php:30
+msgid "Light"
+msgstr "Chiaro"
+
+#: includes/class-design.php:45
+msgid "Dark"
+msgstr "Scuro"
+
+#: includes/class-design.php:60
+msgid "Dark monochrome"
+msgstr "Scuro monocromatico"
+
+#: includes/class-design.php:84
+msgid "Accent"
+msgstr "Accento"
+
+#: includes/class-design.php:85
+msgid "Accent on hover"
+msgstr "Accento al passaggio"
+
+#: includes/class-design.php:86
+msgid "Text on accent"
+msgstr "Testo su accento"
+
+#: includes/class-design.php:87
+msgid "Background"
+msgstr "Sfondo"
+
+#: includes/class-design.php:88
+msgid "Secondary background"
+msgstr "Sfondo secondario"
+
+#: includes/class-design.php:89
+msgid "Panels"
+msgstr "Pannelli"
+
+#: includes/class-design.php:90
+msgid "Inputs"
+msgstr "Campi"
+
+#: includes/class-design.php:91
+msgid "Text"
+msgstr "Testo"
+
+#: includes/class-design.php:92
+msgid "Secondary text"
+msgstr "Testo secondario"
+
+#: includes/class-design.php:93
+msgid "Borders"
+msgstr "Bordi"
+
+#: includes/class-design.php:94
+msgid "Highlighted borders"
+msgstr "Bordi evidenziati"
+
+#: includes/class-design.php:95
+msgid "Accent borders"
+msgstr "Bordi di accento"
+
+#. translators: %s: formatted number of kilometres.
+#: includes/class-format.php:79
+#, php-format
+msgctxt "mileage"
+msgid "%s km"
+msgstr "%s km"
+
+#. translators: %s: engine power in horsepower. German: PS, French: ch, Italian: CV.
+#: includes/class-format.php:101
+#, php-format
+msgctxt "engine power"
+msgid "%s hp"
+msgstr "%s CV"
+
+#. translators: %s: engine power in kilowatts.
+#: includes/class-format.php:103
+#, php-format
+msgctxt "engine power"
+msgid "%s kW"
+msgstr "%s kW"
+
+#. translators: PHP date format for the first registration month, see https://www.php.net/date. German: m.Y
+#: includes/class-format.php:126
+msgctxt "first registration date format"
+msgid "m/Y"
+msgstr "m/Y"
+
+#. translators: %s: litres per 100 kilometres.
+#: includes/class-format.php:139
+#, php-format
+msgctxt "fuel consumption"
+msgid "%s l/100 km"
+msgstr "%s l/100 km"
+
+#. translators: %s: formatted electric range in kilometres.
+#: includes/class-format.php:149
+#, php-format
+msgctxt "electric range"
+msgid "%s km range"
+msgstr "%s km di autonomia"
+
+#: includes/class-labels.php:26
+msgid "Vehicle search"
+msgstr "Ricerca veicoli"
+
+#: includes/class-labels.php:27
+msgid "Listings from AutoScout24"
+msgstr "Annunci da AutoScout24"
+
+#: includes/class-labels.php:28
+msgid "View our dealer page on AutoScout24"
+msgstr "La nostra pagina su AutoScout24"
+
+#: includes/class-labels.php:29
+msgid "AutoScout24"
+msgstr "AutoScout24"
+
+#: includes/class-labels.php:30
+msgid "More filters"
+msgstr "Altri filtri"
+
+#: includes/class-labels.php:31
+msgid "Reset filters"
+msgstr "Azzera filtri"
+
+#: includes/class-labels.php:32
+msgid "All"
+msgstr "Tutti"
+
+#: includes/class-labels.php:33
+msgid "Any"
+msgstr "Qualsiasi"
+
+#: includes/class-labels.php:34
+msgid "Search make"
+msgstr "Cerca marca"
+
+#: includes/class-labels.php:35
+msgid "No make found."
+msgstr "Nessuna marca trovata."
+
+#: includes/class-labels.php:36
+msgid "e.g. Turbo, GTI, Quattro"
+msgstr "es. Turbo, GTI, Quattro"
+
+#: includes/class-labels.php:37
+msgid "Show results"
+msgstr "Mostra risultati"
+
+#: includes/class-labels.php:38
+msgid "Close"
+msgstr "Chiudi"
+
+#: includes/class-labels.php:39
+msgid "Sort by"
+msgstr "Ordina per"
+
+#: includes/class-labels.php:40
+#: includes/class-schema.php:529
+msgid "Filters"
+msgstr "Filtri"
+
+#: includes/class-labels.php:41
+msgid "View vehicle"
+msgstr "Vedi veicolo"
+
+#: includes/class-labels.php:42
+msgid "Result pages"
+msgstr "Pagine dei risultati"
+
+#: includes/class-labels.php:43
+msgid "Previous"
+msgstr "Precedente"
+
+#: includes/class-labels.php:44
+msgid "Next"
+msgstr "Successiva"
+
+#. translators: %d: page number.
+#: includes/class-labels.php:46
+#, php-format
+msgid "Page %d"
+msgstr "Pagina %d"
+
+#: includes/class-labels.php:47
+msgid "No vehicles found."
+msgstr "Nessun veicolo trovato."
+
+#: includes/class-labels.php:48
+msgid "Try changing or resetting the filters."
+msgstr "Modifica o azzera i filtri."
+
+#: includes/class-labels.php:49
+msgid "The vehicle list could not be loaded."
+msgstr "Non è stato possibile caricare l’elenco dei veicoli."
+
+#: includes/class-labels.php:50
+msgid "Please try again in a moment."
+msgstr "Riprova tra un momento."
+
+#: includes/class-labels.php:51
+msgid "Try again"
+msgstr "Riprova"
+
+#: includes/class-labels.php:52
+msgid "Loading vehicles…"
+msgstr "Caricamento veicoli…"
+
+#: includes/class-labels.php:53
+msgid "(opens in a new tab)"
+msgstr "(si apre in una nuova scheda)"
+
+#: includes/class-labels.php:54
+msgid "Warranty"
+msgstr "Garanzia"
+
+#. translators: %s: number of vehicles.
+#: includes/class-labels.php:65
+#, php-format
+msgid "%s vehicle"
+msgid_plural "%s vehicles"
+msgstr[0] "%s veicolo"
+msgstr[1] "%s veicoli"
+
+#: includes/class-labels.php:112
+msgctxt "fuel type"
+msgid "Petrol"
+msgstr "Benzina"
+
+#: includes/class-labels.php:113
+msgctxt "fuel type"
+msgid "Diesel"
+msgstr "Diesel"
+
+#: includes/class-labels.php:114
+msgctxt "fuel type"
+msgid "Electric"
+msgstr "Elettrica"
+
+#: includes/class-labels.php:115
+msgctxt "fuel type"
+msgid "Hydrogen"
+msgstr "Idrogeno"
+
+#: includes/class-labels.php:116
+msgctxt "fuel type"
+msgid "Natural gas / petrol"
+msgstr "Metano / benzina"
+
+#: includes/class-labels.php:117
+msgctxt "fuel type"
+msgid "LPG / petrol"
+msgstr "GPL / benzina"
+
+#: includes/class-labels.php:118
+msgctxt "fuel type"
+msgid "Ethanol / petrol"
+msgstr "Etanolo / benzina"
+
+#: includes/class-labels.php:119
+msgctxt "fuel type"
+msgid "Full hybrid petrol"
+msgstr "Ibrida benzina"
+
+#: includes/class-labels.php:120
+msgctxt "fuel type"
+msgid "Full hybrid diesel"
+msgstr "Ibrida diesel"
+
+#: includes/class-labels.php:121
+msgctxt "fuel type"
+msgid "Mild hybrid petrol"
+msgstr "Mild hybrid benzina"
+
+#: includes/class-labels.php:122
+msgctxt "fuel type"
+msgid "Mild hybrid diesel"
+msgstr "Mild hybrid diesel"
+
+#: includes/class-labels.php:123
+msgctxt "fuel type"
+msgid "Plug-in hybrid petrol"
+msgstr "Ibrida plug-in benzina"
+
+#: includes/class-labels.php:124
+msgctxt "fuel type"
+msgid "Plug-in hybrid diesel"
+msgstr "Ibrida plug-in diesel"
+
+#: includes/class-labels.php:125
+msgctxt "fuel type"
+msgid "Two-stroke mixture"
+msgstr "Miscela due tempi"
+
+#: includes/class-labels.php:128
+msgctxt "transmission"
+msgid "Automatic"
+msgstr "Automatico"
+
+#: includes/class-labels.php:129
+msgctxt "transmission"
+msgid "Continuously variable automatic"
+msgstr "Automatico a variazione continua"
+
+#: includes/class-labels.php:130
+msgctxt "transmission"
+msgid "Semi-automatic"
+msgstr "Semiautomatico"
+
+#: includes/class-labels.php:131
+msgctxt "transmission"
+msgid "Manual"
+msgstr "Manuale"
+
+#: includes/class-labels.php:134
+msgctxt "body type"
+msgid "Convertible"
+msgstr "Cabriolet"
+
+#: includes/class-labels.php:135
+msgctxt "body type"
+msgid "Coupé"
+msgstr "Coupé"
+
+#: includes/class-labels.php:136
+msgctxt "body type"
+msgid "Estate"
+msgstr "Station wagon"
+
+#: includes/class-labels.php:137
+msgctxt "body type"
+msgid "Van / minivan"
+msgstr "Monovolume"
+
+#: includes/class-labels.php:138
+msgctxt "body type"
+msgid "Pickup"
+msgstr "Pick-up"
+
+#: includes/class-labels.php:139
+msgctxt "body type"
+msgid "Saloon"
+msgstr "Berlina"
+
+#: includes/class-labels.php:140
+msgctxt "body type"
+msgid "Small car"
+msgstr "Utilitaria"
+
+#: includes/class-labels.php:141
+msgctxt "body type"
+msgid "SUV / off-roader"
+msgstr "SUV / fuoristrada"
+
+#: includes/class-labels.php:142
+msgctxt "body type"
+msgid "Passenger car"
+msgstr "Autovettura"
+
+#: includes/class-labels.php:143
+msgctxt "body type"
+msgid "Other"
+msgstr "Altro"
+
+#: includes/class-labels.php:144
+msgctxt "body type"
+msgid "Panel van"
+msgstr "Furgone"
+
+#: includes/class-labels.php:145
+msgctxt "body type"
+msgid "Panel van, double cab"
+msgstr "Furgone doppia cabina"
+
+#: includes/class-labels.php:146
+msgctxt "body type"
+msgid "Glazed van"
+msgstr "Furgone vetrato"
+
+#: includes/class-labels.php:147
+msgctxt "body type"
+msgid "Dropside"
+msgstr "Cassone fisso"
+
+#: includes/class-labels.php:148
+msgctxt "body type"
+msgid "Dropside, double cab"
+msgstr "Cassone doppia cabina"
+
+#: includes/class-labels.php:149
+msgctxt "body type"
+msgid "Bus"
+msgstr "Bus"
+
+#: includes/class-labels.php:150
+msgctxt "body type"
+msgid "Chassis cab"
+msgstr "Telaio cabinato"
+
+#: includes/class-labels.php:151
+msgctxt "body type"
+msgid "Platform"
+msgstr "Pianale"
+
+#: includes/class-labels.php:152
+msgctxt "body type"
+msgid "Refrigerated"
+msgstr "Frigorifero"
+
+#: includes/class-labels.php:153
+msgctxt "body type"
+msgid "Box body"
+msgstr "Cassone furgonato"
+
+#: includes/class-labels.php:154
+msgctxt "body type"
+msgid "Tipper"
+msgstr "Ribaltabile"
+
+#: includes/class-labels.php:155
+msgctxt "body type"
+msgid "Body builder"
+msgstr "Allestimento"
+
+#: includes/class-labels.php:156
+msgctxt "body type"
+msgid "Timber transporter"
+msgstr "Trasporto legname"
+
+#: includes/class-labels.php:157
+msgctxt "body type"
+msgid "Alcove motorhome"
+msgstr "Mansardato"
+
+#: includes/class-labels.php:158
+msgctxt "body type"
+msgid "Integrated motorhome"
+msgstr "Motorhome"
+
+#: includes/class-labels.php:159
+msgctxt "body type"
+msgid "Semi-integrated motorhome"
+msgstr "Semintegrale"
+
+#: includes/class-labels.php:160
+msgctxt "body type"
+msgid "Motorhome"
+msgstr "Camper"
+
+#: includes/class-labels.php:161
+msgctxt "body type"
+msgid "Caravan"
+msgstr "Caravan"
+
+#: includes/class-labels.php:164
+msgctxt "drive type"
+msgid "All-wheel drive"
+msgstr "Trazione integrale"
+
+#: includes/class-labels.php:165
+msgctxt "drive type"
+msgid "Front-wheel drive"
+msgstr "Trazione anteriore"
+
+#: includes/class-labels.php:166
+msgctxt "drive type"
+msgid "Rear-wheel drive"
+msgstr "Trazione posteriore"
+
+#: includes/class-labels.php:169
+msgctxt "vehicle condition"
+msgid "New"
+msgstr "Nuovo"
+
+#: includes/class-labels.php:170
+msgctxt "vehicle condition"
+msgid "Used"
+msgstr "Usato"
+
+#: includes/class-labels.php:171
+msgctxt "vehicle condition"
+msgid "Demonstrator"
+msgstr "Km 0 / dimostrativo"
+
+#: includes/class-labels.php:172
+msgctxt "vehicle condition"
+msgid "Classic"
+msgstr "D’epoca"
+
+#: includes/class-labels.php:173
+msgctxt "vehicle condition"
+msgid "Pre-registered"
+msgstr "Immatricolato"
+
+#: includes/class-labels.php:176
+msgctxt "vehicle category"
+msgid "Car"
+msgstr "Auto"
+
+#: includes/class-labels.php:177
+msgctxt "vehicle category"
+msgid "Utility vehicle"
+msgstr "Veicolo commerciale"
+
+#: includes/class-labels.php:178
+msgctxt "vehicle category"
+msgid "Motorcycle"
+msgstr "Moto"
+
+#: includes/class-labels.php:179
+msgctxt "vehicle category"
+msgid "Truck"
+msgstr "Camion"
+
+#: includes/class-labels.php:180
+msgctxt "vehicle category"
+msgid "Camper"
+msgstr "Camper"
+
+#: includes/class-labels.php:181
+msgctxt "vehicle category"
+msgid "Trailer"
+msgstr "Rimorchio"
+
+#. translators: %d: number of minutes.
+#: includes/class-scheduler.php:34
+#, php-format
+msgid "Dealer Inventory: every %d minute"
+msgid_plural "Dealer Inventory: every %d minutes"
+msgstr[0] "Parco veicoli: ogni %d minuto"
+msgstr[1] "Parco veicoli: ogni %d minuti"
+
+#. translators: %s: time of day, e.g. 03:00.
+#: includes/class-scheduler.php:81
+#, php-format
+msgid "Daily at %s"
+msgstr "Ogni giorno alle %s"
+
+#: includes/class-schema.php:281
+msgid "Newest listings first"
+msgstr "Annunci più recenti"
+
+#: includes/class-schema.php:282
+msgid "Oldest listings first"
+msgstr "Annunci meno recenti"
+
+#: includes/class-schema.php:283
+msgid "Price: low to high"
+msgstr "Prezzo crescente"
+
+#: includes/class-schema.php:284
+msgid "Price: high to low"
+msgstr "Prezzo decrescente"
+
+#: includes/class-schema.php:285
+msgid "Mileage: low to high"
+msgstr "Chilometraggio crescente"
+
+#: includes/class-schema.php:286
+msgid "Mileage: high to low"
+msgstr "Chilometraggio decrescente"
+
+#: includes/class-schema.php:287
+msgid "Year: newest first"
+msgstr "Anno: più recente"
+
+#: includes/class-schema.php:288
+msgid "Year: oldest first"
+msgstr "Anno: meno recente"
+
+#: includes/class-schema.php:289
+msgid "Power: highest first"
+msgstr "Potenza: più alta"
+
+#: includes/class-schema.php:290
+msgid "Make: A to Z"
+msgstr "Marca: dalla A alla Z"
+
+#: includes/class-schema.php:291
+msgid "Make: Z to A"
+msgstr "Marca: dalla Z alla A"
+
+#: includes/class-schema.php:302
+#: includes/class-schema.php:858
+msgid "Vehicle type"
+msgstr "Tipo di veicolo"
+
+#: includes/class-schema.php:303
+#: includes/class-schema.php:859
+msgid "Make"
+msgstr "Marca"
+
+#: includes/class-schema.php:304
+msgid "Version / keyword"
+msgstr "Versione / parola chiave"
+
+#: includes/class-schema.php:305
+#: includes/class-schema.php:893
+msgid "Price from"
+msgstr "Prezzo da"
+
+#: includes/class-schema.php:306
+#: includes/class-schema.php:894
+msgid "Price up to"
+msgstr "Prezzo fino a"
+
+#: includes/class-schema.php:307
+#: includes/class-schema.php:895
+msgid "Year from"
+msgstr "Anno da"
+
+#: includes/class-schema.php:308
+#: includes/class-schema.php:896
+msgid "Year up to"
+msgstr "Anno fino a"
+
+#: includes/class-schema.php:309
+#: includes/class-schema.php:897
+msgid "Mileage from"
+msgstr "Km da"
+
+#: includes/class-schema.php:310
+#: includes/class-schema.php:898
+msgid "Mileage up to"
+msgstr "Km fino a"
+
+#: includes/class-schema.php:311
+#: includes/class-schema.php:861
+msgid "Fuel"
+msgstr "Carburante"
+
+#: includes/class-schema.php:312
+#: includes/class-schema.php:862
+msgid "Transmission"
+msgstr "Cambio"
+
+#: includes/class-schema.php:313
+#: includes/class-schema.php:863
+msgid "Body type"
+msgstr "Carrozzeria"
+
+#: includes/class-schema.php:314
+#: includes/class-schema.php:864
+msgid "Drive"
+msgstr "Trazione"
+
+#: includes/class-schema.php:315
+#: includes/class-schema.php:865
+msgid "Condition"
+msgstr "Condizione"
+
+#: includes/class-schema.php:316
+msgid "With warranty"
+msgstr "Con garanzia"
+
+#: includes/class-schema.php:317
+msgid "Power from"
+msgstr "Potenza da"
+
+#: includes/class-schema.php:318
+msgid "Power up to"
+msgstr "Potenza fino a"
+
+#: includes/class-schema.php:333
+msgid "Site language"
+msgstr "Lingua del sito"
+
+#: includes/class-schema.php:335
+msgid "German"
+msgstr "Tedesco"
+
+#: includes/class-schema.php:336
+msgid "French"
+msgstr "Francese"
+
+#: includes/class-schema.php:337
+msgid "Italian"
+msgstr "Italiano"
+
+#: includes/class-schema.php:338
+msgid "English"
+msgstr "Inglese"
+
+#: includes/class-schema.php:350
+msgid "The AutoScout24 country site your listings are published on."
+msgstr "Il sito nazionale AutoScout24 su cui sono pubblicati i tuoi annunci."
+
+#: includes/class-schema.php:357
+msgid "Client ID"
+msgstr "Client ID"
+
+#: includes/class-schema.php:364
+msgid "Client Secret"
+msgstr "Client Secret"
+
+#: includes/class-schema.php:365
+msgid "Stored encrypted. Leave empty to keep the saved secret."
+msgstr "Salvato in forma cifrata. Lascia vuoto per mantenere il secret attuale."
+
+#: includes/class-schema.php:373
+msgid "Seller ID"
+msgstr "Seller ID"
+
+#: includes/class-schema.php:374
+msgid "Your dealer number on AutoScout24."
+msgstr "Il tuo numero concessionario su AutoScout24."
+
+#: includes/class-schema.php:381
+msgid "Dealer page URL"
+msgstr "URL della pagina concessionario"
+
+#: includes/class-schema.php:382
+msgid "Optional. Your public dealer page on AutoScout24, used for the header link."
+msgstr "Facoltativo. La tua pagina pubblica su AutoScout24, usata per il link nell’intestazione."
+
+#: includes/class-schema.php:389
+msgid "Listing text language"
+msgstr "Lingua dei testi degli annunci"
+
+#: includes/class-schema.php:390
+msgid "Language in which listing texts are downloaded. Unsupported languages fall back to the marketplace default."
+msgstr "Lingua in cui vengono scaricati i testi degli annunci. Le lingue non supportate usano la lingua predefinita del portale."
+
+#: includes/class-schema.php:407
+msgid "Recurring interval"
+msgstr "Intervallo ricorrente"
+
+#: includes/class-schema.php:408
+msgid "Once a day at a fixed time"
+msgstr "Una volta al giorno a orario fisso"
+
+#: includes/class-schema.php:417
+msgid "Every 15 minutes"
+msgstr "Ogni 15 minuti"
+
+#: includes/class-schema.php:418
+msgid "Every 30 minutes"
+msgstr "Ogni 30 minuti"
+
+#: includes/class-schema.php:419
+msgid "Every hour"
+msgstr "Ogni ora"
+
+#: includes/class-schema.php:420
+msgid "Every 2 hours"
+msgstr "Ogni 2 ore"
+
+#: includes/class-schema.php:421
+msgid "Every 4 hours"
+msgstr "Ogni 4 ore"
+
+#: includes/class-schema.php:422
+msgid "Every 6 hours"
+msgstr "Ogni 6 ore"
+
+#: includes/class-schema.php:423
+msgid "Every 12 hours"
+msgstr "Ogni 12 ore"
+
+#: includes/class-schema.php:425
+msgid "Interval"
+msgstr "Intervallo"
+
+#: includes/class-schema.php:426
+msgid "Used with the recurring schedule. Shorter intervals use more API requests."
+msgstr "Usato con la pianificazione ricorrente. Intervalli più brevi generano più richieste API."
+
+#: includes/class-schema.php:432
+msgid "Daily time"
+msgstr "Orario giornaliero"
+
+#: includes/class-schema.php:433
+msgid "Used with the daily schedule, in the site time zone."
+msgstr "Usato con la pianificazione giornaliera, nel fuso orario del sito."
+
+#: includes/class-schema.php:439
+msgid "Download warranty information"
+msgstr "Scarica le informazioni sulla garanzia"
+
+#: includes/class-schema.php:440
+msgid "Needed for the \"With warranty\" filter. Costs one extra pass over the listings per sync."
+msgstr "Necessario per il filtro «Con garanzia». Richiede un passaggio aggiuntivo sugli annunci a ogni sincronizzazione."
+
+#: includes/class-schema.php:451
+msgid "Results"
+msgstr "Risultati"
+
+#: includes/class-schema.php:452
+msgid "Visible parts"
+msgstr "Elementi visibili"
+
+#: includes/class-schema.php:453
+msgid "Vehicle links"
+msgstr "Link dei veicoli"
+
+#: includes/class-schema.php:464
+msgid "Vehicles per page"
+msgstr "Veicoli per pagina"
+
+#: includes/class-schema.php:473
+msgid "Card grid"
+msgstr "Griglia di schede"
+
+#: includes/class-schema.php:474
+msgid "List"
+msgstr "Elenco"
+
+#: includes/class-schema.php:476
+msgid "Layout"
+msgstr "Layout"
+
+#: includes/class-schema.php:486
+msgid "Card columns (desktop)"
+msgstr "Colonne di schede (desktop)"
+
+#: includes/class-schema.php:495
+msgid "Default sort order"
+msgstr "Ordinamento predefinito"
+
+#: includes/class-schema.php:503
+msgid "Header bar"
+msgstr "Barra d’intestazione"
+
+#: includes/class-schema.php:512
+msgid "Header title"
+msgstr "Titolo dell’intestazione"
+
+#: includes/class-schema.php:513
+msgid "Leave empty to use \"Site name · Vehicle search\"."
+msgstr "Lascia vuoto per «Nome del sito · Ricerca veicoli»."
+
+#: includes/class-schema.php:521
+msgid "Vehicle count"
+msgstr "Numero di veicoli"
+
+#: includes/class-schema.php:537
+msgid "Sort menu"
+msgstr "Menu di ordinamento"
+
+#: includes/class-schema.php:545
+msgid "Pagination"
+msgstr "Paginazione"
+
+#: includes/class-schema.php:553
+msgid "Link to the dealer page on AutoScout24"
+msgstr "Link alla pagina concessionario su AutoScout24"
+
+#: includes/class-schema.php:554
+msgid "Shown only when a dealer page URL is set."
+msgstr "Visibile solo se è impostato l’URL della pagina concessionario."
+
+#: includes/class-schema.php:562
+msgid "\"Listings from AutoScout24\" note"
+msgstr "Nota «Annunci da AutoScout24»"
+
+#: includes/class-schema.php:570
+msgid "Keep filters, sort and page in the URL"
+msgstr "Mantieni filtri, ordinamento e pagina nell’URL"
+
+#: includes/class-schema.php:571
+msgid "Makes results shareable and paginated pages crawlable."
+msgstr "I risultati diventano condivisibili e le pagine successive indicizzabili."
+
+#: includes/class-schema.php:580
+msgid "Listing on AutoScout24"
+msgstr "Annuncio su AutoScout24"
+
+#: includes/class-schema.php:582
+msgid "Vehicle links open"
+msgstr "I link dei veicoli aprono"
+
+#: includes/class-schema.php:590
+msgid "Open external links in a new tab"
+msgstr "Apri i link esterni in una nuova scheda"
+
+#: includes/class-schema.php:599
+msgid "Button text"
+msgstr "Testo del pulsante"
+
+#: includes/class-schema.php:600
+msgid "Leave empty for \"View vehicle\"."
+msgstr "Lascia vuoto per «Vedi veicolo»."
+
+#: includes/class-schema.php:609
+msgid "Card label"
+msgstr "Etichetta scheda"
+
+#: includes/class-schema.php:610
+msgid "Optional small label above each card title, for example \"New arrival\"."
+msgstr "Piccola etichetta facoltativa sopra ogni titolo, ad esempio «Nuovo arrivo»."
+
+#: includes/class-schema.php:626
+msgid "Filters shown"
+msgstr "Filtri visibili"
+
+#: includes/class-schema.php:648
+msgid "Marketplace currency"
+msgstr "Valuta del portale"
+
+#: includes/class-schema.php:652
+msgid "Currency"
+msgstr "Valuta"
+
+#: includes/class-schema.php:660
+msgid "Horsepower"
+msgstr "Cavalli (CV)"
+
+#: includes/class-schema.php:661
+msgid "Kilowatts"
+msgstr "Kilowatt"
+
+#: includes/class-schema.php:662
+msgid "Both"
+msgstr "Entrambi"
+
+#: includes/class-schema.php:664
+msgid "Power unit"
+msgstr "Unità di potenza"
+
+#: includes/class-schema.php:676
+msgid "Typography and spacing"
+msgstr "Tipografia e spaziature"
+
+#: includes/class-schema.php:677
+msgid "Cards"
+msgstr "Schede"
+
+#: includes/class-schema.php:715
+msgid "Theme font"
+msgstr "Font del tema"
+
+#: includes/class-schema.php:716
+msgid "System UI"
+msgstr "Font di sistema"
+
+#: includes/class-schema.php:717
+msgid "Serif"
+msgstr "Serif"
+
+#: includes/class-schema.php:719
+msgid "Font"
+msgstr "Font"
+
+#: includes/class-schema.php:729
+msgid "Maximum width"
+msgstr "Larghezza massima"
+
+#: includes/class-schema.php:739
+msgid "Side padding"
+msgstr "Margine laterale"
+
+#: includes/class-schema.php:749
+msgid "Outer radius"
+msgstr "Raggio esterno"
+
+#: includes/class-schema.php:759
+msgid "Card radius"
+msgstr "Raggio delle schede"
+
+#: includes/class-schema.php:769
+msgid "Input and button radius"
+msgstr "Raggio di campi e pulsanti"
+
+#: includes/class-schema.php:779
+msgid "Base spacing"
+msgstr "Spaziatura di base"
+
+#: includes/class-schema.php:789
+msgid "Image width in the list layout"
+msgstr "Larghezza immagine nel layout a elenco"
+
+#: includes/class-schema.php:797
+msgid "Image ratio"
+msgstr "Proporzioni immagine"
+
+#: includes/class-schema.php:805
+msgid "Image ratio on phones"
+msgstr "Proporzioni immagine su smartphone"
+
+#: includes/class-schema.php:812
+msgid "Show teaser text"
+msgstr "Mostra testo di anteprima"
+
+#: includes/class-schema.php:819
+msgid "Show key specifications"
+msgstr "Mostra dati principali"
+
+#: includes/class-schema.php:826
+msgid "Show button"
+msgstr "Mostra pulsante"
+
+#: includes/class-schema.php:843
+msgid "Instance name"
+msgstr "Nome dell’istanza"
+
+#: includes/class-schema.php:844
+msgid "Unique name when several inventories are on one page; keeps their URL parameters apart."
+msgstr "Nome univoco quando più elenchi sono sulla stessa pagina; separa i loro parametri URL."
+
+#: includes/class-schema.php:852
+msgid "Compact filter query"
+msgstr "Query di filtro compatta"
+
+#: includes/class-schema.php:853
+msgid "Example: make=bmw&body=suv&price_to=60000. Values here win over the single filter fields."
+msgstr "Esempio: make=bmw&body=suv&price_to=60000. Questi valori hanno la precedenza sui singoli campi filtro."
+
+#: includes/class-schema.php:860
+msgid "Model"
+msgstr "Modello"
+
+#: includes/class-schema.php:882
+msgid "Version contains"
+msgstr "La versione contiene"
+
+#: includes/class-schema.php:889
+msgid "Only vehicles with warranty"
+msgstr "Solo veicoli con garanzia"
+
+#: includes/class-schema.php:899
+msgid "Power from (hp)"
+msgstr "Potenza da (CV)"
+
+#: includes/class-schema.php:900
+msgid "Power up to (hp)"
+msgstr "Potenza fino a (CV)"
+
+#: includes/class-sync.php:39
+#: includes/providers/class-autoscout24-ch.php:400
+msgid "The stored Client Secret can no longer be decrypted (the WordPress security keys changed). Please enter it again."
+msgstr "Il Client Secret salvato non può più essere decifrato (sono cambiate le chiavi di sicurezza di WordPress). Inseriscilo di nuovo."
+
+#: includes/class-sync.php:40
+msgid "The connection is not configured yet."
+msgstr "La connessione non è ancora configurata."
+
+#: includes/class-sync.php:178
+#: includes/class-sync.php:198
+msgid "A synchronization is already running."
+msgstr "È già in corso una sincronizzazione."
+
+#: includes/providers/class-autoscout24-ch.php:48
+msgid "AutoScout24 Switzerland (autoscout24.ch)"
+msgstr "AutoScout24 Svizzera (autoscout24.ch)"
+
+#: includes/providers/class-autoscout24-ch.php:94
+msgid "Client ID, Client Secret and Seller ID are required."
+msgstr "Client ID, Client Secret e Seller ID sono obbligatori."
+
+#. translators: %s: error message returned by the API.
+#: includes/providers/class-autoscout24-ch.php:116
+#, php-format
+msgid "The seller was found, but listing search failed: %s"
+msgstr "Il venditore è stato trovato, ma la ricerca degli annunci non è riuscita: %s"
+
+#: includes/providers/class-autoscout24-ch.php:401
+msgid "Client ID or Client Secret is missing."
+msgstr "Manca il Client ID o il Client Secret."
+
+#: includes/providers/class-autoscout24-ch.php:439
+msgid "The AutoScout24 authentication server could not be reached."
+msgstr "Il server di autenticazione di AutoScout24 non è raggiungibile."
+
+#: includes/providers/class-autoscout24-ch.php:446
+msgid "AutoScout24 rejected the credentials. Check the Client ID and Client Secret."
+msgstr "AutoScout24 ha rifiutato le credenziali. Controlla Client ID e Client Secret."
+
+#: includes/providers/class-autoscout24-ch.php:500
+msgid "The AutoScout24 API is temporarily unavailable."
+msgstr "L’API di AutoScout24 è temporaneamente non disponibile."
+
+#: includes/providers/class-autoscout24-ch.php:529
+msgid "AutoScout24 returned an invalid response."
+msgstr "AutoScout24 ha restituito una risposta non valida."
+
+#: includes/providers/class-autoscout24-ch.php:586
+msgid "AutoScout24 rate limit reached. Please try again later."
+msgstr "Limite di richieste AutoScout24 raggiunto. Riprova più tardi."
+
+#: includes/providers/class-autoscout24-ch.php:588
+msgid "These AutoScout24 credentials are not allowed to read this seller's listings."
+msgstr "Queste credenziali AutoScout24 non possono leggere gli annunci di questo venditore."
+
+#: includes/providers/class-autoscout24-ch.php:590
+msgid "AutoScout24 could not find the requested seller or listing. Check the Seller ID."
+msgstr "AutoScout24 non ha trovato il venditore o l’annuncio. Controlla il Seller ID."
+
+#: includes/providers/class-autoscout24-ch.php:593
+msgid "The AutoScout24 API request failed."
+
+msgstr "La richiesta all’API di AutoScout24 non è riuscita."
