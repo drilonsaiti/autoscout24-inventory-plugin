@@ -416,6 +416,10 @@
 	border-radius: var(--dinv-radius);
 }
 
+.dinv-filters__form {
+	display: contents;
+}
+
 .dinv-filters__head {
 	display: none;
 }

@@ -1,0 +1,27 @@
+{
+	"name": "drilonsaiti/dealer-inventory-for-autoscout24",
+	"description": "Development tools for the Dealer Inventory for AutoScout24 WordPress plugin.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=8.1"
+	},
+	"require-dev": {
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"phpunit/phpunit": "^9.6",
+		"yoast/phpunit-polyfills": "^1.1 || ^2.0",
+		"wp-phpunit/wp-phpunit": "^6.5"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	},
+	"scripts": {
+		"lint": "phpcs",
+		"lint:fix": "phpcbf",
+		"test": "phpunit"
+	}
+}

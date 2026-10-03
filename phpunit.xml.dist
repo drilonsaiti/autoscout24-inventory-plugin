@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/php/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	convertDeprecationsToExceptions="true"
+>
+	<testsuites>
+		<testsuite name="plugin">
+			<directory suffix="Test.php">tests/php</directory>
+		</testsuite>
+	</testsuites>
+	<coverage includeUncoveredFiles="false">
+		<include>
+			<directory suffix=".php">includes</directory>
+		</include>
+	</coverage>
+</phpunit>

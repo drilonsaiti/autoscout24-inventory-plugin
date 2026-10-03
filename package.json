@@ -1,0 +1,15 @@
+{
+	"name": "dealer-inventory-for-autoscout24",
+	"private": true,
+	"description": "Development tools for the Dealer Inventory for AutoScout24 WordPress plugin.",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"test:js": "node --test tests/js/*.test.mjs"
+	},
+	"devDependencies": {
+		"jsdom": "^25.0.0"
+	},
+	"engines": {
+		"node": ">=20"
+	}
+}

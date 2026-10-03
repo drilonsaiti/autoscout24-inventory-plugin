@@ -540,7 +540,7 @@ final class Schema {
 	 */
 	private static function sync_fields(): array {
 		return array(
-			'sync_mode'     => array(
+			'sync_mode'      => array(
 				'group'   => 'sync',
 				'type'    => 'enum',
 				'default' => 'interval',
@@ -550,7 +550,7 @@ final class Schema {
 				),
 				'label'   => __( 'Schedule', 'dealer-inventory-for-autoscout24' ),
 			),
-			'sync_interval' => array(
+			'sync_interval'  => array(
 				'group'   => 'sync',
 				'type'    => 'enum',
 				'default' => 60,
@@ -566,26 +566,37 @@ final class Schema {
 				'label'   => __( 'Interval', 'dealer-inventory-for-autoscout24' ),
 				'help'    => __( 'Used with the recurring schedule. Shorter intervals use more API requests.', 'dealer-inventory-for-autoscout24' ),
 			),
-			'sync_time'     => array(
+			'sync_time'      => array(
 				'group'   => 'sync',
 				'type'    => 'time',
 				'default' => '03:00',
 				'label'   => __( 'Daily time', 'dealer-inventory-for-autoscout24' ),
 				'help'    => __( 'Used with the daily schedule, in the site time zone.', 'dealer-inventory-for-autoscout24' ),
 			),
-			'sync_warranty' => array(
+			'sync_warranty'  => array(
 				'group'   => 'sync',
 				'type'    => 'bool',
 				'default' => true,
 				'label'   => __( 'Download warranty information', 'dealer-inventory-for-autoscout24' ),
 				'help'    => __( 'Needed for the "With warranty" filter. Costs one extra pass over the listings per sync.', 'dealer-inventory-for-autoscout24' ),
 			),
-			'sync_details'  => array(
+			'sync_details'   => array(
 				'group'   => 'sync',
 				'type'    => 'bool',
 				'default' => false,
 				'label'   => __( 'Download descriptions and equipment', 'dealer-inventory-for-autoscout24' ),
 				'help'    => __( 'For vehicle detail pages on your site. Costs two extra API requests per new vehicle; at most 25 vehicles are updated per sync.', 'dealer-inventory-for-autoscout24' ),
+			),
+			'uninstall_data' => array(
+				'group'   => 'sync',
+				'type'    => 'enum',
+				'default' => 'keep',
+				'options' => array(
+					'keep'   => __( 'Keep settings and vehicles', 'dealer-inventory-for-autoscout24' ),
+					'delete' => __( 'Remove everything', 'dealer-inventory-for-autoscout24' ),
+				),
+				'label'   => __( 'When the plugin is deleted', 'dealer-inventory-for-autoscout24' ),
+				'help'    => __( 'Keeping the data lets you reinstall without entering the credentials again. Removing deletes the settings, the stored vehicles and the logs.', 'dealer-inventory-for-autoscout24' ),
 			),
 		);
 	}

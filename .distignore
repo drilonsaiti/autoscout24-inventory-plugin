@@ -1,0 +1,21 @@
+# Files that are not part of the plugin zip (used by the CI build and the
+# WordPress.org deploy).
+/.git
+/.github
+/.idea
+/.wordpress-org
+/node_modules
+/tests
+/vendor
+/build
+.distignore
+.gitignore
+.phpunit.result.cache
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpcs.xml.dist
+phpunit.xml.dist
+README.md
+CHANGELOG.md

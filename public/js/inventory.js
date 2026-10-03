@@ -568,6 +568,7 @@
 		this.instance = ( root.dataset.instance || '' ).replace( /[^a-z0-9_-]/g, '' );
 		this.prefix = this.instance ? 'dinv_' + this.instance + '_' : 'dinv_';
 		this.form = root.querySelector( '[data-dinv-form]' );
+		this.panel = root.querySelector( '[data-dinv-panel]' ) || this.form;
 		this.results = root.querySelector( '[data-dinv-results]' );
 		this.wrap = root.querySelector( '[data-dinv-results-wrap]' );
 		this.count = root.querySelector( '[data-dinv-count]' );
@@ -946,7 +947,7 @@
 	};
 
 	Inventory.prototype.openFilters = function ( open ) {
-		var form = this.form;
+		var form = this.panel;
 		form.classList.toggle( 'is-open', open );
 		if ( this.toggle ) {
 			this.toggle.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
@@ -979,7 +980,7 @@
 
 	Inventory.prototype.trapFocus = function ( event ) {
 		var focusable = Array.prototype.filter.call(
-			this.form.querySelectorAll( 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), summary, [tabindex]:not([tabindex="-1"])' ),
+			this.panel.querySelectorAll( 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), summary, [tabindex]:not([tabindex="-1"])' ),
 			function ( node ) {
 				return node.offsetParent !== null;
 			}
@@ -1006,7 +1007,7 @@
 		form.addEventListener( 'submit', function ( event ) {
 			event.preventDefault();
 			self.loadSoon.cancel();
-			if ( form.classList.contains( 'is-open' ) && self.drawerMode() ) {
+			if ( self.panel.classList.contains( 'is-open' ) && self.drawerMode() ) {
 				self.openFilters( false );
 			}
 			self.load( 1 );
@@ -1049,7 +1050,7 @@
 
 		if ( this.toggle ) {
 			this.toggle.addEventListener( 'click', function () {
-				self.openFilters( ! form.classList.contains( 'is-open' ) );
+				self.openFilters( ! self.panel.classList.contains( 'is-open' ) );
 			} );
 		}
 		if ( this.backdrop ) {
@@ -1057,8 +1058,8 @@
 				self.openFilters( false );
 			} );
 		}
-		form.addEventListener( 'keydown', function ( event ) {
-			if ( ! form.classList.contains( 'is-open' ) || ! self.drawerMode() ) {
+		this.panel.addEventListener( 'keydown', function ( event ) {
+			if ( ! self.panel.classList.contains( 'is-open' ) || ! self.drawerMode() ) {
 				return;
 			}
 			if ( event.key === 'Escape' ) {
@@ -1073,8 +1074,8 @@
 				if ( ! self.drawerMode() && self.backdrop && ! self.backdrop.hidden ) {
 					self.backdrop.hidden = true;
 					document.documentElement.style.overflow = '';
-					form.removeAttribute( 'role' );
-					form.removeAttribute( 'aria-modal' );
+					self.panel.removeAttribute( 'role' );
+					self.panel.removeAttribute( 'aria-modal' );
 				}
 			}, 200 )
 		);

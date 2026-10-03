@@ -68,7 +68,8 @@ You are responsible for using the AutoScout24 API in line with your agreement wi
 1. Install and activate the plugin.
 2. Go to **Dealer Inventory → Connection**, enter Client ID, Client Secret and Seller ID, save and click **Test connection**.
 3. Click **Sync now** (or wait for the schedule).
-4. Add `[dealer_inventory]` to a page. Use **Dealer Inventory → Help & Shortcode** to build a custom shortcode.
+4. Add the **Vehicle Inventory** block (or Elementor widget, or the `[dealer_inventory]` shortcode) to a page.
+5. Optional: set site-wide defaults under **Display** and **Design**. Each block, widget or shortcode can override them.
 
 Credentials can also be defined in `wp-config.php`:
 
@@ -114,18 +115,32 @@ Interface texts follow the site or visitor language (TranslatePress, WPML and Po
 
 They use a different AutoScout24 API. The plugin is prepared for additional markets; support depends on access to that API.
 
+= Can vehicles open on my own site instead of AutoScout24? =
+
+Yes. Set **Display → Vehicle links** to "Detail page on this site". Each vehicle gets its own URL (for example `/cars/vehicle/12345-bmw-x5/`) with a photo gallery, specifications, equipment, SEO title and description, Open Graph tags and schema.org Vehicle data. Choose the page under **Display → Vehicle detail pages** to also list the vehicles in the WordPress XML sitemap. Turn on **Synchronization → Download descriptions and equipment** for the full details.
+
+= Can I change the HTML? =
+
+Yes. Copy any file from the plugin's `templates/` folder to `yourtheme/dealer-inventory/` (same sub-folder) and edit it there. Developers can also use filters such as `dinv_inventory_config`, `dinv_card_data`, `dinv_vehicle_badges`, `dinv_vehicle_url`, `dinv_detail_data`, `dinv_vehicle_json_ld`, `dinv_design_tokens` and `dinv_template`, and the actions `dinv_before_inventory` / `dinv_after_inventory`.
+
+= Is it accessible? =
+
+Filters work with the keyboard, focus is always visible, result counts are announced to screen readers, the mobile filter panel behaves like a dialog, and all design presets meet WCAG 2.2 AA contrast. Without JavaScript, filters and pagination still work as normal links and forms.
+
 = What happens when I delete the plugin? =
 
-Deleting the plugin removes its database tables, settings and scheduled events.
+By default the settings, stored vehicles and logs are kept, so a reinstall works without entering the credentials again. To remove everything, set **Synchronization → When the plugin is deleted** to "Remove everything" before deleting. Scheduled events and caches are always removed.
 
 == Screenshots ==
 
-1. Card grid with filters and sorting.
-2. List layout.
-3. "More filters" dialog.
-4. Display settings: site-wide defaults for every inventory.
-5. Design settings with presets and preview.
-6. Shortcode builder.
+1. Card layout with filters above the results.
+2. List layout with sidebar filters, searchable make / model field and range sliders.
+3. Filter panel on a phone.
+4. Vehicle detail page on your own site.
+5. Design settings with presets and live preview.
+6. Display settings: choose the filters and drag them into order.
+7. The "Vehicle Inventory" block in the block editor.
+8. Shortcode builder with live preview.
 
 == Changelog ==
 
@@ -138,6 +153,10 @@ Deleting the plugin removes its database tables, settings and scheduled events.
 * New: vehicle detail pages with structured data and sitemap.
 * New: design presets, "Use theme styles", live previews, template overrides.
 * New: Gutenberg block and Elementor widget.
+* New: choose whether data is kept or removed when the plugin is deleted (kept by default).
+* Accessibility: the mobile filter panel is a labelled modal dialog; keyboard support for the make / model search.
+* Fixed: a filter without choices could leave an output buffer open.
+* Developer: PHPUnit and JavaScript tests, GitHub Actions for coding standards, PHP 8.1–8.4 and Plugin Check.
 
 = 1.0.0 =
 * First public release, based on a single-dealer build: rebuilt as a configurable, translatable plugin.
@@ -152,7 +171,7 @@ Deleting the plugin removes its database tables, settings and scheduled events.
 == Upgrade Notice ==
 
 = 1.1.0 =
-Adds layouts, detail pages, a block and an Elementor widget. Existing settings are migrated automatically.
+Adds layouts, detail pages, a block and an Elementor widget. Existing settings are migrated automatically. Deleting the plugin now keeps its data unless you choose otherwise.
 
 = 1.0.0 =
 First public release.

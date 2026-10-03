@@ -1,0 +1,530 @@
+<section
+	id="dinv-main"
+	class="dinv-inventory dinv-layout-card dinv-filters-top dinv-has-drawer"
+	style="--dinv-cols:3;--dinv-cols-tablet:2;--dinv-cols-mobile:1;--dinv-image-ratio:4 / 3"
+	data-instance="main"
+	data-interactive="1"
+	data-url-state="1"
+	data-pagination="numbers"
+	data-preset-params="{}"
+	data-preset-sort="newest"
+	data-per-page-default="4"
+	data-layout-default="card"
+	data-view=""
+	data-config="{&quot;per_page&quot;:&quot;4&quot;,&quot;instance&quot;:&quot;main&quot;}"
+	data-locale="en_US"
+	data-version="1790960382"
+	data-rendered="1790968159"
+>
+			<header class="dinv-header">
+	<div class="dinv-header__text">
+		<strong class="dinv-header__title">Demo · Vehicle search</strong>
+					<span class="dinv-header__note">Listings from AutoScout24</span>
+			</div>
+	</header>
+	
+	<div class="dinv-inventory__body">
+		<div class="dinv-toolbar">
+			<h2 class="dinv-toolbar__count">
+			<span data-dinv-count data-total="45">45</span>
+			<span data-dinv-count-label>vehicles</span>
+		</h2>
+	
+			<div class="dinv-toolbar__actions">
+							<button type="button" class="dinv-button dinv-button--ghost dinv-toolbar__filters" data-dinv-filters-toggle aria-controls="dinv-main-panel" aria-expanded="true">
+					<svg class="dinv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>					<span>Filters</span>
+					<span class="dinv-toolbar__badge" data-dinv-active-count hidden></span>
+				</button>
+			
+			
+			
+							<label class="dinv-select">
+					<span class="screen-reader-text">Sort by</span>
+					<select name="dinv_main_sort" data-dinv-sort form="dinv-main-filters">
+													<option value="newest"  selected='selected'>Newest listings first</option>
+													<option value="oldest" >Oldest listings first</option>
+													<option value="price_asc" >Price: low to high</option>
+													<option value="price_desc" >Price: high to low</option>
+													<option value="mileage_asc" >Mileage: low to high</option>
+													<option value="mileage_desc" >Mileage: high to low</option>
+													<option value="year_desc" >Year: newest first</option>
+													<option value="year_asc" >Year: oldest first</option>
+													<option value="power_desc" >Power: highest first</option>
+													<option value="make_model_asc" >Make: A to Z</option>
+													<option value="make_model_desc" >Make: Z to A</option>
+											</select>
+				</label>
+					</div>
+	</div>
+
+		<div class="dinv-inventory__main">
+			<div
+	id="dinv-main-panel"
+	class="dinv-filters dinv-filters--top dinv-filters--drawer"
+	data-dinv-panel
+	aria-labelledby="dinv-main-filters-title"
+>
+<form id="dinv-main-filters" class="dinv-filters__form" data-dinv-form method="get" aria-label="Filters">
+	<div class="dinv-filters__head">
+		<h3 class="dinv-filters__title" id="dinv-main-filters-title">Filters</h3>
+		<button type="button" class="dinv-icon-button dinv-filters__close" data-dinv-drawer-close>
+			<svg class="dinv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>			<span class="screen-reader-text">Close</span>
+		</button>
+	</div>
+
+	
+	<div class="dinv-filters__body">
+					<div class="dinv-filters__grid">
+				<div
+	class="dinv-field dinv-make-model dinv-make-model--separate"
+	data-dinv-filter="make"
+	data-dinv-make-mode="separate"
+	data-counts="1"
+	data-hide-empty="1"
+	data-make-fixed=""
+>
+	<div class="dinv-make-model__selects">
+					<div class="dinv-make-model__make">
+				<label class="dinv-field__label" for="dinv-main-make">Make</label>
+				<span class="dinv-select">
+					<select id="dinv-main-make" name="dinv_main_make" data-dinv-make>
+						<option value="">All makes</option>
+													<option value="audi"  >Audi (9)</option>
+													<option value="bmw"  >BMW (9)</option>
+													<option value="mercedes-benz"  >Mercedes-Benz (9)</option>
+													<option value="porsche"  >Porsche (9)</option>
+													<option value="volkswagen"  >VW (9)</option>
+											</select>
+				</span>
+			</div>
+		
+		<div class="dinv-make-model__model">
+			<label class="dinv-field__label" for="dinv-main-model">Model</label>
+			<span class="dinv-select">
+				<select id="dinv-main-model" name="dinv_main_model" data-dinv-model  disabled='disabled'>
+					<option value="">Choose a make first</option>
+									</select>
+			</span>
+		</div>
+	</div>
+
+	<script type="application/json" data-dinv-tree>
+	{"tree":[{"value":"audi","label":"Audi","count":9,"models":[{"value":"a4","label":"A4","count":4},{"value":"q7","label":"Q7","count":5}]},{"value":"bmw","label":"BMW","count":9,"models":[{"value":"3-series","label":"3 Series","count":3},{"value":"m3","label":"M3","count":3},{"value":"x5","label":"X5","count":3}]},{"value":"mercedes-benz","label":"Mercedes-Benz","count":9,"models":[{"value":"c-class","label":"C-Class","count":5},{"value":"glc","label":"GLC","count":4}]},{"value":"porsche","label":"Porsche","count":9,"models":[{"value":"911","label":"911","count":5},{"value":"taycan","label":"Taycan","count":4}]},{"value":"volkswagen","label":"VW","count":9,"models":[{"value":"golf","label":"Golf","count":4},{"value":"id-4","label":"ID.4","count":5}]}],"facets":{"makes":{"audi":9,"bmw":9,"mercedes-benz":9,"porsche":9,"volkswagen":9},"models":{"audi":{"a4":4,"q7":5},"bmw":{"3-series":3,"m3":3,"x5":3},"mercedes-benz":{"c-class":5,"glc":4},"porsche":{"911":5,"taycan":4},"volkswagen":{"golf":4,"id-4":5}}}}	</script>
+</div>
+<fieldset
+	class="dinv-field dinv-range dinv-range--price dinv-range--inputs"
+	data-dinv-filter="price"
+	data-dinv-range="inputs"
+	data-min="15000"
+	data-max="92000"
+	data-step="500"
+	data-unit="CHF"
+>
+	<legend class="dinv-field__label">
+		Price			</legend>
+
+	
+	<div class="dinv-range__inputs">
+					<label class="dinv-range__end" for="dinv-main-f-price-from">
+				<span class="dinv-range__end-label">From</span>
+									<span class="dinv-input-wrap has-unit">
+													<span class="dinv-input-wrap__unit" aria-hidden="true">CHF</span>
+												<input
+							class="dinv-input"
+							id="dinv-main-f-price-from"
+							type="number"
+							inputmode="numeric"
+							name="dinv_main_price_from"
+							value=""
+							min="0"
+							step="1"
+							placeholder="15,000"
+							data-dinv-input="from"
+						>
+					</span>
+							</label>
+					<label class="dinv-range__end" for="dinv-main-f-price-to">
+				<span class="dinv-range__end-label">To</span>
+									<span class="dinv-input-wrap has-unit">
+													<span class="dinv-input-wrap__unit" aria-hidden="true">CHF</span>
+												<input
+							class="dinv-input"
+							id="dinv-main-f-price-to"
+							type="number"
+							inputmode="numeric"
+							name="dinv_main_price_to"
+							value=""
+							min="0"
+							step="1"
+							placeholder="92,000"
+							data-dinv-input="to"
+						>
+					</span>
+							</label>
+			</div>
+</fieldset>
+<fieldset
+	class="dinv-field dinv-range dinv-range--year dinv-range--inputs"
+	data-dinv-filter="year"
+	data-dinv-range="inputs"
+	data-min="2015"
+	data-max="2024"
+	data-step="1"
+	data-unit=""
+>
+	<legend class="dinv-field__label">
+		First registration			</legend>
+
+	
+	<div class="dinv-range__inputs">
+					<label class="dinv-range__end" for="dinv-main-f-year-from">
+				<span class="dinv-range__end-label">From</span>
+									<span class="dinv-select">
+						<select id="dinv-main-f-year-from" name="dinv_main_year_from" data-dinv-input="from">
+							<option value="">Any</option>
+															<option value="2024" >2024</option>
+															<option value="2023" >2023</option>
+															<option value="2022" >2022</option>
+															<option value="2021" >2021</option>
+															<option value="2020" >2020</option>
+															<option value="2019" >2019</option>
+															<option value="2018" >2018</option>
+															<option value="2017" >2017</option>
+															<option value="2016" >2016</option>
+															<option value="2015" >2015</option>
+													</select>
+					</span>
+							</label>
+					<label class="dinv-range__end" for="dinv-main-f-year-to">
+				<span class="dinv-range__end-label">To</span>
+									<span class="dinv-select">
+						<select id="dinv-main-f-year-to" name="dinv_main_year_to" data-dinv-input="to">
+							<option value="">Any</option>
+															<option value="2024" >2024</option>
+															<option value="2023" >2023</option>
+															<option value="2022" >2022</option>
+															<option value="2021" >2021</option>
+															<option value="2020" >2020</option>
+															<option value="2019" >2019</option>
+															<option value="2018" >2018</option>
+															<option value="2017" >2017</option>
+															<option value="2016" >2016</option>
+															<option value="2015" >2015</option>
+													</select>
+					</span>
+							</label>
+			</div>
+</fieldset>
+<fieldset
+	class="dinv-field dinv-range dinv-range--mileage dinv-range--inputs"
+	data-dinv-filter="mileage"
+	data-dinv-range="inputs"
+	data-min="0"
+	data-max="145000"
+	data-step="5000"
+	data-unit="km"
+>
+	<legend class="dinv-field__label">
+		Mileage					<span class="dinv-range__unit">(km)</span>
+			</legend>
+
+	
+	<div class="dinv-range__inputs">
+					<label class="dinv-range__end" for="dinv-main-f-mileage-from">
+				<span class="dinv-range__end-label">From</span>
+									<span class="dinv-input-wrap">
+												<input
+							class="dinv-input"
+							id="dinv-main-f-mileage-from"
+							type="number"
+							inputmode="numeric"
+							name="dinv_main_mileage_from"
+							value=""
+							min="0"
+							step="1"
+							placeholder="0"
+							data-dinv-input="from"
+						>
+					</span>
+							</label>
+					<label class="dinv-range__end" for="dinv-main-f-mileage-to">
+				<span class="dinv-range__end-label">To</span>
+									<span class="dinv-input-wrap">
+												<input
+							class="dinv-input"
+							id="dinv-main-f-mileage-to"
+							type="number"
+							inputmode="numeric"
+							name="dinv_main_mileage_to"
+							value=""
+							min="0"
+							step="1"
+							placeholder="145,000"
+							data-dinv-input="to"
+						>
+					</span>
+							</label>
+			</div>
+</fieldset>
+			</div>
+							<details class="dinv-filters__more" >
+					<summary>
+						<span class="dinv-filters__more-open">More filters</span>
+						<span class="dinv-filters__more-close">Fewer filters</span>
+						<svg class="dinv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>					</summary>
+					<div class="dinv-filters__grid">
+								<div class="dinv-field dinv-field--body" data-dinv-filter="body">
+			<label class="dinv-field__label" for="dinv-main-f-body">Body type</label>
+			<span class="dinv-select">
+				<select id="dinv-main-f-body" name="dinv_main_body">
+					<option value="">All</option>
+											<option value="coupe" >
+							Coupé (11)						</option>
+											<option value="estate" >
+							Estate (11)						</option>
+											<option value="saloon" >
+							Saloon (11)						</option>
+											<option value="suv" >
+							SUV / off-roader (12)						</option>
+									</select>
+			</span>
+		</div>
+				<div class="dinv-field dinv-field--transmission" data-dinv-filter="transmission">
+			<label class="dinv-field__label" for="dinv-main-f-transmission">Transmission</label>
+			<span class="dinv-select">
+				<select id="dinv-main-f-transmission" name="dinv_main_transmission">
+					<option value="">All</option>
+											<option value="automatic" >
+							Automatic (22)						</option>
+											<option value="manual" >
+							Manual (23)						</option>
+									</select>
+			</span>
+		</div>
+		<fieldset
+	class="dinv-field dinv-range dinv-range--power dinv-range--inputs"
+	data-dinv-filter="power"
+	data-dinv-range="inputs"
+	data-min="120"
+	data-max="520"
+	data-step="10"
+	data-unit="hp"
+>
+	<legend class="dinv-field__label">
+		Power					<span class="dinv-range__unit">(hp)</span>
+			</legend>
+
+	
+	<div class="dinv-range__inputs">
+					<label class="dinv-range__end" for="dinv-main-f-power-from">
+				<span class="dinv-range__end-label">From</span>
+									<span class="dinv-input-wrap">
+												<input
+							class="dinv-input"
+							id="dinv-main-f-power-from"
+							type="number"
+							inputmode="numeric"
+							name="dinv_main_power_from"
+							value=""
+							min="0"
+							step="1"
+							placeholder="120"
+							data-dinv-input="from"
+						>
+					</span>
+							</label>
+					<label class="dinv-range__end" for="dinv-main-f-power-to">
+				<span class="dinv-range__end-label">To</span>
+									<span class="dinv-input-wrap">
+												<input
+							class="dinv-input"
+							id="dinv-main-f-power-to"
+							type="number"
+							inputmode="numeric"
+							name="dinv_main_power_to"
+							value=""
+							min="0"
+							step="1"
+							placeholder="520"
+							data-dinv-input="to"
+						>
+					</span>
+							</label>
+			</div>
+</fieldset>
+		<div class="dinv-field dinv-field--drive" data-dinv-filter="drive">
+			<label class="dinv-field__label" for="dinv-main-f-drive">Drive</label>
+			<span class="dinv-select">
+				<select id="dinv-main-f-drive" name="dinv_main_drive">
+					<option value="">All</option>
+											<option value="all" >
+							All-wheel drive (15)						</option>
+											<option value="front" >
+							Front-wheel drive (15)						</option>
+											<option value="rear" >
+							Rear-wheel drive (15)						</option>
+									</select>
+			</span>
+		</div>
+				<div class="dinv-field dinv-field--condition" data-dinv-filter="condition">
+			<label class="dinv-field__label" for="dinv-main-f-condition">Condition</label>
+			<span class="dinv-select">
+				<select id="dinv-main-f-condition" name="dinv_main_condition">
+					<option value="">All</option>
+											<option value="new" >
+							New (7)						</option>
+											<option value="used" >
+							Used (38)						</option>
+									</select>
+			</span>
+		</div>
+				<div class="dinv-field dinv-field--version" data-dinv-filter="version">
+			<label class="dinv-field__label" for="dinv-main-f-version">Keyword</label>
+			<input class="dinv-input" id="dinv-main-f-version" type="search" name="dinv_main_version" value="" placeholder="e.g. Turbo, GTI, Quattro" maxlength="80" enterkeyhint="search">
+		</div>
+				<div class="dinv-field dinv-field--warranty" data-dinv-filter="warranty">
+			<label class="dinv-check" for="dinv-main-f-warranty">
+				<input id="dinv-main-f-warranty" type="checkbox" name="dinv_main_warranty" value="1" >
+				<span>With warranty</span>
+			</label>
+		</div>
+							</div>
+				</details>
+						</div>
+
+	<div class="dinv-filters__footer">
+		<a class="dinv-button dinv-button--ghost dinv-filters__reset" href="/cars/" data-dinv-reset>
+			<svg class="dinv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>			<span>Reset filters</span>
+		</a>
+		<button type="submit" class="dinv-button dinv-button--primary dinv-filters__submit" data-dinv-submit>Show results</button>
+	</div>
+</form>
+</div>
+<div class="dinv-drawer-backdrop" data-dinv-drawer-backdrop hidden></div>
+			<div class="dinv-results" data-dinv-results-wrap aria-busy="false">
+	<div class="dinv-results__loading" data-dinv-loading hidden>
+		<span class="dinv-spinner" aria-hidden="true"></span>
+		<span>Loading vehicles…</span>
+	</div>
+
+	<div class="dinv-results__items" data-dinv-results tabindex="-1"><div class="dinv-items dinv-items--card dinv-hover-lift" data-dinv-items><article class="dinv-vehicle dinv-card" data-vehicle-id="9000044">
+			<div class="dinv-media">
+			<span class="dinv-gallery">
+							<img class="dinv-media__img" src="https://images.autoscout24.ch/photo/9000044-1.jpg?w=768" srcset="https://images.autoscout24.ch/photo/9000044-1.jpg?w=320 320w, https://images.autoscout24.ch/photo/9000044-1.jpg?w=384 384w, https://images.autoscout24.ch/photo/9000044-1.jpg?w=768 768w, https://images.autoscout24.ch/photo/9000044-1.jpg?w=1024 1024w" sizes="(max-width: 760px) 100vw, 420px" alt="Porsche 911 Trim 45" loading="eager" fetchpriority="high" decoding="async" width="768" height="576">
+								</span>
+				<span class="dinv-badges">
+							<span class="dinv-badge dinv-badge--price_reduced">Price reduced</span>
+							<span class="dinv-badge dinv-badge--warranty">Warranty</span>
+					</span>
+	</div>
+		<div class="dinv-card__body">
+				<h3 class="dinv-vehicle__title">
+			Porsche 911 Trim 45	</h3>
+					<p class="dinv-vehicle__teaser">Service history, one owner</p>
+							<ul class="dinv-chips">
+									<li class="dinv-chip dinv-chip--year">09/2019</li>
+									<li class="dinv-chip dinv-chip--mileage">141,400 km</li>
+									<li class="dinv-chip dinv-chip--fuel">Petrol</li>
+									<li class="dinv-chip dinv-chip--power">516 hp</li>
+							</ul>
+				<div class="dinv-card__footer">
+			<div class="dinv-price">
+			<span class="dinv-price__amount">CHF 92,000</span>
+					<del class="dinv-price__old">CHF 94,000</del>
+				</div>
+					</div>
+	</div>
+</article>
+<article class="dinv-vehicle dinv-card" data-vehicle-id="9000043">
+			<div class="dinv-media">
+			<span class="dinv-gallery">
+							<img class="dinv-media__img" src="https://images.autoscout24.ch/photo/9000043-1.jpg?w=768" srcset="https://images.autoscout24.ch/photo/9000043-1.jpg?w=320 320w, https://images.autoscout24.ch/photo/9000043-1.jpg?w=384 384w, https://images.autoscout24.ch/photo/9000043-1.jpg?w=768 768w, https://images.autoscout24.ch/photo/9000043-1.jpg?w=1024 1024w" sizes="(max-width: 760px) 100vw, 420px" alt="VW ID.4 Trim 44" loading="lazy" decoding="async" width="768" height="576">
+								</span>
+		</div>
+		<div class="dinv-card__body">
+				<h3 class="dinv-vehicle__title">
+			VW ID.4 Trim 44	</h3>
+					<p class="dinv-vehicle__teaser">Service history, one owner</p>
+							<ul class="dinv-chips">
+									<li class="dinv-chip dinv-chip--year">08/2018</li>
+									<li class="dinv-chip dinv-chip--mileage">138,300 km</li>
+									<li class="dinv-chip dinv-chip--fuel">Electric</li>
+									<li class="dinv-chip dinv-chip--power">507 hp</li>
+							</ul>
+				<div class="dinv-card__footer">
+			<div class="dinv-price">
+			<span class="dinv-price__amount">CHF 90,250</span>
+				</div>
+					</div>
+	</div>
+</article>
+<article class="dinv-vehicle dinv-card" data-vehicle-id="9000042">
+			<div class="dinv-media">
+			<span class="dinv-gallery">
+							<img class="dinv-media__img" src="https://images.autoscout24.ch/photo/9000042-1.jpg?w=768" srcset="https://images.autoscout24.ch/photo/9000042-1.jpg?w=320 320w, https://images.autoscout24.ch/photo/9000042-1.jpg?w=384 384w, https://images.autoscout24.ch/photo/9000042-1.jpg?w=768 768w, https://images.autoscout24.ch/photo/9000042-1.jpg?w=1024 1024w" sizes="(max-width: 760px) 100vw, 420px" alt="Mercedes-Benz C-Class Trim 43" loading="lazy" decoding="async" width="768" height="576">
+								</span>
+				<span class="dinv-badges">
+							<span class="dinv-badge dinv-badge--new">New</span>
+							<span class="dinv-badge dinv-badge--warranty">Warranty</span>
+					</span>
+	</div>
+		<div class="dinv-card__body">
+				<h3 class="dinv-vehicle__title">
+			Mercedes-Benz C-Class Trim 43	</h3>
+							<ul class="dinv-chips">
+									<li class="dinv-chip dinv-chip--year">07/2017</li>
+									<li class="dinv-chip dinv-chip--mileage">10 km</li>
+									<li class="dinv-chip dinv-chip--fuel">Electric</li>
+									<li class="dinv-chip dinv-chip--power">498 hp</li>
+							</ul>
+				<div class="dinv-card__footer">
+			<div class="dinv-price">
+			<span class="dinv-price__amount">CHF 88,500</span>
+				</div>
+					</div>
+	</div>
+</article>
+<article class="dinv-vehicle dinv-card" data-vehicle-id="9000041">
+			<div class="dinv-media">
+			<span class="dinv-gallery">
+							<img class="dinv-media__img" src="https://images.autoscout24.ch/photo/9000041-1.jpg?w=768" srcset="https://images.autoscout24.ch/photo/9000041-1.jpg?w=320 320w, https://images.autoscout24.ch/photo/9000041-1.jpg?w=384 384w, https://images.autoscout24.ch/photo/9000041-1.jpg?w=768 768w, https://images.autoscout24.ch/photo/9000041-1.jpg?w=1024 1024w" sizes="(max-width: 760px) 100vw, 420px" alt="Audi Q7 Trim 42" loading="lazy" decoding="async" width="768" height="576">
+								</span>
+		</div>
+		<div class="dinv-card__body">
+				<h3 class="dinv-vehicle__title">
+			Audi Q7 Trim 42	</h3>
+					<p class="dinv-vehicle__teaser">Service history, one owner</p>
+							<ul class="dinv-chips">
+									<li class="dinv-chip dinv-chip--year">06/2016</li>
+									<li class="dinv-chip dinv-chip--mileage">132,100 km</li>
+									<li class="dinv-chip dinv-chip--fuel">Diesel</li>
+									<li class="dinv-chip dinv-chip--power">489 hp</li>
+							</ul>
+				<div class="dinv-card__footer">
+			<div class="dinv-price">
+			<span class="dinv-price__amount">CHF 86,750</span>
+				</div>
+					</div>
+	</div>
+</article>
+</div></div>
+
+	<div class="dinv-empty" data-dinv-empty hidden>
+		<h3 class="dinv-empty__title">No vehicles found.</h3>
+					<p>Try changing or resetting the filters.</p>
+			<button type="button" class="dinv-button dinv-button--ghost" data-dinv-reset>Reset filters</button>
+			</div>
+
+	<div class="dinv-error" data-dinv-error role="alert" hidden>
+		<h3 class="dinv-error__title">The vehicle list could not be loaded.</h3>
+		<p>Please try again in a moment.</p>
+		<button type="button" class="dinv-button dinv-button--ghost" data-dinv-retry>Try again</button>
+	</div>
+
+			<div class="dinv-results__pagination" data-dinv-pagination><nav class="dinv-pagination" aria-label="Result pages"><button type="button" class="dinv-pagination__button dinv-pagination__button--prev" data-page="1" disabled rel="prev"><svg class="dinv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Previous</span></button><div class="dinv-pagination__pages"><a class="dinv-pagination__page is-active" href="/cars/" data-page="1" aria-current="page" aria-label="Page 1">1</a><a class="dinv-pagination__page" href="/cars/?dinv_main_page=2" data-page="2" aria-label="Page 2">2</a><a class="dinv-pagination__page" href="/cars/?dinv_main_page=3" data-page="3" aria-label="Page 3">3</a><span class="dinv-pagination__gap" aria-hidden="true">…</span><a class="dinv-pagination__page" href="/cars/?dinv_main_page=12" data-page="12" aria-label="Page 12">12</a></div><a class="dinv-pagination__button dinv-pagination__button--next" href="/cars/?dinv_main_page=2" data-page="2" rel="next"><span>Next</span><svg class="dinv-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></nav></div>
+	
+	<div class="screen-reader-text" data-dinv-status role="status" aria-live="polite"></div>
+</div>
+		</div>
+	</div>
+</section>

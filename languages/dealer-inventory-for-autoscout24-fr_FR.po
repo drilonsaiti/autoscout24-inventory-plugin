@@ -184,7 +184,7 @@ msgid "Last error"
 msgstr "Dernière erreur"
 
 #: includes/class-admin.php:208 includes/class-admin.php:307
-#: includes/class-schema.php:997 includes/class-schema.php:1182
+#: includes/class-schema.php:1008 includes/class-schema.php:1193
 #: blocks/inventory/index.js:44
 msgid "None"
 msgstr "Aucune"
@@ -329,7 +329,7 @@ msgstr ""
 "chargement des pages et laissez le serveur appeler wp-cron.php, par exemple "
 "toutes les 5 minutes :"
 
-#: includes/class-admin.php:336 includes/class-schema.php:1071
+#: includes/class-admin.php:336 includes/class-schema.php:1082
 msgid "Vehicle detail pages"
 msgstr "Pages de détail des véhicules"
 
@@ -362,7 +362,7 @@ msgstr "Enregistrer l’affichage"
 msgid "Colors, typography and card options without writing CSS."
 msgstr "Couleurs, typographie et options des cartes, sans écrire de CSS."
 
-#: includes/class-admin.php:392 includes/class-schema.php:1125
+#: includes/class-admin.php:392 includes/class-schema.php:1136
 msgid "Preset"
 msgstr "Modèle"
 
@@ -378,7 +378,7 @@ msgstr ""
 "Le modèle remplit les champs de couleur ci-dessous. Rien n’est enregistré "
 "avant de cliquer sur « Enregistrer le design »."
 
-#: includes/class-admin.php:408 includes/class-schema.php:1115
+#: includes/class-admin.php:408 includes/class-schema.php:1126
 msgid "Colors"
 msgstr "Couleurs"
 
@@ -644,7 +644,7 @@ msgid "%1$s, photo %2$d"
 msgstr "%1$s, photo %2$d"
 
 #: includes/class-detail.php:427 includes/class-schema.php:432
-#: includes/class-schema.php:1257
+#: includes/class-schema.php:1268
 msgid "Condition"
 msgstr "État"
 
@@ -659,22 +659,22 @@ msgid "Mileage"
 msgstr "Kilométrage"
 
 #: includes/class-detail.php:430 includes/class-schema.php:428
-#: includes/class-schema.php:1255
+#: includes/class-schema.php:1266
 msgid "Body type"
 msgstr "Carrosserie"
 
 #: includes/class-detail.php:431 includes/class-schema.php:427
-#: includes/class-schema.php:454 includes/class-schema.php:1253
+#: includes/class-schema.php:454 includes/class-schema.php:1264
 msgid "Fuel"
 msgstr "Carburant"
 
 #: includes/class-detail.php:432 includes/class-schema.php:429
-#: includes/class-schema.php:455 includes/class-schema.php:1254
+#: includes/class-schema.php:455 includes/class-schema.php:1265
 msgid "Transmission"
 msgstr "Boîte de vitesses"
 
 #: includes/class-detail.php:433 includes/class-schema.php:430
-#: includes/class-schema.php:457 includes/class-schema.php:1256
+#: includes/class-schema.php:457 includes/class-schema.php:1267
 msgid "Drive"
 msgstr "Transmission"
 
@@ -736,7 +736,7 @@ msgid "Last inspection"
 msgstr "Dernière expertise"
 
 #: includes/class-detail.php:448 includes/class-labels.php:54
-#: includes/class-schema.php:965
+#: includes/class-schema.php:976
 msgid "Warranty"
 msgstr "Garantie"
 
@@ -860,7 +860,7 @@ msgid "Sort by"
 msgstr "Trier par"
 
 #: includes/class-labels.php:40 includes/class-schema.php:307
-#: includes/class-schema.php:829
+#: includes/class-schema.php:840
 msgid "Filters"
 msgstr "Filtres"
 
@@ -938,11 +938,11 @@ msgstr "Par page"
 msgid "Fewer filters"
 msgstr "Moins de filtres"
 
-#: includes/class-labels.php:61 includes/class-schema.php:1251
+#: includes/class-labels.php:61 includes/class-schema.php:1262
 msgid "Make"
 msgstr "Marque"
 
-#: includes/class-labels.php:62 includes/class-schema.php:1252
+#: includes/class-labels.php:62 includes/class-schema.php:1263
 msgid "Model"
 msgstr "Modèle"
 
@@ -1355,7 +1355,7 @@ msgstr "Tous les jours à %s"
 msgid "Layout and results"
 msgstr "Mise en page et résultats"
 
-#: includes/class-schema.php:308 includes/class-schema.php:944
+#: includes/class-schema.php:308 includes/class-schema.php:955
 msgid "Vehicle cards"
 msgstr "Cartes des véhicules"
 
@@ -1419,7 +1419,7 @@ msgstr "Marque et modèle"
 msgid "Price"
 msgstr "Prix"
 
-#: includes/class-schema.php:433 includes/class-schema.php:1250
+#: includes/class-schema.php:433 includes/class-schema.php:1261
 msgid "Vehicle type"
 msgstr "Type de véhicule"
 
@@ -1447,7 +1447,7 @@ msgstr "Texte d’accroche"
 msgid "Monthly rate"
 msgstr "Mensualité"
 
-#: includes/class-schema.php:458 includes/class-schema.php:968
+#: includes/class-schema.php:458 includes/class-schema.php:979
 msgid "Badges"
 msgstr "Badges"
 
@@ -1455,7 +1455,7 @@ msgstr "Badges"
 msgid "Button"
 msgstr "Bouton"
 
-#: includes/class-schema.php:474 includes/class-schema.php:1055
+#: includes/class-schema.php:474 includes/class-schema.php:1066
 msgid "Site language"
 msgstr "Langue du site"
 
@@ -1603,225 +1603,246 @@ msgstr ""
 "par nouveau véhicule ; au plus 25 véhicules sont mis à jour par "
 "synchronisation."
 
-#: includes/class-schema.php:599 includes/class-schema.php:618
+#: includes/class-schema.php:595
+msgid "Keep settings and vehicles"
+msgstr "Conserver les réglages et les véhicules"
+
+#: includes/class-schema.php:596
+msgid "Remove everything"
+msgstr "Tout supprimer"
+
+#: includes/class-schema.php:598
+msgid "When the plugin is deleted"
+msgstr "Lors de la suppression de l’extension"
+
+#: includes/class-schema.php:599
+msgid ""
+"Keeping the data lets you reinstall without entering the credentials again. "
+"Removing deletes the settings, the stored vehicles and the logs."
+msgstr ""
+"Conserver les données permet de réinstaller sans saisir à nouveau les "
+"identifiants. La suppression efface les réglages, les véhicules enregistrés "
+"et les journaux."
+
+#: includes/class-schema.php:610 includes/class-schema.php:629
 msgid "Layout"
 msgstr "Mise en page"
 
-#: includes/class-schema.php:600
+#: includes/class-schema.php:611
 msgid "Results"
 msgstr "Résultats"
 
-#: includes/class-schema.php:601
+#: includes/class-schema.php:612
 msgid "Visible parts"
 msgstr "Éléments visibles"
 
-#: includes/class-schema.php:602
+#: includes/class-schema.php:613
 msgid "Vehicle links"
 msgstr "Liens des véhicules"
 
-#: includes/class-schema.php:613
+#: includes/class-schema.php:624
 msgid "Cards"
 msgstr "Cartes"
 
-#: includes/class-schema.php:614
+#: includes/class-schema.php:625
 msgid "Compact grid"
 msgstr "Grille compacte"
 
-#: includes/class-schema.php:615
+#: includes/class-schema.php:626
 msgid "List"
 msgstr "Liste"
 
-#: includes/class-schema.php:616
+#: includes/class-schema.php:627
 msgid "Table"
 msgstr "Tableau"
 
-#: includes/class-schema.php:628
+#: includes/class-schema.php:639
 msgid "Columns on desktop"
 msgstr "Colonnes sur ordinateur"
 
-#: includes/class-schema.php:629
+#: includes/class-schema.php:640
 msgid "For cards and the compact grid."
 msgstr "Pour les cartes et la grille compacte."
 
-#: includes/class-schema.php:639
+#: includes/class-schema.php:650
 msgid "Columns on tablets"
 msgstr "Colonnes sur tablette"
 
-#: includes/class-schema.php:649
+#: includes/class-schema.php:660
 msgid "Columns on phones"
 msgstr "Colonnes sur mobile"
 
-#: includes/class-schema.php:657
+#: includes/class-schema.php:668
 msgid "Grid / list switch for visitors"
 msgstr "Choix grille / liste pour les visiteurs"
 
-#: includes/class-schema.php:658
+#: includes/class-schema.php:669
 msgid "The visitor's choice is remembered in their browser."
 msgstr "Le choix du visiteur est mémorisé dans son navigateur."
 
-#: includes/class-schema.php:668
+#: includes/class-schema.php:679
 msgid "Vehicles per page"
 msgstr "Véhicules par page"
 
-#: includes/class-schema.php:676
+#: includes/class-schema.php:687
 msgid "Let visitors choose vehicles per page"
 msgstr "Laisser les visiteurs choisir le nombre par page"
 
-#: includes/class-schema.php:685
+#: includes/class-schema.php:696
 msgid "Choices for vehicles per page"
 msgstr "Choix du nombre de véhicules par page"
 
-#: includes/class-schema.php:686
+#: includes/class-schema.php:697
 msgid "Comma separated, up to 48. Example: 12,24,48"
 msgstr "Séparés par des virgules, jusqu’à 48. Exemple : 12,24,48"
 
-#: includes/class-schema.php:695
+#: includes/class-schema.php:706
 msgid "Page numbers"
 msgstr "Numéros de page"
 
-#: includes/class-schema.php:696
+#: includes/class-schema.php:707
 msgid "\"Load more\" button"
 msgstr "Bouton « Charger plus »"
 
-#: includes/class-schema.php:697
+#: includes/class-schema.php:708
 msgid "Infinite scrolling"
 msgstr "Défilement infini"
 
-#: includes/class-schema.php:699 includes/class-schema.php:761
+#: includes/class-schema.php:710 includes/class-schema.php:772
 msgid "Pagination"
 msgstr "Pagination"
 
-#: includes/class-schema.php:700
+#: includes/class-schema.php:711
 msgid "All types keep crawlable page links for search engines."
 msgstr ""
 "Tous les types conservent des liens de page explorables par les moteurs de "
 "recherche."
 
-#: includes/class-schema.php:709
+#: includes/class-schema.php:720
 msgid "Default sort order"
 msgstr "Tri par défaut"
 
-#: includes/class-schema.php:718
+#: includes/class-schema.php:729
 msgid "Sort options offered"
 msgstr "Tris proposés"
 
-#: includes/class-schema.php:719
+#: includes/class-schema.php:730
 msgid "Choose and order the entries of the sort menu."
 msgstr "Choisissez et ordonnez les entrées du menu de tri."
 
-#: includes/class-schema.php:727
+#: includes/class-schema.php:738
 msgid "Header bar"
 msgstr "Barre d’en-tête"
 
-#: includes/class-schema.php:736
+#: includes/class-schema.php:747
 msgid "Header title"
 msgstr "Titre de l’en-tête"
 
-#: includes/class-schema.php:737
+#: includes/class-schema.php:748
 msgid "Leave empty to use \"Site name · Vehicle search\"."
 msgstr "Laissez vide pour « Nom du site · Recherche de véhicules »."
 
-#: includes/class-schema.php:745
+#: includes/class-schema.php:756
 msgid "Vehicle count"
 msgstr "Nombre de véhicules"
 
-#: includes/class-schema.php:753
+#: includes/class-schema.php:764
 msgid "Sort menu"
 msgstr "Menu de tri"
 
-#: includes/class-schema.php:769
+#: includes/class-schema.php:780
 msgid "Link to the dealer page on AutoScout24"
 msgstr "Lien vers la page garage sur AutoScout24"
 
-#: includes/class-schema.php:770
+#: includes/class-schema.php:781
 msgid "Shown only when a dealer page URL is set."
 msgstr "Affiché uniquement si une URL de page garage est définie."
 
-#: includes/class-schema.php:778
+#: includes/class-schema.php:789
 msgid "\"Listings from AutoScout24\" note"
 msgstr "Mention « Annonces d’AutoScout24 »"
 
-#: includes/class-schema.php:786
+#: includes/class-schema.php:797
 msgid "Keep filters, sort and page in the URL"
 msgstr "Conserver filtres, tri et page dans l’URL"
 
-#: includes/class-schema.php:787
+#: includes/class-schema.php:798
 msgid "Makes results shareable and paginated pages crawlable."
 msgstr ""
 "Les résultats deviennent partageables et les pages suivantes indexables."
 
-#: includes/class-schema.php:796
+#: includes/class-schema.php:807
 msgid "Listing on AutoScout24"
 msgstr "Annonce sur AutoScout24"
 
-#: includes/class-schema.php:797
+#: includes/class-schema.php:808
 msgid "Detail page on this site"
 msgstr "Page de détail sur ce site"
 
-#: includes/class-schema.php:798
+#: includes/class-schema.php:809
 msgid "No link"
 msgstr "Aucun lien"
 
-#: includes/class-schema.php:800
+#: includes/class-schema.php:811
 msgid "Vehicle links open"
 msgstr "Les liens des véhicules ouvrent"
 
-#: includes/class-schema.php:808
+#: includes/class-schema.php:819
 msgid "Open AutoScout24 links in a new tab"
 msgstr "Ouvrir les liens AutoScout24 dans un nouvel onglet"
 
-#: includes/class-schema.php:817
+#: includes/class-schema.php:828
 msgid "Button text"
 msgstr "Texte du bouton"
 
-#: includes/class-schema.php:818
+#: includes/class-schema.php:829
 msgid "Leave empty for \"View vehicle\"."
 msgstr "Laissez vide pour « Voir le véhicule »."
 
-#: includes/class-schema.php:830
+#: includes/class-schema.php:841
 msgid "Make and model filter"
 msgstr "Filtre marque et modèle"
 
-#: includes/class-schema.php:840
+#: includes/class-schema.php:851
 msgid "Show filters"
 msgstr "Afficher les filtres"
 
-#: includes/class-schema.php:849
+#: includes/class-schema.php:860
 msgid "Filters and their order"
 msgstr "Filtres et leur ordre"
 
-#: includes/class-schema.php:850
+#: includes/class-schema.php:861
 msgid "Tick the filters to show and drag them into order."
 msgstr ""
 "Cochez les filtres à afficher et faites-les glisser dans l’ordre voulu."
 
-#: includes/class-schema.php:859
+#: includes/class-schema.php:870
 msgid "Above the results"
 msgstr "Au-dessus des résultats"
 
-#: includes/class-schema.php:860
+#: includes/class-schema.php:871
 msgid "Sidebar"
 msgstr "Barre latérale"
 
-#: includes/class-schema.php:862
+#: includes/class-schema.php:873
 msgid "Position"
 msgstr "Position"
 
-#: includes/class-schema.php:872
+#: includes/class-schema.php:883
 msgid "Filters shown before \"More filters\""
 msgstr "Filtres affichés avant « Plus de filtres »"
 
-#: includes/class-schema.php:873
+#: includes/class-schema.php:884
 msgid "Above the results only. The rest open with \"More filters\"."
 msgstr ""
 "Au-dessus des résultats uniquement. Les autres s’ouvrent avec « Plus de "
 "filtres »."
 
-#: includes/class-schema.php:881
+#: includes/class-schema.php:892
 msgid "Start collapsed"
 msgstr "Replié au départ"
 
-#: includes/class-schema.php:882
+#: includes/class-schema.php:893
 msgid ""
 "Above the results: filters open with a button. Sidebar: every filter starts "
 "folded."
@@ -1829,138 +1850,138 @@ msgstr ""
 "Au-dessus des résultats : les filtres s’ouvrent avec un bouton. Barre "
 "latérale : chaque filtre est replié."
 
-#: includes/class-schema.php:890
+#: includes/class-schema.php:901
 msgid "Slide-in filter panel on phones"
 msgstr "Panneau de filtres coulissant sur mobile"
 
-#: includes/class-schema.php:899
+#: includes/class-schema.php:910
 msgid "From / to fields"
 msgstr "Champs de / à"
 
-#: includes/class-schema.php:900
+#: includes/class-schema.php:911
 msgid "Sliders"
 msgstr "Curseurs"
 
-#: includes/class-schema.php:902
+#: includes/class-schema.php:913
 msgid "Price, year, mileage and power"
 msgstr "Prix, année, kilométrage et puissance"
 
-#: includes/class-schema.php:911
+#: includes/class-schema.php:922
 msgid "Two dropdowns: make, then model"
 msgstr "Deux listes : marque, puis modèle"
 
-#: includes/class-schema.php:912
+#: includes/class-schema.php:923
 msgid "One picker with makes and models"
 msgstr "Une liste avec marques et modèles"
 
-#: includes/class-schema.php:913
+#: includes/class-schema.php:924
 msgid "One search field with suggestions"
 msgstr "Un champ de recherche avec suggestions"
 
-#: includes/class-schema.php:914
+#: includes/class-schema.php:925
 msgid "Hidden"
 msgstr "Masqué"
 
-#: includes/class-schema.php:916
+#: includes/class-schema.php:927
 msgid "Style"
 msgstr "Style"
 
-#: includes/class-schema.php:924
+#: includes/class-schema.php:935
 msgid "Show the number of vehicles per make and model"
 msgstr "Afficher le nombre de véhicules par marque et modèle"
 
-#: includes/class-schema.php:932
+#: includes/class-schema.php:943
 msgid "Hide makes and models without matching vehicles"
 msgstr "Masquer les marques et modèles sans véhicule correspondant"
 
-#: includes/class-schema.php:933
+#: includes/class-schema.php:944
 msgid "When other filters are active. Otherwise they are shown greyed out."
 msgstr "Lorsque d’autres filtres sont actifs. Sinon, ils sont grisés."
 
-#: includes/class-schema.php:955
+#: includes/class-schema.php:966
 msgid "Show on each vehicle"
 msgstr "Afficher sur chaque véhicule"
 
-#: includes/class-schema.php:964
+#: includes/class-schema.php:975
 msgid "New"
 msgstr "Neuf"
 
-#: includes/class-schema.php:966
+#: includes/class-schema.php:977
 msgid "Price reduced"
 msgstr "Prix baissé"
 
-#: includes/class-schema.php:977
+#: includes/class-schema.php:988
 msgid "Image ratio"
 msgstr "Format d’image"
 
-#: includes/class-schema.php:987
+#: includes/class-schema.php:998
 msgid "Images per vehicle"
 msgstr "Images par véhicule"
 
-#: includes/class-schema.php:988
+#: includes/class-schema.php:999
 msgid ""
 "More than one shows a small gallery when the pointer moves over the image."
 msgstr "Au-delà d’une image, une petite galerie s’affiche au survol."
 
-#: includes/class-schema.php:998
+#: includes/class-schema.php:1009
 msgid "Lift"
 msgstr "Soulever"
 
-#: includes/class-schema.php:999
+#: includes/class-schema.php:1010
 msgid "Zoom image"
 msgstr "Zoom sur l’image"
 
-#: includes/class-schema.php:1000
+#: includes/class-schema.php:1011
 msgid "Shadow"
 msgstr "Ombre"
 
-#: includes/class-schema.php:1002
+#: includes/class-schema.php:1013
 msgid "Hover effect"
 msgstr "Effet au survol"
 
-#: includes/class-schema.php:1011
+#: includes/class-schema.php:1022
 msgid "Card label"
 msgstr "Étiquette de carte"
 
-#: includes/class-schema.php:1012
+#: includes/class-schema.php:1023
 msgid "Optional small label above each title, for example \"New arrival\"."
 msgstr ""
 "Petite étiquette facultative au-dessus de chaque titre, p. ex. « Nouvel "
 "arrivage »."
 
-#: includes/class-schema.php:1031
+#: includes/class-schema.php:1042
 msgid "Marketplace currency"
 msgstr "Devise de la plateforme"
 
-#: includes/class-schema.php:1035
+#: includes/class-schema.php:1046
 msgid "Currency"
 msgstr "Devise"
 
-#: includes/class-schema.php:1043
+#: includes/class-schema.php:1054
 msgid "Horsepower"
 msgstr "Chevaux (ch)"
 
-#: includes/class-schema.php:1044
+#: includes/class-schema.php:1055
 msgid "Kilowatts"
 msgstr "Kilowatts"
 
-#: includes/class-schema.php:1045
+#: includes/class-schema.php:1056
 msgid "Both"
 msgstr "Les deux"
 
-#: includes/class-schema.php:1047
+#: includes/class-schema.php:1058
 msgid "Power unit"
 msgstr "Unité de puissance"
 
-#: includes/class-schema.php:1060
+#: includes/class-schema.php:1071
 msgid "First registration format"
 msgstr "Format de la première immatriculation"
 
-#: includes/class-schema.php:1079
+#: includes/class-schema.php:1090
 msgid "Inventory page for detail links"
 msgstr "Page d’inventaire pour les liens de détail"
 
-#: includes/class-schema.php:1080
+#: includes/class-schema.php:1091
 msgid ""
 "Used when vehicles link to \"Detail page on this site\". Pick the page with "
 "your main inventory; inventories on other pages (for example the homepage) "
@@ -1970,25 +1991,25 @@ msgstr ""
 "Choisissez la page de votre inventaire principal ; les inventaires d’autres "
 "pages (p. ex. l’accueil) y renvoient."
 
-#: includes/class-schema.php:1088
+#: includes/class-schema.php:1099
 msgid "Detail URL part"
 msgstr "Segment d’URL des détails"
 
-#: includes/class-schema.php:1089
+#: includes/class-schema.php:1100
 msgid ""
 "Example: /cars/vehicle/12345-bmw-x5/. Lowercase letters, numbers and dashes."
 msgstr ""
 "Exemple : /voitures/vehicle/12345-bmw-x5/. Minuscules, chiffres et tirets."
 
-#: includes/class-schema.php:1116
+#: includes/class-schema.php:1127
 msgid "Typography and spacing"
 msgstr "Typographie et espacements"
 
-#: includes/class-schema.php:1131
+#: includes/class-schema.php:1142
 msgid "Use theme styles"
 msgstr "Utiliser les styles du thème"
 
-#: includes/class-schema.php:1132
+#: includes/class-schema.php:1143
 msgid ""
 "Take colors and fonts from your theme instead of the settings below. Layout "
 "stays the same."
@@ -1996,83 +2017,83 @@ msgstr ""
 "Reprendre les couleurs et polices du thème au lieu des réglages ci-dessous. "
 "La mise en page reste la même."
 
-#: includes/class-schema.php:1153
+#: includes/class-schema.php:1164
 msgid "Theme font"
 msgstr "Police du thème"
 
-#: includes/class-schema.php:1154
+#: includes/class-schema.php:1165
 msgid "System UI"
 msgstr "Police système"
 
-#: includes/class-schema.php:1155
+#: includes/class-schema.php:1166
 msgid "Serif"
 msgstr "Serif"
 
-#: includes/class-schema.php:1156
+#: includes/class-schema.php:1167
 msgid "Custom"
 msgstr "Personnalisée"
 
-#: includes/class-schema.php:1158
+#: includes/class-schema.php:1169
 msgid "Font"
 msgstr "Police"
 
-#: includes/class-schema.php:1167
+#: includes/class-schema.php:1178
 msgid "Custom font family"
 msgstr "Famille de police personnalisée"
 
-#: includes/class-schema.php:1168
+#: includes/class-schema.php:1179
 msgid "A font your theme already loads, for example \"Inter\", sans-serif."
 msgstr "Une police déjà chargée par votre thème, p. ex. \"Inter\", sans-serif."
 
-#: includes/class-schema.php:1170
+#: includes/class-schema.php:1181
 msgid "Maximum width"
 msgstr "Largeur maximale"
 
-#: includes/class-schema.php:1171
+#: includes/class-schema.php:1182
 msgid "Side padding"
 msgstr "Marge latérale"
 
-#: includes/class-schema.php:1172
+#: includes/class-schema.php:1183
 msgid "Base spacing"
 msgstr "Espacement de base"
 
-#: includes/class-schema.php:1173
+#: includes/class-schema.php:1184
 msgid "Outer radius"
 msgstr "Rayon extérieur"
 
-#: includes/class-schema.php:1174
+#: includes/class-schema.php:1185
 msgid "Card radius"
 msgstr "Rayon des cartes"
 
-#: includes/class-schema.php:1175
+#: includes/class-schema.php:1186
 msgid "Input and button radius"
 msgstr "Rayon des champs et boutons"
 
-#: includes/class-schema.php:1183
+#: includes/class-schema.php:1194
 msgid "Soft"
 msgstr "Douce"
 
-#: includes/class-schema.php:1184
+#: includes/class-schema.php:1195
 msgid "Strong"
 msgstr "Forte"
 
-#: includes/class-schema.php:1186
+#: includes/class-schema.php:1197
 msgid "Shadows"
 msgstr "Ombres"
 
-#: includes/class-schema.php:1188
+#: includes/class-schema.php:1199
 msgid "Image width in the list layout"
 msgstr "Largeur d’image en mode liste"
 
-#: includes/class-schema.php:1195
+#: includes/class-schema.php:1206
 msgid "Image ratio on phones"
 msgstr "Format d’image sur mobile"
 
-#: includes/class-schema.php:1236
+#: includes/class-schema.php:1247
 msgid "Instance name"
 msgstr "Nom de l’instance"
 
-#: includes/class-schema.php:1237
+#: includes/class-schema.php:1248
 msgid ""
 "Unique name when several inventories are on one page; keeps their URL "
 "parameters apart."
@@ -2080,11 +2101,11 @@ msgstr ""
 "Nom unique quand plusieurs listes figurent sur une page ; sépare leurs "
 "paramètres d’URL."
 
-#: includes/class-schema.php:1244
+#: includes/class-schema.php:1255
 msgid "Compact filter query"
 msgstr "Requête de filtre compacte"
 
-#: includes/class-schema.php:1245
+#: includes/class-schema.php:1256
 msgid ""
 "Example: make=bmw&body=suv&price_to=60000. Values here win over the single "
 "filter fields."
@@ -2092,43 +2113,43 @@ msgstr ""
 "Exemple : make=bmw&body=suv&price_to=60000. Ces valeurs priment sur les "
 "champs de filtre individuels."
 
-#: includes/class-schema.php:1273
+#: includes/class-schema.php:1284
 msgid "Version contains"
 msgstr "La version contient"
 
-#: includes/class-schema.php:1280
+#: includes/class-schema.php:1291
 msgid "Only vehicles with warranty"
 msgstr "Uniquement les véhicules avec garantie"
 
-#: includes/class-schema.php:1284
+#: includes/class-schema.php:1295
 msgid "Price from"
 msgstr "Prix dès"
 
-#: includes/class-schema.php:1285
+#: includes/class-schema.php:1296
 msgid "Price up to"
 msgstr "Prix jusqu’à"
 
-#: includes/class-schema.php:1286
+#: includes/class-schema.php:1297
 msgid "Year from"
 msgstr "Année dès"
 
-#: includes/class-schema.php:1287
+#: includes/class-schema.php:1298
 msgid "Year up to"
 msgstr "Année jusqu’à"
 
-#: includes/class-schema.php:1288
+#: includes/class-schema.php:1299
 msgid "Mileage from"
 msgstr "Kilométrage dès"
 
-#: includes/class-schema.php:1289
+#: includes/class-schema.php:1300
 msgid "Mileage up to"
 msgstr "Kilométrage jusqu’à"
 
-#: includes/class-schema.php:1290
+#: includes/class-schema.php:1301
 msgid "Power from (hp)"
 msgstr "Puissance dès (ch)"
 
-#: includes/class-schema.php:1291
+#: includes/class-schema.php:1302
 msgid "Power up to (hp)"
 msgstr "Puissance jusqu’à (ch)"
 
@@ -2239,7 +2260,7 @@ msgid "hp"
 msgstr "ch"
 
 #. translators: %d: number of vehicles per page.
-#: templates/parts/toolbar.php:82
+#: templates/parts/toolbar.php:83
 #, php-format
 msgid "%d per page"
 msgstr "%d par page"
@@ -2267,3 +2288,33 @@ msgstr ""
 #: blocks/inventory/index.js:262
 msgid "Open the settings"
 msgstr "Ouvrir les réglages"
+
+#: blocks/inventory/block.json
+msgctxt "block title"
+msgid "Vehicle Inventory"
+msgstr "Inventaire de véhicules"
+
+#: blocks/inventory/block.json
+msgctxt "block description"
+msgid "Shows your AutoScout24 vehicles with filters, sorting and pagination."
+msgstr "Affiche vos véhicules AutoScout24 avec filtres, tri et pagination."
+
+#: blocks/inventory/block.json
+msgctxt "block keyword"
+msgid "cars"
+msgstr "voitures"
+
+#: blocks/inventory/block.json
+msgctxt "block keyword"
+msgid "vehicles"
+msgstr "véhicules"
+
+#: blocks/inventory/block.json
+msgctxt "block keyword"
+msgid "inventory"
+msgstr "inventaire"
+
+#: blocks/inventory/block.json
+msgctxt "block keyword"
+msgid "dealer"
+msgstr "concessionnaire"

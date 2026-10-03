@@ -64,10 +64,14 @@ final class Template {
 		$vars = (array) apply_filters( 'dinv_template_args', $vars, $name );
 
 		ob_start();
-		( static function ( string $dinv_template_path, array $dinv_template_vars ): void {
-			extract( $dinv_template_vars, EXTR_SKIP ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- Template scope only.
-			include $dinv_template_path;
-		} )( $path, $vars );
-		return (string) ob_get_clean();
+		try {
+			( static function ( string $dinv_template_path, array $dinv_template_vars ): void {
+				extract( $dinv_template_vars, EXTR_SKIP ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- Template scope only.
+				include $dinv_template_path;
+			} )( $path, $vars );
+		} finally {
+			$html = (string) ob_get_clean();
+		}
+		return $html;
 	}
 }

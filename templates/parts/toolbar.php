@@ -27,8 +27,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $dinv_filter_toggle = $config['show_filters'] && ( $config['mobile_drawer'] || ( $config['filters_collapsed'] && 'top' === $config['filter_position'] ) );
 $dinv_sort_options  = array_intersect_key( Schema::sort_options(), array_flip( (array) $config['sort_options'] ) );
-if ( ! isset( $dinv_sort_options[ $sort ] ) ) {
-	$dinv_sort_options = array( $sort => Schema::sort_options()[ $sort ] ) + $dinv_sort_options;
+$dinv_sort_key      = (string) $sort;
+if ( ! isset( $dinv_sort_options[ $dinv_sort_key ] ) ) {
+	$dinv_sort_options = array( $dinv_sort_key => Schema::sort_options()[ $dinv_sort_key ] ) + $dinv_sort_options;
 }
 // Keep the configured order.
 $dinv_sort_options = array_merge( array_intersect_key( array_flip( (array) $config['sort_options'] ), $dinv_sort_options ), $dinv_sort_options );
@@ -53,7 +54,7 @@ $dinv_current = '' !== $view ? $view : ( 'list' === $config['layout'] ? 'list' :
 	<?php if ( $dinv_has_actions ) : ?>
 		<div class="dinv-toolbar__actions">
 			<?php if ( $dinv_filter_toggle ) : ?>
-				<button type="button" class="dinv-button dinv-button--ghost dinv-toolbar__filters<?php echo $config['filters_collapsed'] && 'top' === $config['filter_position'] ? ' is-always' : ''; ?>" data-dinv-filters-toggle aria-controls="<?php echo esc_attr( $dinv_form ); ?>" aria-expanded="<?php echo $config['filters_collapsed'] ? 'false' : 'true'; ?>">
+				<button type="button" class="dinv-button dinv-button--ghost dinv-toolbar__filters<?php echo $config['filters_collapsed'] && 'top' === $config['filter_position'] ? ' is-always' : ''; ?>" data-dinv-filters-toggle aria-controls="<?php echo esc_attr( $uid . '-panel' ); ?>" aria-expanded="<?php echo $config['filters_collapsed'] ? 'false' : 'true'; ?>">
 					<?php echo Renderer::icon( 'filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static SVG. ?>
 					<span><?php echo esc_html( $labels['filters'] ); ?></span>
 					<span class="dinv-toolbar__badge" data-dinv-active-count hidden></span>

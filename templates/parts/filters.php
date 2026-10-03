@@ -100,7 +100,6 @@ $dinv_field = static function ( string $key ) use ( $config, $instance, $filters
 		return Template::render( 'parts/filter-range.php', array_merge( $dinv_parts, array( 'range' => $key ) ) );
 	}
 
-	ob_start();
 	if ( isset( $dinv_choice_groups[ $key ] ) ) {
 		list( $group, $enum, $target ) = $dinv_choice_groups[ $key ];
 		$rows                          = (array) ( $options[ $group ] ?? array() );
@@ -108,6 +107,10 @@ $dinv_field = static function ( string $key ) use ( $config, $instance, $filters
 		if ( isset( $preset_filters[ $target ] ) || ( count( $rows ) < 2 && '' === $current ) ) {
 			return '';
 		}
+	}
+
+	ob_start();
+	if ( isset( $dinv_choice_groups[ $key ] ) ) {
 		?>
 		<div class="dinv-field dinv-field--<?php echo esc_attr( $key ); ?>" data-dinv-filter="<?php echo esc_attr( $key ); ?>">
 			<label class="dinv-field__label" for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label>
@@ -192,14 +195,13 @@ $dinv_group = static function ( string $key, string $html ) use ( $config, $dinv
 	return '<details class="dinv-filter-group dinv-filter-group--' . esc_attr( $key ) . '"' . ( $config['filters_collapsed'] ? '' : ' open' ) . '><summary>' . esc_html( $dinv_names[ $key ] ?? $key ) . Renderer::icon( 'chevron' ) . '</summary><div class="dinv-filter-group__body">' . $html . '</div></details>';
 };
 ?>
-<form
-	id="<?php echo esc_attr( $dinv_form_id ); ?>"
+<div
+	id="<?php echo esc_attr( $uid ); ?>-panel"
 	class="<?php echo esc_attr( implode( ' ', $dinv_classes ) ); ?>"
-	data-dinv-form
-	method="get"
-	aria-label="<?php echo esc_attr( $labels['filters'] ); ?>"
-	<?php echo $config['filters_collapsed'] && 'top' === $dinv_position ? 'data-collapsed' : ''; ?>
+	data-dinv-panel
+	aria-labelledby="<?php echo esc_attr( $uid ); ?>-filters-title"
 >
+<form id="<?php echo esc_attr( $dinv_form_id ); ?>" class="dinv-filters__form" data-dinv-form method="get" aria-label="<?php echo esc_attr( $labels['filters'] ); ?>">
 	<div class="dinv-filters__head">
 		<h3 class="dinv-filters__title" id="<?php echo esc_attr( $uid ); ?>-filters-title"><?php echo esc_html( $labels['filters'] ); ?></h3>
 		<button type="button" class="dinv-icon-button dinv-filters__close" data-dinv-drawer-close>
@@ -246,4 +248,5 @@ $dinv_group = static function ( string $key, string $html ) use ( $config, $dinv
 		<button type="submit" class="dinv-button dinv-button--primary dinv-filters__submit" data-dinv-submit><?php echo esc_html( $labels['apply'] ); ?></button>
 	</div>
 </form>
+</div>
 <div class="dinv-drawer-backdrop" data-dinv-drawer-backdrop hidden></div>
