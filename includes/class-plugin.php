@@ -199,7 +199,7 @@ final class Plugin {
 		Settings::all();
 		update_option( self::VERSION_OPTION, DINV_VERSION, true );
 		Scheduler::reschedule();
-		update_option( 'dinv_flush_rewrite', 1, false );
+		update_option( 'dinv_flush_rewrite', '1', true );
 	}
 
 	/**

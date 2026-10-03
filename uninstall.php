@@ -35,6 +35,7 @@ function dinv_uninstall_site(): void {
 			$wpdb->esc_like( '_transient_timeout_dinv_' ) . '%'
 		)
 	);
+	delete_option( 'dinv_public_cache' );
 	delete_option( 'dinv_sync_lock' );
 	delete_option( 'dinv_flush_rewrite' );
 	flush_rewrite_rules( false );

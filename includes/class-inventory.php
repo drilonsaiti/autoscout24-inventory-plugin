@@ -77,6 +77,13 @@ final class Inventory {
 	public array $results;
 
 	/**
+	 * Make / model counts (computed once).
+	 *
+	 * @var array|null
+	 */
+	private ?array $facets = null;
+
+	/**
 	 * Result renderer.
 	 *
 	 * @var Renderer
@@ -147,10 +154,18 @@ final class Inventory {
 			$page = max( 1, absint( $read( 'page' ) ) );
 		}
 
-		$need_total    = $config['show_count'] || $config['show_pagination'];
-		$this->results = Repository::search( $this->filters, $page, $per_page, $this->sort, $need_total );
+		$need_total = $config['show_count'] || $config['show_pagination'];
+
+		// The make / model counts ignore the make and model filters; without
+		// those filters their sum is the total, so no COUNT query is needed.
+		$known_total = null;
+		if ( $this->shows_make_control() && empty( $this->filters['make'] ) && empty( $this->filters['model'] ) ) {
+			$known_total = (int) $this->facets()['total'];
+		}
+
+		$this->results = Repository::search( $this->filters, $page, $per_page, $this->sort, $need_total, $known_total );
 		if ( $page > 1 && $this->results['total_pages'] > 0 && $page > $this->results['total_pages'] ) {
-			$this->results = Repository::search( $this->filters, $this->results['total_pages'], $per_page, $this->sort, $need_total );
+			$this->results = Repository::search( $this->filters, $this->results['total_pages'], $per_page, $this->sort, $need_total, $known_total );
 		}
 
 		$this->renderer = new Renderer( $config );
@@ -242,12 +257,16 @@ final class Inventory {
 	/**
 	 * Vehicle counts per make and model for the current filters.
 	 *
-	 * @return array{makes: array<string, int>, models: array<string, array<string, int>>}
+	 * @return array{makes: array<string, int>, models: array<string, array<string, int>>, total: int}
 	 */
 	public function facets(): array {
-		return $this->shows_make_control() ? Repository::facets( $this->filters ) : array(
-			'makes'  => array(),
-			'models' => array(),
-		);
+		if ( null === $this->facets ) {
+			$this->facets = $this->shows_make_control() ? Repository::facets( $this->filters ) : array(
+				'makes'  => array(),
+				'models' => array(),
+				'total'  => 0,
+			);
+		}
+		return $this->facets;
 	}
 }

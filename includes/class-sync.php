@@ -81,13 +81,14 @@ final class Sync {
 			$details     = self::refresh_details( $connection, $language );
 
 			Repository::invalidate_public_cache();
+			Repository::warm_public_cache();
 
 			$stats = array(
 				'last_success'       => current_time( 'mysql', true ),
 				'version'            => time(),
 				'duration'           => round( microtime( true ) - $started, 3 ),
 				'received'           => $received,
-				'active'             => Repository::count_active( $connection->id ),
+				'active'             => Repository::active_total(),
 				'deactivated'        => $deactivated,
 				'warranty_refreshed' => $metadata['warranty_refreshed'],
 				'metadata_failures'  => $metadata['failures'],
@@ -138,7 +139,7 @@ final class Sync {
 			++$result['failures'];
 			Logger::log( 'warning', 'seller_refresh_failed', 'Seller profile refresh failed.', array( 'error_code' => $seller->get_error_code() ) );
 		} else {
-			update_option( 'dinv_seller_profile', $seller, false );
+			update_option( 'dinv_seller_profile', $seller, true );
 		}
 
 		if ( ! in_array( 'warranty', $provider->features(), true ) || ! Settings::get( 'sync_warranty', true ) ) {

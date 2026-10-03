@@ -75,4 +75,23 @@ class MigrationTest extends Test_Case {
 
 		$this->assertSame( array( 'show_make' => true ), get_option( Settings::OPTION ) );
 	}
+
+	public function test_version_three_autoloads_hot_options_and_drops_old_transients(): void {
+		global $wpdb;
+		add_option( 'dinv_seller_profile', array( 'name' => 'Demo' ), '', false );
+		update_option( 'dinv_flush_rewrite', '1', false );
+		set_transient( 'dinv_filter_options', array( 1 ), HOUR_IN_SECONDS );
+		update_option( Migrations::OPTION, 2 );
+
+		Migrations::maybe_run();
+
+		$autoload = $wpdb->get_col( "SELECT autoload FROM {$wpdb->options} WHERE option_name IN ('dinv_seller_profile','dinv_flush_rewrite')" );
+		$this->assertCount( 2, $autoload );
+		foreach ( $autoload as $value ) {
+			$this->assertContains( $value, array( 'yes', 'on', 'auto-on' ) );
+		}
+		$this->assertSame( array( 'name' => 'Demo' ), get_option( 'dinv_seller_profile' ) );
+		$this->assertSame( '1', get_option( 'dinv_flush_rewrite' ), 'A pending flush is kept.' );
+		$this->assertFalse( get_transient( 'dinv_filter_options' ) );
+	}
 }

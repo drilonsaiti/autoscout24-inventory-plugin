@@ -155,6 +155,13 @@ final class Design {
 		foreach ( $tokens as $name => $value ) {
 			$css .= $name . ':' . $value . ';';
 		}
+
+		// Native controls (checkboxes, scrollbars, date pickers) follow dark designs.
+		$settings = $settings ?? Settings::all();
+		$bg       = sanitize_hex_color( (string) ( $settings['design_bg'] ?? '' ) );
+		if ( empty( $settings['use_theme_styles'] ) && $bg && self::luminance( $bg ) < 0.2 ) {
+			$css .= 'color-scheme:dark;';
+		}
 		return $css . '}';
 	}
 
@@ -262,6 +269,27 @@ final class Design {
 			'serif'   => 'Georgia,"Times New Roman",serif',
 		);
 		return $stacks[ $font ] ?? 'inherit';
+	}
+
+	/**
+	 * Relative luminance (WCAG) of a hex color.
+	 *
+	 * @param string $hex #RRGGBB.
+	 */
+	public static function luminance( string $hex ): float {
+		$hex = ltrim( $hex, '#' );
+		if ( 3 === strlen( $hex ) ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+		if ( 6 !== strlen( $hex ) || ! ctype_xdigit( $hex ) ) {
+			return 1.0;
+		}
+		$channels = array();
+		foreach ( array( 0, 2, 4 ) as $offset ) {
+			$c          = hexdec( substr( $hex, $offset, 2 ) ) / 255;
+			$channels[] = $c <= 0.03928 ? $c / 12.92 : ( ( $c + 0.055 ) / 1.055 ) ** 2.4;
+		}
+		return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
 	}
 
 	/**

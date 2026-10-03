@@ -114,4 +114,12 @@ class DesignTest extends Test_Case {
 		$css = Design::css( array( 'use_theme_styles' => true ) );
 		$this->assertStringContainsString( 'var(--wp--preset--color--', $css );
 	}
+
+	public function test_dark_backgrounds_use_a_dark_color_scheme(): void {
+		$dark  = Design::presets()['premium_dark'];
+		$light = Design::presets()['classic'];
+
+		$this->assertStringContainsString( 'color-scheme:dark', Design::css( $dark ) );
+		$this->assertStringNotContainsString( 'color-scheme', Design::css( $light ) );
+	}
 }

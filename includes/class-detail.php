@@ -80,8 +80,14 @@ final class Detail {
 	 * migration or when the URL segment is saved).
 	 */
 	public static function maybe_flush(): void {
-		if ( get_option( 'dinv_flush_rewrite' ) ) {
-			delete_option( 'dinv_flush_rewrite' );
+		// The flag is kept as an autoloaded option, so checking it costs no query.
+		$flag = get_option( 'dinv_flush_rewrite' );
+		if ( false === $flag ) {
+			add_option( 'dinv_flush_rewrite', '0', '', true );
+			return;
+		}
+		if ( '1' === (string) $flag ) {
+			update_option( 'dinv_flush_rewrite', '0', true );
 			flush_rewrite_rules( false );
 		}
 	}

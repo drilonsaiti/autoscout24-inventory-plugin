@@ -27,9 +27,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class Repository {
 
-	private const CACHE_FILTERS    = 'dinv_filter_options';
-	private const CACHE_MAKE_MODEL = 'dinv_make_model_rows';
-	private const CACHE_TTL        = 6 * HOUR_IN_SECONDS;
+	/**
+	 * One non-autoloaded option holds every derived list (filter options,
+	 * makes and models, number of active vehicles). It is rebuilt after each
+	 * sync, so a page view reads it with a single query.
+	 */
+	public const CACHE_OPTION = 'dinv_public_cache';
+
+	/**
+	 * Transients used by version 1.1.0 and earlier (removed on invalidation).
+	 */
+	private const LEGACY_TRANSIENTS = array( 'dinv_filter_options', 'dinv_make_model_rows' );
+
+	/**
+	 * Per-request copy of the cache option.
+	 *
+	 * @var array<string, mixed>|null
+	 */
+	private static ?array $cache = null;
+
+	/**
+	 * The request copy has parts that are not stored yet.
+	 *
+	 * @var bool
+	 */
+	private static bool $cache_dirty = false;
 
 	/**
 	 * Allowed sort keys mapped to ORDER BY clauses. Never built from input.
@@ -333,31 +355,29 @@ final class Repository {
 	/**
 	 * Search active vehicles.
 	 *
-	 * @param array  $filters    Normalized filters.
-	 * @param int    $page       1-based page.
-	 * @param int    $per_page   Page size (1-48).
-	 * @param string $sort       Sort key.
-	 * @param bool   $need_total Run the COUNT query.
+	 * The total comes from (in order): $known_total, the cached number of
+	 * active vehicles when no filter is set, the page itself when it is the
+	 * last one, and only then a COUNT query.
+	 *
+	 * @param array    $filters     Normalized filters.
+	 * @param int      $page        1-based page.
+	 * @param int      $per_page    Page size (1-48).
+	 * @param string   $sort        Sort key.
+	 * @param bool     $need_total  Whether the total is needed.
+	 * @param int|null $known_total Total already known to the caller.
 	 * @return array{items: array, total: int, page: int, per_page: int, total_pages: int}
 	 */
-	public static function search( array $filters, int $page, int $per_page, string $sort, bool $need_total = true ): array {
+	public static function search( array $filters, int $page, int $per_page, string $sort, bool $need_total = true, ?int $known_total = null ): array {
 		global $wpdb;
 
 		$page     = max( 1, $page );
 		$per_page = max( 1, min( 48, $per_page ) );
+		$offset   = ( $page - 1 ) * $per_page;
 
 		list( $where_sql, $params ) = self::where_sql( $filters );
 
-		$total = 0;
-		if ( $need_total ) {
-			$count_sql = 'SELECT COUNT(*) FROM ' . self::vehicles_table() . ' WHERE ' . $where_sql;
-			$total     = (int) $wpdb->get_var( $wpdb->prepare( $count_sql, ...$params ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- WHERE built from whitelisted columns and placeholders.
-		}
-
-		$order  = self::SORTS[ $sort ] ?? self::SORTS['newest'];
-		$offset = ( $page - 1 ) * $per_page;
-
 		// ORDER BY comes from the SORTS whitelist; WHERE uses placeholders only.
+		$order = self::SORTS[ $sort ] ?? self::SORTS['newest'];
 		$items = $wpdb->get_results( // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare(
 				'SELECT ' . implode( ', ', self::CARD_COLUMNS ) . ' FROM ' . self::vehicles_table()
@@ -371,6 +391,16 @@ final class Repository {
 		if ( ! $need_total ) {
 			// Compact blocks only need to know whether this page has results.
 			$total = count( $items );
+		} elseif ( null !== $known_total ) {
+			$total = $known_total;
+		} elseif ( ! self::has_filters( $filters ) ) {
+			$total = self::active_total();
+		} elseif ( count( $items ) < $per_page && ( $items || 1 === $page ) ) {
+			// A short page is the last one: no COUNT query needed.
+			$total = $offset + count( $items );
+		} else {
+			$count_sql = 'SELECT COUNT(*) FROM ' . self::vehicles_table() . ' WHERE ' . $where_sql;
+			$total     = (int) $wpdb->get_var( $wpdb->prepare( $count_sql, ...$params ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- WHERE built from whitelisted columns and placeholders.
 		}
 
 		return array(
@@ -382,6 +412,15 @@ final class Repository {
 				? ( $total > 0 ? (int) ceil( $total / $per_page ) : 0 )
 				: ( $total > 0 ? 1 : 0 ),
 		);
+	}
+
+	/**
+	 * Whether any filter is set.
+	 *
+	 * @param array $filters Normalized filters.
+	 */
+	public static function has_filters( array $filters ): bool {
+		return (bool) array_filter( $filters, static fn( $value ) => '' !== $value && null !== $value && 0 !== $value && false !== $value );
 	}
 
 	/**
@@ -415,7 +454,7 @@ final class Repository {
 	 * @return array<string, array>
 	 */
 	public static function filter_options(): array {
-		$cached = get_transient( self::CACHE_FILTERS );
+		$cached = self::cache_get( 'filter_options' );
 		if ( is_array( $cached ) ) {
 			return $cached;
 		}
@@ -454,7 +493,7 @@ final class Repository {
 			'bounds'        => self::bounds( $connection ),
 		);
 
-		set_transient( self::CACHE_FILTERS, $options, self::CACHE_TTL );
+		self::cache_set( 'filter_options', $options );
 		return $options;
 	}
 
@@ -508,21 +547,29 @@ final class Repository {
 		$facets = array(
 			'makes'  => array(),
 			'models' => array(),
+			'total'  => 0,
 		);
 
-		if ( ! array_filter( $filters, static fn( $value ) => '' !== $value && null !== $value && 0 !== $value ) ) {
-			$rows = self::make_model_rows();
+		if ( ! self::has_filters( $filters ) ) {
+			$rows            = self::make_model_rows();
+			$facets['total'] = self::active_total();
 		} else {
 			global $wpdb;
 			list( $where_sql, $params ) = self::where_sql( $filters );
-			$sql                        = 'SELECT make_key, model_key, COUNT(*) AS count FROM ' . self::vehicles_table() . ' WHERE ' . $where_sql . " AND make_key<>'' GROUP BY make_key, model_key";
+			$sql                        = 'SELECT make_key, model_key, COUNT(*) AS count FROM ' . self::vehicles_table() . ' WHERE ' . $where_sql . ' GROUP BY make_key, model_key';
 			$rows                       = $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared -- WHERE built from whitelisted columns and placeholders.
 			$rows                       = is_array( $rows ) ? $rows : array();
+			foreach ( $rows as $row ) {
+				$facets['total'] += (int) $row['count'];
+			}
 		}
 
 		foreach ( $rows as $row ) {
 			$make  = (string) $row['make_key'];
 			$count = (int) $row['count'];
+			if ( '' === $make ) {
+				continue;
+			}
 
 			$facets['makes'][ $make ] = ( $facets['makes'][ $make ] ?? 0 ) + $count;
 			if ( '' !== (string) $row['model_key'] ) {
@@ -694,7 +741,7 @@ final class Repository {
 	 * @return array<int, array{make_key: string, make_name: string, model_key: string, model_name: string, count: int}>
 	 */
 	public static function make_model_rows(): array {
-		$cached = get_transient( self::CACHE_MAKE_MODEL );
+		$cached = self::cache_get( 'make_model_rows' );
 		if ( is_array( $cached ) ) {
 			return $cached;
 		}
@@ -714,7 +761,7 @@ final class Repository {
 		);
 		$rows = is_array( $rows ) ? $rows : array();
 
-		set_transient( self::CACHE_MAKE_MODEL, $rows, self::CACHE_TTL );
+		self::cache_set( 'make_model_rows', $rows );
 		return $rows;
 	}
 
@@ -722,8 +769,78 @@ final class Repository {
 	 * Clear cached filter metadata.
 	 */
 	public static function invalidate_public_cache(): void {
-		delete_transient( self::CACHE_FILTERS );
-		delete_transient( self::CACHE_MAKE_MODEL );
+		self::$cache       = array();
+		self::$cache_dirty = false;
+		delete_option( self::CACHE_OPTION );
+		foreach ( self::LEGACY_TRANSIENTS as $transient ) {
+			delete_transient( $transient );
+		}
+	}
+
+	/**
+	 * Build the cache right away (after a sync), so visitors never wait for it.
+	 */
+	public static function warm_public_cache(): void {
+		self::filter_options();
+		self::make_model_rows();
+		self::active_total();
+		self::save_public_cache();
+	}
+
+	/**
+	 * Number of active vehicles of the default connection (cached).
+	 */
+	public static function active_total(): int {
+		$cached = self::cache_get( 'total' );
+		if ( is_int( $cached ) ) {
+			return $cached;
+		}
+		$total = self::count_active();
+		self::cache_set( 'total', $total );
+		return $total;
+	}
+
+	/**
+	 * One part of the cache.
+	 *
+	 * @param string $part Part name.
+	 * @return mixed Null when missing.
+	 */
+	private static function cache_get( string $part ) {
+		if ( null === self::$cache ) {
+			$stored      = get_option( self::CACHE_OPTION );
+			self::$cache = is_array( $stored ) ? $stored : array();
+		}
+		return self::$cache[ $part ] ?? null;
+	}
+
+	/**
+	 * Store one part of the cache.
+	 *
+	 * @param string $part  Part name.
+	 * @param mixed  $value Value.
+	 */
+	private static function cache_set( string $part, $value ): void {
+		if ( null === self::$cache ) {
+			self::cache_get( $part );
+		}
+		self::$cache[ $part ] = $value;
+
+		// Write once per request, however many parts were rebuilt.
+		if ( ! self::$cache_dirty ) {
+			self::$cache_dirty = true;
+			add_action( 'shutdown', array( self::class, 'save_public_cache' ), 0 );
+		}
+	}
+
+	/**
+	 * Store rebuilt cache parts.
+	 */
+	public static function save_public_cache(): void {
+		if ( self::$cache_dirty && is_array( self::$cache ) ) {
+			update_option( self::CACHE_OPTION, self::$cache, false );
+		}
+		self::$cache_dirty = false;
 	}
 
 	/**

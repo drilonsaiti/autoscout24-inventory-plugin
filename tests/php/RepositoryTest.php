@@ -134,4 +134,85 @@ class RepositoryTest extends Test_Case {
 		$this->assertSame( 'Hello', json_decode( $row['detail_json'], true )['description'] );
 		$this->assertCount( 5, Repository::vehicles_needing_details( 'default', 10 ) );
 	}
+
+	/**
+	 * Run a callback and count the database queries it makes.
+	 *
+	 * @param callable $callback Callback.
+	 * @return array{0: mixed, 1: int} Result and query count.
+	 */
+	private function queries( callable $callback ): array {
+		global $wpdb;
+		$before = $wpdb->num_queries;
+		$result = $callback();
+		return array( $result, $wpdb->num_queries - $before );
+	}
+
+	public function test_unfiltered_search_needs_one_query_with_a_warm_cache(): void {
+		$this->fixture();
+		Repository::warm_public_cache();
+
+		list( $result, $queries ) = $this->queries( static fn() => Repository::search( array(), 1, 4, 'newest' ) );
+
+		$this->assertSame( 6, $result['total'] );
+		$this->assertSame( 1, $queries, 'Only the page itself is queried; the total comes from the cache.' );
+	}
+
+	public function test_last_page_needs_no_count_query(): void {
+		$this->fixture();
+
+		list( $result, $queries ) = $this->queries( static fn() => Repository::search( array( 'make' => 'bmw' ), 1, 12, 'newest' ) );
+		$this->assertSame( 3, $result['total'] );
+		$this->assertSame( 1, $queries );
+
+		list( $result, $queries ) = $this->queries( static fn() => Repository::search( array( 'make' => 'bmw' ), 2, 2, 'newest' ) );
+		$this->assertSame( 3, $result['total'], 'Short last page: offset + items.' );
+		$this->assertSame( 1, $queries );
+
+		list( $result, $queries ) = $this->queries( static fn() => Repository::search( array( 'make' => 'bmw' ), 1, 2, 'newest' ) );
+		$this->assertSame( 3, $result['total'], 'A full page still counts.' );
+		$this->assertSame( 2, $queries );
+
+		$beyond = Repository::search( array( 'make' => 'bmw' ), 9, 2, 'newest' );
+		$this->assertSame( 3, $beyond['total'], 'Pages beyond the end still report the real total.' );
+	}
+
+	public function test_known_total_skips_counting(): void {
+		$this->fixture();
+
+		list( $result, $queries ) = $this->queries( static fn() => Repository::search( array( 'fuel' => 'petrol' ), 1, 1, 'newest', true, 2 ) );
+
+		$this->assertSame( 2, $result['total'] );
+		$this->assertSame( 2, $result['total_pages'] );
+		$this->assertSame( 1, $queries );
+	}
+
+	public function test_facets_include_the_total(): void {
+		$this->fixture();
+		$this->store( array( $this->vehicle( 9, array( 'make_key' => '', 'make_name' => '', 'model_key' => '', 'fuel_type' => 'petrol' ) ) ) );
+
+		$facets = Repository::facets( array( 'fuel' => 'petrol' ) );
+
+		$this->assertSame( 3, $facets['total'], 'Vehicles without a make are counted too.' );
+		$this->assertArrayNotHasKey( '', $facets['makes'] );
+		$this->assertSame( 7, Repository::facets( array() )['total'] );
+	}
+
+	public function test_public_cache_is_one_option_and_cleared_on_invalidation(): void {
+		$this->fixture();
+		Repository::warm_public_cache();
+
+		$cache = get_option( Repository::CACHE_OPTION );
+		$this->assertSame( 6, $cache['total'] );
+		$this->assertArrayHasKey( 'filter_options', $cache );
+		$this->assertArrayHasKey( 'make_model_rows', $cache );
+
+		Repository::invalidate_public_cache();
+		$this->assertFalse( get_option( Repository::CACHE_OPTION ) );
+
+		list( , $queries ) = $this->queries( static fn() => Repository::filter_options() );
+		$this->assertGreaterThan( 1, $queries, 'Rebuilt after invalidation.' );
+		list( , $queries ) = $this->queries( static fn() => Repository::filter_options() );
+		$this->assertSame( 0, $queries, 'Served from the request copy.' );
+	}
 }

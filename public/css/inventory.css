@@ -1320,7 +1320,7 @@
 
 .dinv-row {
 	display: grid;
-	grid-template-columns: var(--dinv-image-width) minmax(0, 1fr);
+	grid-template-columns: min(var(--dinv-image-width), 40%) minmax(0, 1fr);
 	overflow: hidden;
 }
 
@@ -1329,8 +1329,12 @@
 }
 
 .dinv-row .dinv-media {
+	/* Fill the image column; the row height decides the image height. A
+	   fixed ratio here would widen the image beyond its column. */
+	width: 100%;
 	height: 100%;
-	min-height: 100%;
+	min-height: 180px;
+	aspect-ratio: auto;
 }
 
 .dinv-row__body {
@@ -1373,12 +1377,39 @@
 	gap: 6px;
 }
 
-@media (max-width: 760px) {
+
+/* Narrow content columns on wide screens (e.g. a theme with a slim
+   content area): stack the list rows by the width of the results. */
+.dinv-results {
+	container: dinv-results / inline-size;
+}
+
+@container dinv-results (max-width: 760px) {
+	.dinv-row__body {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.dinv-row__side {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		text-align: left;
+	}
+
+	.dinv-row .dinv-price {
+		justify-content: flex-start;
+	}
+}
+
+@container dinv-results (max-width: 520px) {
 	.dinv-row {
 		grid-template-columns: 1fr;
 	}
 
 	.dinv-row .dinv-media {
+		height: auto;
+		min-height: 0;
 		aspect-ratio: var(--dinv-image-ratio-mobile);
 	}
 
@@ -2028,5 +2059,427 @@
 
 	.dinv-detail__summary {
 		padding: 18px;
+	}
+}
+
+/* Theme compatibility ----------------------------------------------------
+ *
+ * Many themes style a, button, input, select, img, lists and headings with
+ * selectors like `.entry-content a:hover` or `input[type="number"]`, which
+ * would win over single-class rules above. The rules below repeat the
+ * important properties one step more specific (scope + element + class),
+ * still without !important, so a theme or custom CSS can override them
+ * deliberately (for example with `.dinv-inventory .dinv-button`).
+ */
+
+:is(.dinv-inventory, .dinv-detail) :is(h1, h2, h3, h4):is([class], [id]) {
+	margin: 0;
+	padding: 0;
+	color: var(--dinv-text);
+	font-family: var(--dinv-font);
+	letter-spacing: normal;
+	text-transform: none;
+	border: 0;
+	background: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-toolbar__count [data-dinv-count] {
+	color: var(--dinv-text);
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-toolbar__count [data-dinv-count-label] {
+	color: var(--dinv-muted);
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(p, ul, ol, dl, dd, fieldset, legend)[class] {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(ul, ol)[class] {
+	list-style: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(ul, ol)[class] > li {
+	margin: 0;
+	list-style: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(ul, ol)[class] > li::before,
+:is(.dinv-inventory, .dinv-detail) :is(ul, ol)[class] > li::marker {
+	content: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-detail__text :is(p, ul, ol) {
+	margin: 0 0 0.9em;
+}
+
+/* Images */
+
+:is(.dinv-inventory, .dinv-detail) .dinv-media img,
+:is(.dinv-inventory, .dinv-detail) .dinv-photos__slide img {
+	display: block;
+	width: 100%;
+	max-width: none;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	object-fit: cover;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-photos__thumbs img,
+:is(.dinv-inventory, .dinv-detail) .dinv-table__image img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 0;
+	object-fit: cover;
+	border: 0;
+	box-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-table__image img {
+	width: 96px;
+	aspect-ratio: 4 / 3;
+	border-radius: var(--dinv-radius-sm);
+}
+
+/* Links */
+
+:is(.dinv-inventory, .dinv-detail) a:is(.dinv-vehicle__link, .dinv-media),
+:is(.dinv-inventory, .dinv-detail) a:is(.dinv-vehicle__link, .dinv-media):is(:link, :visited, :hover, :focus, :active) {
+	color: inherit;
+	text-decoration: none;
+	background: none;
+	border: 0;
+	box-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) a.dinv-vehicle__link:hover {
+	color: var(--dinv-accent);
+}
+
+:is(.dinv-inventory, .dinv-detail) a:is(.dinv-header__link, .dinv-detail__back),
+:is(.dinv-inventory, .dinv-detail) a:is(.dinv-header__link, .dinv-detail__back):is(:link, :visited) {
+	color: var(--dinv-accent);
+	text-decoration: none;
+	border: 0;
+	box-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) a:is(.dinv-header__link, .dinv-detail__back):is(:hover, :focus) {
+	color: var(--dinv-accent-hover);
+	text-decoration: underline;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-photos__thumbs a,
+:is(.dinv-inventory, .dinv-detail) .dinv-photos__thumbs a:is(:link, :visited, :hover, :focus) {
+	text-decoration: none;
+	box-shadow: none;
+}
+
+/* Buttons */
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button,
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button:is(:link, :visited) {
+	min-height: var(--dinv-control-h);
+	margin: 0;
+	padding: 10px 18px;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: var(--dinv-radius-sm);
+	box-shadow: none;
+	font-family: var(--dinv-font);
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: normal;
+	text-decoration: none;
+	text-transform: none;
+	text-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button--primary,
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button--primary:is(:link, :visited, :focus, :active) {
+	color: var(--dinv-on-accent);
+	background: var(--dinv-accent);
+	border-color: var(--dinv-accent);
+	text-decoration: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button--primary:hover {
+	color: var(--dinv-on-accent);
+	background: var(--dinv-accent-hover);
+	border-color: var(--dinv-accent-hover);
+	text-decoration: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button--ghost,
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button--ghost:is(:link, :visited, :focus, :active) {
+	color: var(--dinv-text);
+	background: var(--dinv-panel-2);
+	border-color: var(--dinv-border);
+	text-decoration: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-button--ghost:hover {
+	color: var(--dinv-text);
+	background: var(--dinv-panel-2);
+	border-color: var(--dinv-border-hi);
+	text-decoration: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-card :is(a, button).dinv-vehicle__cta {
+	min-height: 40px;
+	padding: 8px 14px;
+	font-size: 0.875rem;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-table :is(a, button).dinv-vehicle__cta {
+	min-height: 36px;
+	padding: 6px 12px;
+	font-size: 0.875rem;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button):is(.dinv-pagination__page, .dinv-pagination__button),
+:is(.dinv-inventory, .dinv-detail) :is(a, button):is(.dinv-pagination__page, .dinv-pagination__button):is(:link, :visited, :focus, :active) {
+	margin: 0;
+	color: var(--dinv-text);
+	background: var(--dinv-panel-2);
+	border: 1px solid var(--dinv-border);
+	border-radius: var(--dinv-radius-sm);
+	box-shadow: none;
+	font-family: var(--dinv-font);
+	font-size: 0.9375rem;
+	font-weight: 600;
+	letter-spacing: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button):is(.dinv-pagination__page, .dinv-pagination__button):hover {
+	color: var(--dinv-text);
+	background: var(--dinv-panel-2);
+	border-color: var(--dinv-border-hi);
+	text-decoration: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-pagination__page.is-active,
+:is(.dinv-inventory, .dinv-detail) :is(a, button).dinv-pagination__page.is-active:is(:link, :visited, :hover, :focus) {
+	color: var(--dinv-on-accent);
+	background: var(--dinv-accent);
+	border-color: var(--dinv-accent);
+}
+
+:is(.dinv-inventory, .dinv-detail) button:is(.dinv-icon-button, .dinv-combobox__clear),
+:is(.dinv-inventory, .dinv-detail) button:is(.dinv-icon-button, .dinv-combobox__clear):is(:hover, :focus, :active) {
+	margin: 0;
+	padding: 0;
+	color: var(--dinv-text);
+	background: transparent;
+	box-shadow: none;
+	text-decoration: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) button.dinv-combobox__clear {
+	border: 0;
+}
+
+:is(.dinv-inventory, .dinv-detail) button.dinv-views__button,
+:is(.dinv-inventory, .dinv-detail) button.dinv-views__button:is(:hover, :focus, :active) {
+	margin: 0;
+	padding: 0;
+	color: var(--dinv-muted);
+	background: transparent;
+	border: 0;
+	box-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) button.dinv-views__button[aria-pressed="true"] {
+	color: var(--dinv-text);
+	background: var(--dinv-panel-2);
+	box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+}
+
+:is(.dinv-inventory, .dinv-detail) button.dinv-photos__nav,
+:is(.dinv-inventory, .dinv-detail) button.dinv-photos__nav:is(:hover, :focus, :active) {
+	margin: 0;
+	padding: 0;
+	color: #14171c;
+	background: rgb(255 255 255 / 92%);
+	border: 0;
+	border-radius: 50%;
+}
+
+/* Keyboard focus stays visible whatever the theme does on :focus. */
+:is(.dinv-inventory, .dinv-detail) :is(a, button, input, select, summary)[class]:focus-visible {
+	outline: 2px solid var(--dinv-accent);
+	outline-offset: 2px;
+	box-shadow: 0 0 0 5px var(--dinv-focus-ring);
+}
+
+/* Form controls */
+
+:is(.dinv-inventory, .dinv-detail) .dinv-select select,
+:is(.dinv-inventory, .dinv-detail) input.dinv-input,
+:is(.dinv-inventory, .dinv-detail) input.dinv-input:is([type="number"], [type="search"], [type="text"]) {
+	width: 100%;
+	max-width: none;
+	min-height: var(--dinv-control-h);
+	height: auto;
+	margin: 0;
+	color: var(--dinv-text);
+	background-color: var(--dinv-panel-2);
+	border: 1px solid var(--dinv-border);
+	border-radius: var(--dinv-radius-sm);
+	box-shadow: none;
+	font-family: var(--dinv-font);
+	font-size: 0.9375rem;
+	font-weight: 400;
+	line-height: 1.3;
+	letter-spacing: normal;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-select select {
+	padding: 9px 36px 9px 12px;
+	background-image: none;
+	appearance: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) input.dinv-input:is([type="number"], [type="search"], [type="text"]) {
+	padding: 9px 12px;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-input-wrap.has-unit input.dinv-input {
+	padding-left: 46px;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-filters--sidebar .dinv-input-wrap.has-unit input.dinv-input {
+	padding-right: 8px;
+	padding-left: 42px;
+	font-size: 0.875rem;
+}
+
+:is(.dinv-inventory, .dinv-detail) input.dinv-combobox__input.dinv-input {
+	padding-left: 38px;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-select select:is(:hover, :focus),
+:is(.dinv-inventory, .dinv-detail) input.dinv-input:is(:hover, :focus) {
+	color: var(--dinv-text);
+	background-color: var(--dinv-panel-2);
+	border-color: var(--dinv-border-hi);
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-select select:disabled {
+	color: var(--dinv-muted);
+	background-color: var(--dinv-panel);
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(label, legend)[class] {
+	float: none;
+	width: auto;
+	margin: 0;
+	color: var(--dinv-text);
+	font-size: inherit;
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) input[type="range"].dinv-range__slider {
+	width: calc(100% + 20px);
+	height: 28px;
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: 0;
+	box-shadow: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-range > legend.dinv-field__label {
+	float: left;
+	width: 100%;
+}
+
+/* Tables */
+
+:is(.dinv-inventory, .dinv-detail) table.dinv-table {
+	width: 100%;
+	margin: 0;
+	border: 0;
+	border-collapse: collapse;
+	background: none;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-table :is(th, td) {
+	padding: 12px 14px;
+	color: var(--dinv-text);
+	background: none;
+	border: 0;
+	border-bottom: 1px solid var(--dinv-border);
+	text-align: left;
+	vertical-align: middle;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-table thead th {
+	color: var(--dinv-muted);
+	background: var(--dinv-bg-alt);
+}
+
+:is(.dinv-inventory, .dinv-detail) :is(label, legend).dinv-field__label {
+	display: block;
+	margin: 0 0 6px;
+	padding: 0;
+	color: var(--dinv-muted);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.45;
+}
+
+/* Heading sizes (themes often size h2 / h3 inside the content area). */
+
+:is(.dinv-inventory, .dinv-detail) h2.dinv-toolbar__count {
+	font-size: 1.375rem;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+:is(.dinv-inventory, .dinv-detail) h3.dinv-vehicle__title {
+	font-size: 1.0625rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-tile h3.dinv-vehicle__title {
+	font-size: 0.9375rem;
+}
+
+:is(.dinv-inventory, .dinv-detail) h3:is(.dinv-filters__title, .dinv-empty__title, .dinv-error__title) {
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+:is(.dinv-inventory, .dinv-detail) h1.dinv-detail__title {
+	font-size: clamp(1.5rem, 2.4vw, 2rem);
+	font-weight: 700;
+	line-height: 1.15;
+}
+
+:is(.dinv-inventory, .dinv-detail) .dinv-detail__section > h2[id] {
+	margin-bottom: 16px;
+	font-size: 1.375rem;
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+@media (max-width: 760px) {
+	:is(.dinv-inventory, .dinv-detail) .dinv-table .dinv-table__row > :is(th, td) {
+		padding: 0;
+		border: 0;
 	}
 }

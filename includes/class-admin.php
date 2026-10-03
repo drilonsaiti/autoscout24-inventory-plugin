@@ -612,7 +612,7 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 		}
 
 		if ( ( $old['detail_base'] ?? '' ) !== ( $new['detail_base'] ?? '' ) ) {
-			update_option( 'dinv_flush_rewrite', 1, false );
+			update_option( 'dinv_flush_rewrite', '1', true );
 		}
 
 		if ( $old['sync_mode'] !== $new['sync_mode'] || (int) $old['sync_interval'] !== (int) $new['sync_interval'] || $old['sync_time'] !== $new['sync_time'] ) {
@@ -958,7 +958,11 @@ define( 'DINV_SELLER_ID', 12345 );</code></pre>
 	 * @param mixed $value Value.
 	 */
 	private function value_text( $value ): string {
-		if ( is_bool( $value ) || is_array( $value ) ) {
+		if ( is_array( $value ) ) {
+			// Spaces let long lists wrap in the table.
+			return str_replace( ',', ', ', Schema::to_attr( $value ) );
+		}
+		if ( is_bool( $value ) ) {
 			return Schema::to_attr( $value );
 		}
 		return '' === (string) $value ? '—' : (string) $value;

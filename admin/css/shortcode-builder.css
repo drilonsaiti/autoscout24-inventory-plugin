@@ -22,11 +22,16 @@
 .dinv-builder__output label { display:block; margin-bottom:8px; font-weight:700; }
 .dinv-builder__output textarea { width:100%; min-height:104px; padding:13px 14px; resize:vertical; background:#111318; color:#f5f5f5; border:1px solid #111318; border-radius:8px; font-family:Consolas,Monaco,monospace; font-size:12px; line-height:1.55; }
 .dinv-builder__actions { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
-.dinv-param-table { width:100%; border-collapse:collapse; margin-top:14px; }
+.dinv-param-table { width:100%; border-collapse:collapse; margin-top:14px; table-layout:fixed; }
+.dinv-param-table th:nth-child(1) { width:20%; }
+.dinv-param-table th:nth-child(2) { width:22%; }
+.dinv-param-table th:nth-child(3) { width:22%; }
 .dinv-param-table th,
 .dinv-param-table td { padding:10px 12px; border-bottom:1px solid #eee; text-align:left; vertical-align:top; }
 .dinv-param-table th { color:#50575e; font-size:12px; text-transform:uppercase; letter-spacing:.03em; }
-.dinv-param-table code { white-space:nowrap; }
+.dinv-param-table code { white-space:normal; overflow-wrap:anywhere; }
+.dinv-param-table td:first-child code { white-space:nowrap; }
+.dinv-param-table td { overflow-wrap:anywhere; }
 .dinv-param-table tr:last-child td { border-bottom:0; }
 
 @media(max-width:1100px){

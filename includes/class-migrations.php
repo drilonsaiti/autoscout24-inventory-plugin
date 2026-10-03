@@ -25,7 +25,7 @@ final class Migrations {
 	/**
 	 * Latest schema version.
 	 */
-	public const VERSION = 2;
+	public const VERSION = 3;
 
 	/**
 	 * Run pending migrations. Cheap when up to date (one autoloaded option read).
@@ -63,6 +63,7 @@ final class Migrations {
 		return array(
 			1 => array( self::class, 'v1_install' ),
 			2 => array( self::class, 'v2_phase_two_settings' ),
+			3 => array( self::class, 'v3_fewer_queries' ),
 		);
 	}
 
@@ -163,6 +164,19 @@ final class Migrations {
 			Settings::reset_cache();
 		}
 
-		update_option( 'dinv_flush_rewrite', 1, true );
+		update_option( 'dinv_flush_rewrite', '1', true );
+	}
+
+	/**
+	 * Version 3: options read on every request are autoloaded, and the
+	 * derived lists move from two transients to one cache option.
+	 */
+	public static function v3_fewer_queries(): void {
+		if ( false === get_option( 'dinv_flush_rewrite' ) ) {
+			add_option( 'dinv_flush_rewrite', '0', '', true );
+		}
+		wp_set_options_autoload( array( 'dinv_flush_rewrite', 'dinv_seller_profile' ), true );
+
+		Repository::invalidate_public_cache();
 	}
 }
